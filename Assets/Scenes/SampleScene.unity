@@ -510,8 +510,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.18910754, y: -0.000000008447957, z: 0.0000000016269279, w: 0.9819564}
-  m_LocalPosition: {x: 0, y: 4, z: -5}
+  m_LocalRotation: {x: 0.11462549, y: 0.00889569, z: -0.0010264798, w: 0.99336845}
+  m_LocalPosition: {x: -0.10303449, y: 3.7023673, z: -5.752382}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3642255909750820895}
@@ -569,7 +569,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh15026
+  m_Name: pb_Mesh15186
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1163,7 +1163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4, z: -5}
+  m_FollowOffset: {x: 0, y: 3.7023673, z: -5.7533045}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -1183,7 +1183,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: 0
+    Value: 1.0261507
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1
@@ -1217,7 +1217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4, z: -5}
+  m_FollowOffset: {x: 0, y: 3.7023673, z: -5.7533045}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -1237,7 +1237,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: 0
+    Value: 1.0261507
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1
@@ -1305,12 +1305,12 @@ MonoBehaviour:
           m_CallState: 2
   m_LegacyBlendHint: 0
   m_YAxis:
-    Value: 0.5
+    Value: 0.24808753
     m_SpeedMode: 1
-    m_MaxSpeed: 0.01
+    m_MaxSpeed: 0
     m_AccelTime: 0
     m_DecelTime: 0
-    m_InputAxisName: Mouse Y
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: 0
@@ -1324,21 +1324,21 @@ MonoBehaviour:
       m_LegacyVelocityFilterStrength: -1
   m_YAxisRecentering:
     m_enabled: 0
-    m_WaitTime: 0
+    m_WaitTime: 2
     m_RecenteringTime: 0.5
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: 0
+    Value: 1.0261507
     m_SpeedMode: 1
-    m_MaxSpeed: 1
+    m_MaxSpeed: 0
     m_AccelTime: 0
     m_DecelTime: 0
-    m_InputAxisName: Mouse X
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
-    m_MinValue: -180
-    m_MaxValue: 180
+    m_MinValue: 0
+    m_MaxValue: 360
     m_Wrap: 1
     m_Recentering:
       m_enabled: 0
@@ -1352,19 +1352,19 @@ MonoBehaviour:
     m_Bias: 0
   m_RecenterToTargetHeading:
     m_enabled: 0
-    m_WaitTime: 0
+    m_WaitTime: 2
     m_RecenteringTime: 0.5
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_BindingMode: 4
   m_SplineCurvature: 0.2
   m_Orbits:
-  - m_Height: 7
+  - m_Height: 9
     m_Radius: 0
-  - m_Height: 4
-    m_Radius: 5
-  - m_Height: 1
-    m_Radius: 2
+  - m_Height: 6
+    m_Radius: 7
+  - m_Height: 2
+    m_Radius: 3
   m_LegacyHeadingBias: 3.4028235e+38
   m_Rigs:
   - {fileID: 1285835259266175154}
@@ -1455,7 +1455,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.13238297, y: -0.000000017054942, z: 0.0000000022778317, w: 0.99119866}
+  m_LocalRotation: {x: 0.086251475, y: 0.00892136, z: -0.00077238993, w: 0.99623317}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1496,7 +1496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpeedMultiplier: 0.1
   xAxis:
-    multiplier: 10
+    multiplier: 15
     accelTime: 0.1
     decelTime: 0.1
     name: Mouse X
@@ -1518,11 +1518,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2895267444548320166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 500b8d15f2f03ba4dba888368046cf4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b25704389081a14faec53e60aa71454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recenter: 0
-  recenterTime: 0.5
+  RecenterButton: 116
+  RecenterTime: 1
 --- !u!4 &3642255909750820895
 Transform:
   m_ObjectHideFlags: 0
@@ -1701,7 +1701,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8660784859111640137}
-  m_LocalRotation: {x: 0.18910751, y: -0.000000008447955, z: 0.0000000016269276, w: 0.9819564}
+  m_LocalRotation: {x: 0.14334144, y: 0.00886225, z: -0.0012836352, w: 0.9896328}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1744,7 +1744,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2895267444548320166}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4, z: -5}
+  m_LocalPosition: {x: -0.10303449, y: 3.7023673, z: -5.752382}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5544105100163214360}
@@ -1793,7 +1793,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.18910751, y: -0.000000008447955, z: 0.0000000016269276, w: 0.9819564}
+  m_LocalRotation: {x: 0.14334142, y: 0.008862229, z: -0.0012836319, w: 0.98963284}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1885,7 +1885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4, z: -5}
+  m_FollowOffset: {x: 0, y: 3.7023673, z: -5.7533045}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -1905,7 +1905,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: 0
+    Value: 1.0261507
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1

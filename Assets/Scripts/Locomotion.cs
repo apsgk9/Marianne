@@ -11,6 +11,7 @@ public class Locomotion : ILocomotion
     private Camera _playerCamera;
 
     private float _RotationSpeed { get;}
+    public Vector3 LastDirection { get; private set; }
 
     public Locomotion(Player player, float moveSpeed,float rotationSpeed,Camera playerCamera)
     {
@@ -30,11 +31,16 @@ public class Locomotion : ILocomotion
     {
         MoveTransform();
         RotateTransform();
-
     }
 
     private void RotateTransform()
     {
+        if(FollowRecenter.Recentering)
+        {
+            return;            
+        }
+
+
         var direction = GetPlayerForwardVector();
         if (direction != Vector3.zero)
         {
@@ -56,7 +62,13 @@ public class Locomotion : ILocomotion
 
     private void MoveTransform()
     {
-        
-        _characterController.SimpleMove(GetPlayerForwardVector(_moveSpeed));
+        if(!FollowRecenter.Recentering)
+        {
+            _characterController.SimpleMove(GetPlayerForwardVector(_moveSpeed));
+        }
+        else if (PlayerInput.Instance.IsThereMovement() && !PlayerInput.Instance.isPlayerTryingToMove)
+        {
+            _characterController.SimpleMove(_player.transform.forward*_moveSpeed);            
+        }
     }
 }

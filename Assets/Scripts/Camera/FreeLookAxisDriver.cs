@@ -96,6 +96,8 @@ public class FreeLookAxisDriver : MonoBehaviour
 
     private CinemachineFreeLook freeLook;
 
+    private RecenterToPlayerForward RecenterToPlayerForward;
+
     private void Awake()
     {
         freeLook = GetComponent<CinemachineFreeLook>();
@@ -103,12 +105,14 @@ public class FreeLookAxisDriver : MonoBehaviour
         freeLook.m_XAxis.m_InputAxisName = string.Empty;
         freeLook.m_YAxis.m_MaxSpeed = freeLook.m_YAxis.m_AccelTime = freeLook.m_YAxis.m_DecelTime = 0;
         freeLook.m_YAxis.m_InputAxisName = string.Empty;
+        RecenterToPlayerForward = GetComponent<RecenterToPlayerForward>();
     }
 
     private void OnValidate()
     {
         xAxis.Validate();
         yAxis.Validate();
+        RecenterToPlayerForward = GetComponent<RecenterToPlayerForward>();
     }
 
     private void Reset()
@@ -141,6 +145,7 @@ public class FreeLookAxisDriver : MonoBehaviour
         {
             freeLook.m_RecenterToTargetHeading.CancelRecentering();
             freeLook.m_YAxisRecentering.CancelRecentering();
+            RecenterToPlayerForward.CancelRecentering();
         }
     }
 }

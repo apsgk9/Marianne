@@ -7,12 +7,18 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
     public event Action MoveModeTogglePressed;
     public float Vertical => Input.GetAxis("Vertical");
     public float Horizontal => Input.GetAxis("Horizontal");
+    public Vector2 DirectionMagnitude => new Vector2(Horizontal,Vertical);
+    public Vector2 LastDirectionMagnitude;
     public event Action<int> HotKeyPressed;
     public bool PausePressed {get;}
     public Vector2 CursorPosition => Input.mousePosition;
     public Vector2 LastCursorPosition;
     public float IdleThreshold =2f;
     public bool isPlayerLookIdle =>MouseIdleTimer.Activated;
+
+    public bool isPlayerTryingToMove => _isPlayerTryingToMove;
+    private bool _isPlayerTryingToMove;
+
     private Timer MouseIdleTimer;
 
     private void Awake()
@@ -20,6 +26,7 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
         Instance=this;
         MouseIdleTimer = new Timer(IdleThreshold);
         LastCursorPosition=Input.mousePosition;
+        LastDirectionMagnitude=DirectionMagnitude;
     }
 
     public void Tick()
@@ -30,11 +37,29 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
         }
 
         HotKeyCheck();
+
+        
     }
     private void Update()
-    {        
+    {
         PlayerMouseIdleCheck();
-        LastCursorPosition= CursorPosition;
+        PlayerMovementIdleCheck();
+        LastCursorPosition = CursorPosition;
+        LastDirectionMagnitude=DirectionMagnitude;
+    }
+
+    public bool IsThereMovement()
+    {
+        return Vertical > Mathf.Epsilon || Horizontal > Mathf.Epsilon;
+    }
+
+    private bool IsThereDifferenceInMovement()
+    {
+        return LastDirectionMagnitude != DirectionMagnitude;
+    }
+    private void PlayerMovementIdleCheck()
+    {
+        _isPlayerTryingToMove = IsThereDifferenceInMovement() ? true: false;
     }
 
     private void PlayerMouseIdleCheck()

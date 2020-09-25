@@ -3,16 +3,20 @@ using Cinemachine;
 using Cinemachine.Utility;
 using System;
 //https://forum.unity.com/threads/trouble-recentering-the-x-axis-of-the-free-look-camera.539097/
-public class SimpleFollowRecenter : MonoBehaviour
+public class FollowRecenter : MonoBehaviour
 {
-    public bool recenter;
+    public static bool Recentering;
     public float recenterTime = 0.5f;
     CinemachineFreeLook FreeLookVirtualCam;
+    public bool recenter;
+
 
     void Start()
     {
         FreeLookVirtualCam = GetComponent<CinemachineFreeLook>();
         FixTimeRecentering();
+        FreeLookVirtualCam.m_RecenterToTargetHeading.m_enabled=Recentering;        
+        FreeLookVirtualCam.m_YAxisRecentering.m_enabled=Recentering;
     }
     void Update()
     {
@@ -23,13 +27,15 @@ public class SimpleFollowRecenter : MonoBehaviour
         Recenter();
     }
 
-    
-
     private void Recenter()
-    {
-        
-        FreeLookVirtualCam.m_RecenterToTargetHeading.m_enabled=recenter;
-        FreeLookVirtualCam.m_YAxisRecentering.m_enabled=recenter;
+    {        
+        if(!Recentering)
+        {
+            FreeLookVirtualCam.m_RecenterToTargetHeading.CancelRecentering();
+            FreeLookVirtualCam.m_YAxisRecentering.CancelRecentering();
+        }
+        FreeLookVirtualCam.m_RecenterToTargetHeading.m_enabled=Recentering;        
+        FreeLookVirtualCam.m_YAxisRecentering.m_enabled=Recentering;
     }
 
     private bool isOnCenter()
@@ -41,7 +47,8 @@ public class SimpleFollowRecenter : MonoBehaviour
         Vector3 back = FreeLookVirtualCam.transform.position - target.position;
         float angle = UnityVectorExtensions.SignedAngle(
             back.ProjectOntoPlane(up), -target.forward.ProjectOntoPlane(up), up);
-        if (Mathf.Abs(angle) < 0.1)
+
+        if (Mathf.Abs(angle) < 0.2)
         {
             return true;
         }
@@ -53,7 +60,10 @@ public class SimpleFollowRecenter : MonoBehaviour
 
     private void RecenterCheck()
     {
-        recenter=PlayerInput.Instance.isPlayerLookIdle && !isOnCenter();
+        Recentering=PlayerInput.Instance.isPlayerLookIdle &&
+        //!PlayerInput.Instance.isPlayerTryingToMove &&
+        !isOnCenter();
+        recenter=Recentering;
     }
     private void FixTimeRecentering()
     {
