@@ -7,7 +7,6 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
     public event Action MoveModeTogglePressed;
     public float Vertical => Input.GetAxis("Vertical");
     public float Horizontal => Input.GetAxis("Horizontal");
-    public float MouseX => Input.GetAxis("Mouse X");
     public event Action<int> HotKeyPressed;
     public bool PausePressed {get;}
     public Vector2 CursorPosition => Input.mousePosition;

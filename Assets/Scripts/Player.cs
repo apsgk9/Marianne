@@ -7,20 +7,17 @@ public class Player : MonoBehaviour
     [SerializeField] private Camera PlayerCamera;
     [SerializeField] private float moveSpeed=4f;
 
-    public IMover _mover;
-    private Rotator _rotator;
+    public IMover _Locomotion;
 
     private void Awake() 
     {
         _characterController = GetComponent<CharacterController>();
-        _mover = new Mover (this,moveSpeed,PlayerCamera);
-        _rotator = new Rotator(this);
+        _Locomotion = new Mover (this,moveSpeed,PlayerCamera);
     }
 
 
     private void Update()
     {
-        _mover.Tick();
-        //_rotator.Tick();
+        _Locomotion.Tick();
     }
 }

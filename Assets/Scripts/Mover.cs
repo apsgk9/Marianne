@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,9 +24,25 @@ public class Mover : IMover
 
     public void Tick()
     {
+        MoveTransform();
+        RotateTransform();
+
+    }
+
+    private void RotateTransform()
+    {
+        var direction  = new Vector3(PlayerInput.Instance.Horizontal, 0, PlayerInput.Instance.Vertical);
+        if(direction != Vector3.zero)
+        {
+            var newRotation = Quaternion.LookRotation(direction);
+            _player.transform.rotation= newRotation;
+        }
+    }
+
+    private void MoveTransform()
+    {
         Vector3 movementInput = new Vector3(PlayerInput.Instance.Horizontal * _moveSpeed, 0, PlayerInput.Instance.Vertical * _moveSpeed);
         Vector3 movement = _playerCamera.transform.TransformDirection(movementInput);
-        //Vector3 movement = _player.transform.rotation * movementInput;
         _characterController.SimpleMove(movement);
     }
 }

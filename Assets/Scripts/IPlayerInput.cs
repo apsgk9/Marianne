@@ -7,7 +7,6 @@ public interface IPlayerInput
     event Action<int> HotKeyPressed;
     float Vertical {get;}
     float Horizontal {get;}
-    float MouseX { get;}
 
     void Tick();
 
