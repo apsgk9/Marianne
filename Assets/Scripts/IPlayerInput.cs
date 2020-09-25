@@ -7,7 +7,6 @@ public interface IPlayerInput
     event Action<int> HotKeyPressed;
     float Vertical {get;}
     float Horizontal {get;}
-
     void Tick();
 
     bool PausePressed {get;}
