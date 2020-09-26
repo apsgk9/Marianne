@@ -55,20 +55,23 @@ public class Locomotion : ILocomotion
 
     private Vector3 GetPlayerForwardVector(float multipler=1f)
     {
-        var movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal*multipler, 0, PlayerCharacterInput.Instance.Vertical*multipler);
-        Vector3 VectorForwardBasedOnPlayerCamera = _playerCamera.transform.TransformDirection(movementInput);
+
+        //fix movement since camera uptop can slow locomotion
+        var movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal, 0, PlayerCharacterInput.Instance.Vertical);
+        Vector3 VectorForwardBasedOnPlayerCamera = _playerCamera.transform.TransformDirection(movementInput).normalized * multipler;
         return VectorForwardBasedOnPlayerCamera;
     }
 
     private void MoveTransform()
     {
-        if(!FollowRecenter.Recentering)
-        {
-            _characterController.SimpleMove(GetPlayerForwardVector(_moveSpeed));
-        }
-        else if (PlayerCharacterInput.Instance.IsThereMovement() && !PlayerCharacterInput.Instance.isPlayerTryingToMove)
-        {
-            _characterController.SimpleMove(_player.transform.forward*_moveSpeed);            
-        }
+        _characterController.SimpleMove(GetPlayerForwardVector(_moveSpeed));
+        //if(!FollowRecenter.Recentering)
+        //{
+        //    _characterController.SimpleMove(GetPlayerForwardVector(_moveSpeed));
+        //}
+        //else if (PlayerCharacterInput.Instance.IsThereMovement() && !PlayerCharacterInput.Instance.isPlayerTryingToMove)
+        //{
+        //    _characterController.SimpleMove(_player.transform.forward*_moveSpeed);            
+        //}
     }
 }
