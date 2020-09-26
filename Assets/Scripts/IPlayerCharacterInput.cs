@@ -11,7 +11,9 @@ public interface IPlayerCharacterInput
 
     bool PausePressed {get;}
     Vector2 CursorPosition { get;}
+    Vector2 CursorDeltaPosition { get;}
     bool isPlayerLookIdle { get; }
     bool isPlayerTryingToMove { get; }
+    
     bool IsThereMovement();
 }

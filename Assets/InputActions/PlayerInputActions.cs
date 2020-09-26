@@ -19,7 +19,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
             ""id"": ""2afa339e-e207-4c97-bf24-30b3f11486c8"",
             ""actions"": [
                 {
-                    ""name"": ""Movement"",
+                    ""name"": ""MovementAxis"",
                     ""type"": ""PassThrough"",
                     ""id"": ""dc041b8d-7752-40cb-b2cf-b4c563f6acb2"",
                     ""expectedControlType"": ""Vector2"",
@@ -51,9 +51,25 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""MouseDeltaAim"",
+                    ""type"": ""Value"",
+                    ""id"": ""c310d3a3-ba23-4930-a33a-2608fcdab2e4"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""b9cb2286-d039-4b0f-beba-58e2a980b5ca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Recenter"",
+                    ""type"": ""Button"",
+                    ""id"": ""de48e09b-17f5-46e8-9fec-38ac71a4dd4b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -67,7 +83,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""MovementAxis"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -78,7 +94,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""MovementAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -89,7 +105,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""MovementAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -100,7 +116,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""MovementAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -111,64 +127,20 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""MovementAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Gamepad"",
-                    ""id"": ""c8ba1acb-8249-4ac3-8216-9d5ffd74583e"",
-                    ""path"": ""2DVector"",
+                    ""name"": """",
+                    ""id"": ""c4725b44-8ca4-45d2-899d-950fbabd411a"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": true,
+                    ""action"": ""MovementAxis"",
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""aa1b513e-6315-4308-93bd-2af18a6fb319"",
-                    ""path"": ""<Gamepad>/leftStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""4779b2ac-e753-4abd-97d0-a370b7c96d64"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""bc3df727-eaff-41b2-8196-3c324736ee93"",
-                    ""path"": ""<Gamepad>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""21c746f6-a18e-4e83-a975-57f23af67246"",
-                    ""path"": ""<Gamepad>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -182,64 +154,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Gamepad"",
-                    ""id"": ""49d59bd4-902a-4ad4-8759-e8999c621d48"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AnalogAim"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""95028532-f963-47c2-955a-03cd6eecce47"",
-                    ""path"": ""<Gamepad>/rightStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AnalogAim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""deb6a1c6-0c16-446c-a888-8bc84e9bda16"",
-                    ""path"": ""<Gamepad>/rightStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AnalogAim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""2969688e-638f-4a9d-b438-3ed53a60bb6a"",
-                    ""path"": ""<Gamepad>/rightStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AnalogAim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""025480e0-cfa1-4bd8-ba98-c688521d590a"",
-                    ""path"": ""<Gamepad>/rightStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AnalogAim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""93759dad-b974-4a49-b176-2820675836b5"",
-                    ""path"": ""<Mouse>/position"",
+                    ""path"": ""<Pointer>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -260,12 +177,45 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""732327e1-97c2-40c8-b24b-e470fe7302e2"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""id"": ""453f9506-c5b7-4881-8413-213f3a0db1df"",
+                    ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Jump"",
+                    ""action"": ""MouseDeltaAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cac79751-f183-434e-92d7-be1b871172da"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AnalogAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da78a2ad-da56-4591-ad62-27a501e93dfe"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Recenter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ed7ca45-5df5-4edd-aaa8-9e11b9d2aca3"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Recenter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -276,11 +226,13 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_MovementAxis = m_Player.FindAction("MovementAxis", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_AnalogAim = m_Player.FindAction("AnalogAim", throwIfNotFound: true);
         m_Player_MouseAim = m_Player.FindAction("MouseAim", throwIfNotFound: true);
+        m_Player_MouseDeltaAim = m_Player.FindAction("MouseDeltaAim", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_Recenter = m_Player.FindAction("Recenter", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -330,20 +282,24 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_MovementAxis;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_AnalogAim;
     private readonly InputAction m_Player_MouseAim;
+    private readonly InputAction m_Player_MouseDeltaAim;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_Recenter;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @MovementAxis => m_Wrapper.m_Player_MovementAxis;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @AnalogAim => m_Wrapper.m_Player_AnalogAim;
         public InputAction @MouseAim => m_Wrapper.m_Player_MouseAim;
+        public InputAction @MouseDeltaAim => m_Wrapper.m_Player_MouseDeltaAim;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @Recenter => m_Wrapper.m_Player_Recenter;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -353,9 +309,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
-                @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @MovementAxis.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovementAxis;
+                @MovementAxis.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovementAxis;
+                @MovementAxis.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovementAxis;
                 @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
@@ -365,16 +321,22 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @MouseAim.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseAim;
                 @MouseAim.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseAim;
                 @MouseAim.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseAim;
+                @MouseDeltaAim.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDeltaAim;
+                @MouseDeltaAim.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDeltaAim;
+                @MouseDeltaAim.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseDeltaAim;
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @Recenter.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
+                @Recenter.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
+                @Recenter.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Movement.started += instance.OnMovement;
-                @Movement.performed += instance.OnMovement;
-                @Movement.canceled += instance.OnMovement;
+                @MovementAxis.started += instance.OnMovementAxis;
+                @MovementAxis.performed += instance.OnMovementAxis;
+                @MovementAxis.canceled += instance.OnMovementAxis;
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
@@ -384,19 +346,27 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @MouseAim.started += instance.OnMouseAim;
                 @MouseAim.performed += instance.OnMouseAim;
                 @MouseAim.canceled += instance.OnMouseAim;
+                @MouseDeltaAim.started += instance.OnMouseDeltaAim;
+                @MouseDeltaAim.performed += instance.OnMouseDeltaAim;
+                @MouseDeltaAim.canceled += instance.OnMouseDeltaAim;
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Recenter.started += instance.OnRecenter;
+                @Recenter.performed += instance.OnRecenter;
+                @Recenter.canceled += instance.OnRecenter;
             }
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
     public interface IPlayerActions
     {
-        void OnMovement(InputAction.CallbackContext context);
+        void OnMovementAxis(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnAnalogAim(InputAction.CallbackContext context);
         void OnMouseAim(InputAction.CallbackContext context);
+        void OnMouseDeltaAim(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnRecenter(InputAction.CallbackContext context);
     }
 }

@@ -9,18 +9,26 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     public Vector2 DirectionVector => new Vector2(Horizontal,Vertical);
     public Vector2 LastDirectionVector;
     public event Action<int> HotKeyPressed;
-    public bool PausePressed {get;}
-    public Vector2 CursorPosition => Input.mousePosition;
+    public Vector2 CursorPosition => _mousePosition;
+    public Vector2 CursorDeltaPosition => _cursorDeltaPosition + _analogAimPosition;
     public Vector2 LastCursorPosition;
     public float IdleThreshold =2f;
     public bool isPlayerLookIdle =>MouseIdleTimer.Activated;
     public bool isPlayerTryingToMove => _isPlayerTryingToMove;
-    private bool _isPlayerTryingToMove;
     private Timer MouseIdleTimer;
     public float Vertical => _vertical;
     public float Horizontal => _horizontal;
+
+    public bool PausePressed {get;}
+    private bool _isPlayerTryingToMove;
+
+    public Vector2 _cursorDeltaPosition;
+    private Vector2 _mousePosition;
+    private Vector2 _analogAimPosition;
     public float _vertical;
     public float _horizontal;
+
+    public float AnalogAimSensitivity=30f;
 
     //New actions    
     public PlayerInputActions _inputActions;
@@ -29,7 +37,6 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     {
         Instance=this;
         MouseIdleTimer = new Timer(IdleThreshold);
-        LastCursorPosition=Input.mousePosition;
         LastDirectionVector=DirectionVector;
         
         _inputActions = new PlayerInputActions();
@@ -37,15 +44,24 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     private void OnEnable()
     {
         _inputActions.Enable();
-        _inputActions.Player.Movement.performed+= HandleMovement;
+        _inputActions.Player.MovementAxis.performed+= HandleMovement;
+        _inputActions.Player.MouseAim.performed+= HandleMouseAim;
+        _inputActions.Player.MouseDeltaAim.performed+= HandleMouseDeltaAim;
+        _inputActions.Player.AnalogAim.performed+= HandleAnalogAim;
     }
+
+    
 
     private void OnDisable()
     {
         _inputActions.Disable();
-        _inputActions.Player.Movement.performed-= HandleMovement;
+        _inputActions.Player.MovementAxis.performed-= HandleMovement;
+        _inputActions.Player.MouseAim.performed-= HandleMouseAim;
+        _inputActions.Player.MouseDeltaAim.performed-= HandleMouseDeltaAim;
+        _inputActions.Player.AnalogAim.performed-= HandleAnalogAim;
     }
 
+    
     public void Tick()
     {
         if (MoveModeTogglePressed != null && Input.GetKeyDown(KeyCode.Minus))
@@ -54,8 +70,6 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         }
 
         HotKeyCheck();
-
-        
     }
     private void Update()
     {
@@ -64,14 +78,32 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         LastCursorPosition = CursorPosition;
         LastDirectionVector=DirectionVector;
     }
+    private void LateUpdate()
+    {        
+        _cursorDeltaPosition= Vector2.zero;
+    }
 
     
     private void HandleMovement(InputAction.CallbackContext context)
     {
         var value= context.ReadValue<Vector2>();
-        Debug.Log("value:"+value);
         _horizontal = value.x;
         _vertical = value.y;
+    }
+
+    private void HandleMouseAim(InputAction.CallbackContext context)
+    {
+        _mousePosition= context.ReadValue<Vector2>();
+    }
+    private void HandleMouseDeltaAim(InputAction.CallbackContext context)
+    {
+        _cursorDeltaPosition = context.ReadValue<Vector2>();
+    }
+
+    private void HandleAnalogAim(InputAction.CallbackContext context)
+    {
+        _analogAimPosition= context.ReadValue<Vector2>()*AnalogAimSensitivity;
+
     }
 
 

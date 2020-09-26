@@ -3,6 +3,7 @@ using UnityEngine;
 using Cinemachine;
 using Cinemachine.Utility;
 
+public enum AxisSpace{ x,y}
 [Serializable]
 public struct CinemachineInputAxisDriver
 {
@@ -18,6 +19,8 @@ public struct CinemachineInputAxisDriver
     [Tooltip("The name of this axis as specified in Unity Input manager. "
         + "Setting to an empty string will disable the automatic updating of this axis")]
     public string name;
+
+    public AxisSpace axisSpace;
 
     [NoSaveDuringPlay]
     [Tooltip("The value of the input axis.  A value of 0 means no input.  You can drive "
@@ -40,12 +43,23 @@ public struct CinemachineInputAxisDriver
 
     public bool Update(float deltaTime, ref AxisState axis)
     {
-        if (!string.IsNullOrEmpty(name))
+        //if (!string.IsNullOrEmpty(name))
+        //{
+        //    try { inputValue = CinemachineCore.GetInputAxis(name); }
+        //    catch (ArgumentException) {}
+        //    //catch (ArgumentException e) { Debug.LogError(e.ToString()); }
+        //}
+        //
+        if(axisSpace ==AxisSpace.x)
         {
-            try { inputValue = CinemachineCore.GetInputAxis(name); }
-            catch (ArgumentException) {}
-            //catch (ArgumentException e) { Debug.LogError(e.ToString()); }
+            inputValue = PlayerCharacterInput.Instance.CursorDeltaPosition.x;
         }
+        else
+        {
+            inputValue = PlayerCharacterInput.Instance.CursorDeltaPosition.y;
+        }
+        //Debug.Log("inputValue:"+inputValue);
+
 
         float input = inputValue * multiplier*speedMultiplier;
         if (deltaTime < Epsilon)
@@ -124,6 +138,7 @@ public class FreeLookAxisDriver : MonoBehaviour
             accelTime = 0.1f,
             decelTime = 0.1f,
             name = "Mouse X",
+            axisSpace = AxisSpace.x,
             speedMultiplier=SpeedMultiplier,
         };
         yAxis = new CinemachineInputAxisDriver
@@ -132,6 +147,7 @@ public class FreeLookAxisDriver : MonoBehaviour
             accelTime = 0.1f,
             decelTime = 0.1f,
             name = "Mouse Y",
+            axisSpace = AxisSpace.y,
             speedMultiplier=SpeedMultiplier,
         };
     }

@@ -18,14 +18,12 @@ public class RecenterToPlayerForward : MonoBehaviour
         isRecentering=false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TryRecenter()
     {
-        if(Input.GetKeyDown(RecenterButton) && isRecentering==false)
+        if (isRecentering == false)
         {
             StartCoroutine(Recenter());
         }
-        
     }
 
     public void CancelRecentering()
@@ -83,26 +81,26 @@ public class RecenterToPlayerForward : MonoBehaviour
         }
         float toMax= Mathf.Abs(max-from);
         float toMin= Mathf.Abs(min-from);
-        bool WrapAroundMax= toMax<toMin? true: false;
+        bool WrapStartAtMax= toMax<toMin? true: false;
         difference= Mathf.Abs((max-min)-difference);
         
-        if(WrapAroundMax)
+        if(WrapStartAtMax)
         {
-            float newStep= Mathf.SmoothStep(from, from+difference,t);
-            float toreturn=newStep;
-            if(newStep>max)
+            float newStep= Mathf.SmoothStep(0, difference, t);
+            float toreturn=from+newStep;
+            if(toreturn>max)
             {
-                toreturn= newStep-max;
+                toreturn= min+(toreturn-max);
             }
             return toreturn;
         }
         else
         {
-            float newStep= Mathf.SmoothStep(from, from-difference,t);
-            float toreturn=newStep;
+            float newStep= Mathf.SmoothStep(0, difference, t);
+            float toreturn=from-newStep;
             if(newStep<min)
             {
-                toreturn= max-newStep;
+                toreturn= max+(toreturn-min);
             }
             return toreturn;
         }
