@@ -55,7 +55,7 @@ public class Locomotion : ILocomotion
 
     private Vector3 GetPlayerForwardVector(float multipler=1f)
     {
-        var movementInput= new Vector3(PlayerInput.Instance.Horizontal*multipler, 0, PlayerInput.Instance.Vertical*multipler);
+        var movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal*multipler, 0, PlayerCharacterInput.Instance.Vertical*multipler);
         Vector3 VectorForwardBasedOnPlayerCamera = _playerCamera.transform.TransformDirection(movementInput);
         return VectorForwardBasedOnPlayerCamera;
     }
@@ -66,7 +66,7 @@ public class Locomotion : ILocomotion
         {
             _characterController.SimpleMove(GetPlayerForwardVector(_moveSpeed));
         }
-        else if (PlayerInput.Instance.IsThereMovement() && !PlayerInput.Instance.isPlayerTryingToMove)
+        else if (PlayerCharacterInput.Instance.IsThereMovement() && !PlayerCharacterInput.Instance.isPlayerTryingToMove)
         {
             _characterController.SimpleMove(_player.transform.forward*_moveSpeed);            
         }

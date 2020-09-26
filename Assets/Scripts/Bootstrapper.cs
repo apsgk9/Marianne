@@ -6,7 +6,7 @@ public class Bootstrapper
     public static void Initialize()
     {
         var inputGameObject = new GameObject("INPUT SYSTEM");
-        inputGameObject.AddComponent<PlayerInput>();
+        inputGameObject.AddComponent<PlayerCharacterInput>();
         GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
         
     }

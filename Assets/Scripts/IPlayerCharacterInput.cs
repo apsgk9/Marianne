@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public interface IPlayerInput
+public interface IPlayerCharacterInput
 {
     event Action MoveModeTogglePressed;
     event Action<int> HotKeyPressed;

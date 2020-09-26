@@ -60,7 +60,7 @@ public class FollowRecenter : MonoBehaviour
 
     private void RecenterCheck()
     {
-        Recentering=PlayerInput.Instance.isPlayerLookIdle &&
+        Recentering=PlayerCharacterInput.Instance.isPlayerLookIdle &&
         //!PlayerInput.Instance.isPlayerTryingToMove &&
         !isOnCenter();
         recenter=Recentering;

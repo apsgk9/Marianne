@@ -1,32 +1,49 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerInput : MonoBehaviour, IPlayerInput
+public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
 {
-    public static IPlayerInput Instance {get; set;}
+    public static IPlayerCharacterInput Instance {get; set;}
     public event Action MoveModeTogglePressed;
-    public float Vertical => Input.GetAxis("Vertical");
-    public float Horizontal => Input.GetAxis("Horizontal");
-    public Vector2 DirectionMagnitude => new Vector2(Horizontal,Vertical);
-    public Vector2 LastDirectionMagnitude;
+    public Vector2 DirectionVector => new Vector2(Horizontal,Vertical);
+    public Vector2 LastDirectionVector;
     public event Action<int> HotKeyPressed;
     public bool PausePressed {get;}
     public Vector2 CursorPosition => Input.mousePosition;
     public Vector2 LastCursorPosition;
     public float IdleThreshold =2f;
     public bool isPlayerLookIdle =>MouseIdleTimer.Activated;
-
     public bool isPlayerTryingToMove => _isPlayerTryingToMove;
     private bool _isPlayerTryingToMove;
-
     private Timer MouseIdleTimer;
+    public float Vertical => _vertical;
+    public float Horizontal => _horizontal;
+    public float _vertical;
+    public float _horizontal;
+
+    //New actions    
+    public PlayerInputActions _inputActions;
 
     private void Awake()
     {
         Instance=this;
         MouseIdleTimer = new Timer(IdleThreshold);
         LastCursorPosition=Input.mousePosition;
-        LastDirectionMagnitude=DirectionMagnitude;
+        LastDirectionVector=DirectionVector;
+        
+        _inputActions = new PlayerInputActions();
+    }
+    private void OnEnable()
+    {
+        _inputActions.Enable();
+        _inputActions.Player.Movement.performed+= HandleMovement;
+    }
+
+    private void OnDisable()
+    {
+        _inputActions.Disable();
+        _inputActions.Player.Movement.performed-= HandleMovement;
     }
 
     public void Tick()
@@ -45,8 +62,18 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
         PlayerMouseIdleCheck();
         PlayerMovementIdleCheck();
         LastCursorPosition = CursorPosition;
-        LastDirectionMagnitude=DirectionMagnitude;
+        LastDirectionVector=DirectionVector;
     }
+
+    
+    private void HandleMovement(InputAction.CallbackContext context)
+    {
+        var value= context.ReadValue<Vector2>();
+        Debug.Log("value:"+value);
+        _horizontal = value.x;
+        _vertical = value.y;
+    }
+
 
     public bool IsThereMovement()
     {
@@ -55,7 +82,7 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
 
     private bool IsThereDifferenceInMovement()
     {
-        return LastDirectionMagnitude != DirectionMagnitude;
+        return LastDirectionVector != DirectionVector;
     }
     private void PlayerMovementIdleCheck()
     {
