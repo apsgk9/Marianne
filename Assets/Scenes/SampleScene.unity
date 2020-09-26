@@ -1506,8 +1506,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5641381598827573899}
   - component: {fileID: 2895267444548320168}
-  - component: {fileID: 1149526371348613096}
   - component: {fileID: 2895267444548320167}
+  - component: {fileID: 1149526371348613096}
   - component: {fileID: 2895267444548320169}
   m_Layer: 0
   m_Name: CM FreeLookPlayer

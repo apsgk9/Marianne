@@ -58,8 +58,9 @@ public class Locomotion : ILocomotion
 
         //fix movement since camera uptop can slow locomotion
         var movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal, 0, PlayerCharacterInput.Instance.Vertical);
-        Vector3 VectorForwardBasedOnPlayerCamera = _playerCamera.transform.TransformDirection(movementInput).normalized * multipler;
-        return VectorForwardBasedOnPlayerCamera;
+        Vector3 VectorForwardBasedOnPlayerCamera=_playerCamera.transform.TransformDirection(movementInput);
+        VectorForwardBasedOnPlayerCamera.y=0f;
+        return VectorForwardBasedOnPlayerCamera.normalized*multipler;
     }
 
     private void MoveTransform()

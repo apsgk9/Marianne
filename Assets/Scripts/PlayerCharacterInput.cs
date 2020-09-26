@@ -28,7 +28,7 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     public float _vertical;
     public float _horizontal;
 
-    public float AnalogAimSensitivity=30f;
+    public float AnalogAimSensitivity=15f;
 
     //New actions    
     public PlayerInputActions _inputActions;
