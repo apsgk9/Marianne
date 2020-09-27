@@ -11,7 +11,8 @@ public class Locomotion : ILocomotion
     private Camera _playerCamera;
 
     private float _RotationSpeed { get;}
-    public Vector3 LastDirection { get; private set; }
+    public Vector3 VectorForwardBasedOnPlayerCamera { get; private set; }
+    private Vector3 _movementInput;
 
     public Locomotion(Player player, float moveSpeed,float rotationSpeed,Camera playerCamera)
     {
@@ -29,22 +30,16 @@ public class Locomotion : ILocomotion
 
     public void Tick()
     {
+        CalculatePlayerForwardVector();
         MoveTransform();
         RotateTransform();
     }
 
     private void RotateTransform()
     {
-        if(FollowRecenter.Recentering)
+        if (VectorForwardBasedOnPlayerCamera != Vector3.zero)
         {
-            return;            
-        }
-
-
-        var direction = GetPlayerForwardVector();
-        if (direction != Vector3.zero)
-        {
-            var DesiredRotation = Quaternion.LookRotation(direction);
+            var DesiredRotation = Quaternion.LookRotation(VectorForwardBasedOnPlayerCamera);
             var FixedRotation = Quaternion.Slerp(_player.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed);
             
             //zero out y
@@ -53,26 +48,18 @@ public class Locomotion : ILocomotion
         }
     }
 
-    private Vector3 GetPlayerForwardVector(float multipler=1f)
+    private void CalculatePlayerForwardVector()
     {
-
         //fix movement since camera uptop can slow locomotion
-        var movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal, 0, PlayerCharacterInput.Instance.Vertical);
-        Vector3 VectorForwardBasedOnPlayerCamera=_playerCamera.transform.TransformDirection(movementInput);
-        VectorForwardBasedOnPlayerCamera.y=0f;
-        return VectorForwardBasedOnPlayerCamera.normalized*multipler;
+        _movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal, 0, PlayerCharacterInput.Instance.Vertical);
+        var temp=_playerCamera.transform.TransformDirection(_movementInput);
+        temp.y=0f;
+        VectorForwardBasedOnPlayerCamera=temp;
     }
 
     private void MoveTransform()
     {
-        _characterController.SimpleMove(GetPlayerForwardVector(_moveSpeed));
-        //if(!FollowRecenter.Recentering)
-        //{
-        //    _characterController.SimpleMove(GetPlayerForwardVector(_moveSpeed));
-        //}
-        //else if (PlayerCharacterInput.Instance.IsThereMovement() && !PlayerCharacterInput.Instance.isPlayerTryingToMove)
-        //{
-        //    _characterController.SimpleMove(_player.transform.forward*_moveSpeed);            
-        //}
+        var movementMagnitude=_movementInput.magnitude;
+        _characterController.SimpleMove(VectorForwardBasedOnPlayerCamera.normalized*movementMagnitude*_moveSpeed);
     }
 }

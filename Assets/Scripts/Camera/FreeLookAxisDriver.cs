@@ -41,7 +41,7 @@ public struct CinemachineInputAxisDriver
         decelTime = Mathf.Max(0, decelTime);
     }
 
-    public bool Update(float deltaTime, ref AxisState axis)
+    public float Update(float deltaTime, ref AxisState axis)
     {
         //if (!string.IsNullOrEmpty(name))
         //{
@@ -85,7 +85,7 @@ public struct CinemachineInputAxisDriver
         }
 
         axis.Value = ClampValue(ref axis, axis.Value + input);
-        return Mathf.Abs(inputValue) > Epsilon;
+        return Mathf.Abs(inputValue);
     }
 
     float ClampValue(ref AxisState axis, float v)
@@ -111,6 +111,8 @@ public class FreeLookAxisDriver : MonoBehaviour
     private CinemachineFreeLook freeLook;
 
     private RecenterToPlayerForward RecenterToPlayerForward;
+
+    public float RecenterThreshold= 1f;
 
     private void Awake()
     {
@@ -154,10 +156,13 @@ public class FreeLookAxisDriver : MonoBehaviour
 
     private void Update()
     {
-        bool changed = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);
-        if (yAxis.Update(Time.deltaTime, ref freeLook.m_YAxis))
-            changed = true;
-        if (changed)
+        //bool changed = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);
+        //if (yAxis.Update(Time.deltaTime, ref freeLook.m_YAxis))
+        //    changed = true;
+        float xAxisInput = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);
+        float yAxisInput= yAxis.Update(Time.deltaTime, ref freeLook.m_YAxis);
+        Vector2 axisInputs= new Vector2(xAxisInput,yAxisInput);
+        if (axisInputs.magnitude > RecenterThreshold)
         {
             freeLook.m_RecenterToTargetHeading.CancelRecentering();
             freeLook.m_YAxisRecentering.CancelRecentering();
