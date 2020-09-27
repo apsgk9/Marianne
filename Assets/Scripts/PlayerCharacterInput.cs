@@ -18,7 +18,6 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     private Timer MouseIdleTimer;
     public float Vertical => _vertical;
     public float Horizontal => _horizontal;
-
     public bool PausePressed {get;}
     private bool _isPlayerTryingToMove;
 
@@ -27,8 +26,9 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     private Vector2 _analogAimPosition;
     public float _vertical;
     public float _horizontal;
-
     public float AnalogAimSensitivity=15f;
+    public bool RunPressed => _runPressed;
+    public bool _runPressed;
 
     //New actions    
     public PlayerInputActions _inputActions;
@@ -48,9 +48,10 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         _inputActions.Player.MouseAim.performed+= HandleMouseAim;
         _inputActions.Player.MouseDeltaAim.performed+= HandleMouseDeltaAim;
         _inputActions.Player.AnalogAim.performed+= HandleAnalogAim;
-    }
-
-    
+        //_inputActions.Player.Run.performed+= HandleRun;
+        _inputActions.Player.Run.started+=HandleRunPressed;
+        _inputActions.Player.Run.canceled+=HandleRunReleased;
+    }    
 
     private void OnDisable()
     {
@@ -59,9 +60,13 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         _inputActions.Player.MouseAim.performed-= HandleMouseAim;
         _inputActions.Player.MouseDeltaAim.performed-= HandleMouseDeltaAim;
         _inputActions.Player.AnalogAim.performed-= HandleAnalogAim;
+        //_inputActions.Player.Run.performed-= HandleRun;
+        _inputActions.Player.Run.started+=HandleRunPressed;
+        _inputActions.Player.Run.canceled+=HandleRunReleased;
     }
 
     
+
     public void Tick()
     {
         if (MoveModeTogglePressed != null && Input.GetKeyDown(KeyCode.Minus))
@@ -104,6 +109,15 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     {
         _analogAimPosition= context.ReadValue<Vector2>()*AnalogAimSensitivity;
 
+    }
+    private void HandleRunReleased(InputAction.CallbackContext obj)
+    {
+        _runPressed=false;
+    }
+
+    private void HandleRunPressed(InputAction.CallbackContext obj)
+    {
+        _runPressed=true;
     }
 
 

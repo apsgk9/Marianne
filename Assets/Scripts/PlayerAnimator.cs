@@ -1,36 +1,56 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(RunTransitionHandler))]
 public class PlayerAnimator : MonoBehaviour
 {
-    public AnimatorStateInfo stateInfo;
     public Animator Animator;
-
+    public PlayerState PlayerState;
     public string SpeedParameterName = "Speed";
-    private float _rawSpeedValue;
+    private float _compositeSpeedValue;
     private Vector2 _rawDirection;
-
-    //private static readonly float Speed = Animator.StringToHash("Speed");
-
+    public RunTransitionHandler _runTransitionHandler { get; private set;}
+    public float AnimationSpeedTweaker=0.5f;
+    public bool UseCurves=true;
     private void Awake()
-    {        
+    {
+        _runTransitionHandler= GetComponent<RunTransitionHandler>();
+    }
+    public void Update()
+    {
+        if(UseCurves)
+        {
+            CurveCalculations();
+        }
+        else
+        {
+            SpeedCalculations();
+        }
+
+        Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SpeedCalculations()
     {
-        _rawDirection = new Vector2(PlayerCharacterInput.Instance.Horizontal,PlayerCharacterInput.Instance.Vertical);
-        _rawSpeedValue= _rawDirection.magnitude;
-        
-        Animator.SetFloat(SpeedParameterName,_rawSpeedValue);
+        _compositeSpeedValue=PlayerState.Speed*AnimationSpeedTweaker;
     }
+
+    private void CurveCalculations()
+    {
+        _rawDirection = new Vector2(PlayerCharacterInput.Instance.Horizontal, PlayerCharacterInput.Instance.Vertical);
+        _compositeSpeedValue = _rawDirection.magnitude * _runTransitionHandler.RunMultiplier;
+    }
+
     private void OnValidate()
     {
         if(Animator==null)
         {
             Debug.LogWarning("PlayerAnimator must have an animator.");
         }
-        
+        if(PlayerState==null)
+        {
+            Debug.LogWarning("PlayerState is missing for PlayerAnimator.");
+        }
     }
 }

@@ -6,19 +6,27 @@ public class Locomotion : ILocomotion
 {
     private readonly Player _player;
     private readonly CharacterController _characterController;
-    [SerializeField] private float _moveSpeed;
-
+    private float _moveSpeed;
+    private float _runMoveSpeed;
     private Camera _playerCamera;
 
     private float _RotationSpeed { get;}
     public Vector3 VectorForwardBasedOnPlayerCamera { get; private set; }
     private Vector3 _movementInput;
+    private RunTransitionHandler _runTransitionHandler;
 
-    public Locomotion(Player player, float moveSpeed,float rotationSpeed,Camera playerCamera)
+
+    public Vector3 finalMovementComposite{get; private set;}
+    public Vector3 DeltaMovement => finalMovementComposite;
+    public event Action<Vector3> OnMoveChange;
+
+    
+    public Locomotion(Player player, float moveSpeed,float runMoveSpeed,float rotationSpeed,Camera playerCamera,RunTransitionHandler _runTransitionHandlerInput)
     {
         _player = player;
         _characterController = player.GetComponent<CharacterController>();
         _moveSpeed = moveSpeed;
+        _runMoveSpeed=runMoveSpeed;
         _playerCamera= playerCamera;
         _RotationSpeed = rotationSpeed;
         if(_playerCamera==null)
@@ -26,6 +34,7 @@ public class Locomotion : ILocomotion
             var temp =GameObject.FindObjectOfType<PlayerCamera>();
             _playerCamera = temp?.GetComponent<Camera>();
         }
+        _runTransitionHandler = _runTransitionHandlerInput;
     }
 
     public void Tick()
@@ -50,7 +59,6 @@ public class Locomotion : ILocomotion
 
     private void CalculatePlayerForwardVector()
     {
-        //fix movement since camera uptop can slow locomotion
         _movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal, 0, PlayerCharacterInput.Instance.Vertical);
         var temp=_playerCamera.transform.TransformDirection(_movementInput);
         temp.y=0f;
@@ -60,6 +68,19 @@ public class Locomotion : ILocomotion
     private void MoveTransform()
     {
         var movementMagnitude=_movementInput.magnitude;
-        _characterController.SimpleMove(VectorForwardBasedOnPlayerCamera.normalized*movementMagnitude*_moveSpeed);
+
+        var runMultiplierTarget= _runTransitionHandler.RunMultiplier;
+        var runModifierAddition= ((runMultiplierTarget-(float)_runTransitionHandler.baseTarget)*_runMoveSpeed);
+
+        Vector3 runcomposite=VectorForwardBasedOnPlayerCamera.normalized*runModifierAddition;
+
+        Vector3 baseMovementComposite=(VectorForwardBasedOnPlayerCamera.normalized*movementMagnitude*_moveSpeed);
+
+        finalMovementComposite=runcomposite+baseMovementComposite;
+
+
+        _characterController.SimpleMove(finalMovementComposite);
+        OnMoveChange?.Invoke(finalMovementComposite);
     }
+
 }

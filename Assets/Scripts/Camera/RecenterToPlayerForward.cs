@@ -49,12 +49,9 @@ public class RecenterToPlayerForward : MonoBehaviour
             var newTime = currentTime / RecenterTime;
             FreeLookPlayerVirtualCam.m_YAxis.Value = Mathf.SmoothStep(initialYAxis, 0.5f, newTime);
 
-            //var newRotationX=Mathf.SmoothStep(initialXAxis,LastYRotation,newTime);
-            //Debug.Log("newRotationX:"+newRotationX);
             FreeLookPlayerVirtualCam.m_XAxis.Value = 
             SmoothStepWrap(initialXAxis, LastYRotation,minVal,maxValue,newTime);
 
-            //FreeLookPlayerVirtualCam.m_XAxis.Value=Mathf.LerpAngle(initialXAxis,LastYRotation,newTime);
             yield return null;
             currentTime += Time.deltaTime;
         }

@@ -73,6 +73,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Value"",
+                    ""id"": ""ad251588-8ab6-4cfa-aa95-7263183e954a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -218,6 +226,28 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""Recenter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eb02d518-062e-4ada-8a34-37aa6070887e"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43c6d76c-300d-48a9-92a9-e86abfb62e03"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -233,6 +263,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Player_MouseDeltaAim = m_Player.FindAction("MouseDeltaAim", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Recenter = m_Player.FindAction("Recenter", throwIfNotFound: true);
+        m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -289,6 +320,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_MouseDeltaAim;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Recenter;
+    private readonly InputAction m_Player_Run;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -300,6 +332,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @MouseDeltaAim => m_Wrapper.m_Player_MouseDeltaAim;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Recenter => m_Wrapper.m_Player_Recenter;
+        public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -330,6 +363,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Recenter.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
                 @Recenter.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
                 @Recenter.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
+                @Run.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
+                @Run.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
+                @Run.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -355,6 +391,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Recenter.started += instance.OnRecenter;
                 @Recenter.performed += instance.OnRecenter;
                 @Recenter.canceled += instance.OnRecenter;
+                @Run.started += instance.OnRun;
+                @Run.performed += instance.OnRun;
+                @Run.canceled += instance.OnRun;
             }
         }
     }
@@ -368,5 +407,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnMouseDeltaAim(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnRecenter(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
 }

@@ -63,11 +63,7 @@ public class LocomotionBehaviour : StateMachineBehaviour
         SpeedMultiplierParameterName="LocomotionSpeedMultiplier";
         WalkSpeedThreshold=1f;
         RunSpeedThreshold=2f;
-        SprintSpeedThreshold=3f;
-        //_stateInfo;
-        //WalkSpeedCurve;
-        //RunSpeedCurve;
-        //SprintSpeedCurve;        
+        SprintSpeedThreshold=3f;  
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
