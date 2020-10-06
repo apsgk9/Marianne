@@ -25,6 +25,11 @@ public class Locomotion : ILocomotion
     public float runSpeed=4f;
     public float walkSpeed=2f;
     private float previousAnimatorMovementSpeed;
+    private LocomotionMode locomotionMode;
+    enum LocomotionMode
+    {
+        Idle=0,Walk=1,Run=2,Sprint=3
+    }
 
     public Locomotion(Player player, float moveSpeed,float runMoveSpeed,float rotationSpeed,Camera playerCamera,RunTransitionHandler _runTransitionHandlerInput)
     {
@@ -41,6 +46,7 @@ public class Locomotion : ILocomotion
         }
         _runTransitionHandler = _runTransitionHandlerInput;
         previousAnimatorMovementSpeed=0f;
+        locomotionMode= LocomotionMode.Idle;
     }
 
     public void Tick()
@@ -155,25 +161,45 @@ public class Locomotion : ILocomotion
 
         Vector3 baseMovementComposite = (VectorForwardBasedOnPlayerCamera.normalized * movementMagnitude * _moveSpeed);
         finalMovementComposite = runcomposite + baseMovementComposite;
+        var runGap=0.00f;
+        var walkGap=0.00f;
+        if(locomotionMode==LocomotionMode.Run)
+        {
+            walkGap=-0.1f;
+            runGap=-0.1f;    
+        }
+        else if(locomotionMode==LocomotionMode.Walk)
+        {       
+            walkGap=0.1f;
+            runGap=-0.1f;             
+        }
         
         var finalMovementCompositeMagnitude=finalMovementComposite.magnitude;
+        Debug.Log(finalMovementCompositeMagnitude);
 
-        if (finalMovementCompositeMagnitude >= runThreshold && finalMovementCompositeMagnitude <= sprintThreshold) //run
+        if (finalMovementCompositeMagnitude >= runThreshold+runGap && finalMovementCompositeMagnitude <= sprintThreshold) //run
         {
             finalMovementComposite =finalMovementComposite.normalized*runSpeed;
+            locomotionMode = LocomotionMode.Run;
         }
         else if (finalMovementCompositeMagnitude > sprintThreshold+ Mathf.Epsilon) //sprint
         {
-            Debug.Log(finalMovementCompositeMagnitude.ToString("F64") +"||"+sprintThreshold);
             finalMovementComposite =finalMovementComposite.normalized*sprintSpeed;
+            locomotionMode = LocomotionMode.Sprint;
         }
-        else if (finalMovementCompositeMagnitude < runThreshold && finalMovementCompositeMagnitude > 0.01f) //walk
+        else if (finalMovementCompositeMagnitude < runThreshold+walkGap && finalMovementCompositeMagnitude > 0.01f) //walk
         {
-            finalMovementComposite =finalMovementComposite.normalized*walkSpeed;
+            finalMovementComposite =finalMovementComposite.normalized*walkSpeed;            
+            locomotionMode = LocomotionMode.Walk;
+        }
+        else
+        {
+            finalMovementComposite =Vector3.zero;   
+            locomotionMode= LocomotionMode.Idle;
         }
 
         _characterController.SimpleMove(finalMovementComposite);
         OnMoveChange?.Invoke(finalMovementComposite);
-        OnMoveAnimatorSpeedChange?.Invoke(finalMovementComposite.magnitude/2);
+        OnMoveAnimatorSpeedChange?.Invoke((float)locomotionMode);
     }
 }

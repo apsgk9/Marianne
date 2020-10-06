@@ -8,7 +8,8 @@ public class PlayerAnimator : MonoBehaviour
     public Animator Animator;
     public PlayerState PlayerState;
     public string SpeedParameterName = "Speed";
-    public string ChangeInVeclotityParameterName = "ChangeInVelocity";
+    public string ChangeInVelocityParameterName = "ChangeInVelocity";
+    public string DeltaVelocityParameterName = "DeltaVelocity";
     private float _compositeSpeedValue;
     private Vector2 _rawDirection;
     public RunTransitionHandler _runTransitionHandler { get; private set;}
@@ -30,12 +31,13 @@ public class PlayerAnimator : MonoBehaviour
         }
 
         Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
-        Animator.SetBool(ChangeInVeclotityParameterName, IsIdle());
+        Animator.SetBool(ChangeInVelocityParameterName, ChangeInVelocity());
+        Animator.SetFloat(DeltaVelocityParameterName, PlayerState.DeltaVelocity.magnitude);
     }
 
-    private bool IsIdle()
+    private bool ChangeInVelocity()
     {
-        return PlayerState.DeltaVelocity.magnitude<0.001f;
+        return !(PlayerState.DeltaVelocity.magnitude<Mathf.Epsilon);
     }
 
     private void SpeedCalculations()

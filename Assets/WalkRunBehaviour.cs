@@ -7,6 +7,7 @@ public class WalkRunBehaviour : StateMachineBehaviour
     public string SpeedParameterName="Speed";
     public string LastSpeedParameterName="LastSpeed";
     public string WalkRunSpeedParameterName="WalkRunSpeed";
+    public string FirstSpeedParameterName="FirstSpeedValue";
     private bool _isTransitioning;
     private float initialOffset;
     private float currentTime;
@@ -27,6 +28,7 @@ public class WalkRunBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         SpeedValue= animator.GetFloat(SpeedParameterName);
+        animator.SetFloat(FirstSpeedParameterName,SpeedValue);
         LastSpeedValue= animator.GetFloat(LastSpeedParameterName);
         PreviousWalkRunSpeedValue =animator.GetFloat(WalkRunSpeedParameterName);
     }
@@ -41,7 +43,10 @@ public class WalkRunBehaviour : StateMachineBehaviour
 
         WalkRunSpeedValue = GetWalkRunSpeedValue();
         animator.SetFloat(WalkRunSpeedParameterName,WalkRunSpeedValue);
-        animator.SetFloat(LastSpeedParameterName,WalkRunSpeedValue);
+        if(SpeedValue!=0f)
+        {
+            animator.SetFloat(LastSpeedParameterName,SpeedValue);
+        }
     }
 
 
