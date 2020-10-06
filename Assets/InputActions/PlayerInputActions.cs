@@ -199,7 +199,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""id"": ""cac79751-f183-434e-92d7-be1b871172da"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""ScaleVector2(x=2,y=2)"",
                     ""groups"": """",
                     ""action"": ""AnalogAim"",
                     ""isComposite"": false,
