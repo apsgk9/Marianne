@@ -13,11 +13,16 @@ public class PlayerAnimator : MonoBehaviour
     private float _compositeSpeedValue;
     private Vector2 _rawDirection;
     public RunTransitionHandler _runTransitionHandler { get; private set;}
+    public string ControllerDeltaParameterName ="ControllerDelta";
+
     public float AnimationSpeedTweaker=0.5f;
     public bool UseCurves=true;
+    private static Vector2 _previousMovmementAxis;
+
     private void Awake()
     {
         _runTransitionHandler= GetComponent<RunTransitionHandler>();
+        _previousMovmementAxis=Vector2.zero;
     }
     public void Update()
     {
@@ -33,6 +38,19 @@ public class PlayerAnimator : MonoBehaviour
         Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
         Animator.SetBool(ChangeInVelocityParameterName, ChangeInVelocity());
         Animator.SetFloat(DeltaVelocityParameterName, PlayerState.DeltaVelocity.magnitude);
+
+        float _ControllerMovementAxisDelta = NewMethod();
+        Animator.SetFloat(ControllerDeltaParameterName, _ControllerMovementAxisDelta);
+    }
+
+    private static float NewMethod()
+    {
+        var movementAxis=new Vector2(PlayerCharacterInput.Instance.Horizontal, PlayerCharacterInput.Instance.Vertical);
+        float delta= (movementAxis-_previousMovmementAxis).magnitude;
+        
+
+        _previousMovmementAxis=movementAxis;
+        return delta;
     }
 
     private bool ChangeInVelocity()

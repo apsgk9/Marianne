@@ -64,6 +64,7 @@ public class Locomotion : ILocomotion
     {
         //_characterController.SimpleMove(DeltaVector*50);
         _characterController.Move(DeltaVector);
+        OnMoveChange?.Invoke(DeltaVector);
         //_player.transform.position += DeltaVector;
         //PlayerGameobject.transform.rotation = Animator.rootRotation;
         //PlayerGameobject.transform.position += Animator.deltaPosition;
@@ -169,10 +170,7 @@ public class Locomotion : ILocomotion
     private void MovementSystem3()
     {
         var movementMagnitude = Mathf.Clamp(_movementInput.magnitude,0,1);
-        if(movementMagnitude>1)
-        {
-            Debug.Log(movementMagnitude.ToString("F20"));
-        }
+        
 
         var runMultiplierTarget = _runTransitionHandler.RunMultiplier;
         var runModifierAddition = ((runMultiplierTarget - (float)_runTransitionHandler.baseTarget) * _runMoveSpeed);
@@ -195,32 +193,25 @@ public class Locomotion : ILocomotion
         }
         
         var finalMovementCompositeMagnitude=finalMovementComposite.magnitude;
-        //Debug.Log(finalMovementCompositeMagnitude);
 
         if (finalMovementCompositeMagnitude >= runThreshold+runGap && finalMovementCompositeMagnitude <= sprintThreshold) //run
         {
-            finalMovementComposite =finalMovementComposite.normalized*runSpeed;
             locomotionMode = LocomotionMode.Run;
         }
         else if (finalMovementCompositeMagnitude > sprintThreshold+ Mathf.Epsilon) //sprint
         {
-            finalMovementComposite =finalMovementComposite.normalized*sprintSpeed;
             locomotionMode = LocomotionMode.Sprint;
         }
         else if (finalMovementCompositeMagnitude < runThreshold+walkGap && finalMovementCompositeMagnitude > 0.01f) //walk
-        {
-            finalMovementComposite =finalMovementComposite.normalized*walkSpeed;            
+        {         
             locomotionMode = LocomotionMode.Walk;
         }
         else
         {
-            finalMovementComposite =Vector3.zero;   
             locomotionMode= LocomotionMode.Idle;
         }
-
-        //_characterController.SimpleMove(finalMovementComposite);
-        OnMoveChange?.Invoke(finalMovementComposite);
         OnMoveAnimatorSpeedChange?.Invoke((float)locomotionMode);
+        
     }
 
     
