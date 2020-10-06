@@ -8,6 +8,7 @@ public class PlayerAnimator : MonoBehaviour
     public Animator Animator;
     public PlayerState PlayerState;
     public string SpeedParameterName = "Speed";
+    public string ChangeInVeclotityParameterName = "ChangeInVelocity";
     private float _compositeSpeedValue;
     private Vector2 _rawDirection;
     public RunTransitionHandler _runTransitionHandler { get; private set;}
@@ -19,7 +20,7 @@ public class PlayerAnimator : MonoBehaviour
     }
     public void Update()
     {
-        if(UseCurves)
+        if (UseCurves)
         {
             CurveCalculations();
         }
@@ -29,11 +30,17 @@ public class PlayerAnimator : MonoBehaviour
         }
 
         Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
+        Animator.SetBool(ChangeInVeclotityParameterName, IsIdle());
+    }
+
+    private bool IsIdle()
+    {
+        return PlayerState.DeltaVelocity.magnitude<0.001f;
     }
 
     private void SpeedCalculations()
     {
-        _compositeSpeedValue=PlayerState.Speed*AnimationSpeedTweaker;
+        _compositeSpeedValue=PlayerState.AnimatorSpeed*AnimationSpeedTweaker;
     }
 
     private void CurveCalculations()

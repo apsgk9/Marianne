@@ -7,7 +7,7 @@
             "actions": [
                 {
                     "name": "MovementAxis",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "dc041b8d-7752-40cb-b2cf-b4c563f6acb2",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -42,7 +42,7 @@
                     "type": "Value",
                     "id": "c310d3a3-ba23-4930-a33a-2608fcdab2e4",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=1.5,y=1.5)",
                     "interactions": ""
                 },
                 {
@@ -128,10 +128,10 @@
                 },
                 {
                     "name": "",
-                    "id": "c4725b44-8ca4-45d2-899d-950fbabd411a",
+                    "id": "325e10f6-b49e-46dc-a97a-64fff9866504",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "groups": "",
                     "action": "MovementAxis",
                     "isComposite": false,
@@ -228,7 +228,7 @@
                 {
                     "name": "",
                     "id": "43c6d76c-300d-48a9-92a9-e86abfb62e03",
-                    "path": "<Gamepad>/leftStickPress",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

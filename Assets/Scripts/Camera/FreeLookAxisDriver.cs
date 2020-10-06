@@ -16,9 +16,9 @@ public struct CinemachineInputAxisDriver
     [Tooltip("The amount of time in seconds it takes to decelerate to a lower speed")]
     public float decelTime;
 
-    [Tooltip("The name of this axis as specified in Unity Input manager. "
-        + "Setting to an empty string will disable the automatic updating of this axis")]
-    public string name;
+    //[Tooltip("The name of this axis as specified in Unity Input manager. "
+    //    + "Setting to an empty string will disable the automatic updating of this axis")]
+    //public string name;
 
     public AxisSpace axisSpace;
 
@@ -113,6 +113,7 @@ public class FreeLookAxisDriver : MonoBehaviour
     private RecenterToPlayerForward RecenterToPlayerForward;
 
     public float RecenterThreshold= 1f;
+    public bool CanCancelRecenter=false;
 
     private void Awake()
     {
@@ -139,7 +140,7 @@ public class FreeLookAxisDriver : MonoBehaviour
             multiplier = -10f,
             accelTime = 0.1f,
             decelTime = 0.1f,
-            name = "Mouse X",
+            //name = "Mouse X",
             axisSpace = AxisSpace.x,
             speedMultiplier=SpeedMultiplier,
         };
@@ -148,7 +149,7 @@ public class FreeLookAxisDriver : MonoBehaviour
             multiplier = 0.1f,
             accelTime = 0.1f,
             decelTime = 0.1f,
-            name = "Mouse Y",
+            //name = "Mouse Y",
             axisSpace = AxisSpace.y,
             speedMultiplier=SpeedMultiplier,
         };
@@ -161,12 +162,16 @@ public class FreeLookAxisDriver : MonoBehaviour
         //    changed = true;
         float xAxisInput = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);
         float yAxisInput= yAxis.Update(Time.deltaTime, ref freeLook.m_YAxis);
-        Vector2 axisInputs= new Vector2(xAxisInput,yAxisInput);
-        if (axisInputs.magnitude > RecenterThreshold)
+        if(CanCancelRecenter)
         {
-            freeLook.m_RecenterToTargetHeading.CancelRecentering();
-            freeLook.m_YAxisRecentering.CancelRecentering();
-            RecenterToPlayerForward.CancelRecentering();
+            
+            Vector2 axisInputs= new Vector2(xAxisInput,yAxisInput);
+            if (axisInputs.magnitude > RecenterThreshold)
+            {
+                freeLook.m_RecenterToTargetHeading.CancelRecentering();
+                freeLook.m_YAxisRecentering.CancelRecentering();
+                RecenterToPlayerForward.CancelRecentering();
+            }
         }
     }
 }

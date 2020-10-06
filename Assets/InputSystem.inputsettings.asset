@@ -15,7 +15,7 @@ MonoBehaviour:
   m_SupportedDevices: []
   m_UpdateMode: 1
   m_CompensateForScreenOrientation: 1
-  m_FilterNoiseOnCurrent: 1
+  m_FilterNoiseOnCurrent: 0
   m_DefaultDeadzoneMin: 0.1
   m_DefaultDeadzoneMax: 0.9
   m_DefaultButtonPressPoint: 0.5

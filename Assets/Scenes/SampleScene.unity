@@ -220,6 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Velocity: {x: 0, y: 0, z: 0}
   Speed: 0
+  AnimatorSpeed: 0
   _player: {fileID: 252170316}
 --- !u!114 &252170318
 MonoBehaviour:
@@ -870,7 +871,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh104426
+  m_Name: pb_Mesh15886
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1415,7 +1416,7 @@ MonoBehaviour:
   Animator: {fileID: 206579177}
   PlayerState: {fileID: 252170317}
   SpeedParameterName: Speed
-  AnimationSpeedTweaker: 0.5
+  AnimationSpeedTweaker: 1
   UseCurves: 0
 --- !u!114 &2059802252
 MonoBehaviour:
@@ -1844,7 +1845,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.24996781, y: 0.000000013363455, z: -0.0000000034499559, w: 0.96825415}
+  m_LocalRotation: {x: 0.24996781, y: -0.000000018626611, z: 0.000000004808711, w: 0.96825415}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1885,12 +1886,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82829cd5081233d4f9894879b8b638f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpeedMultiplier: 0.005
+  SpeedMultiplier: 0.0025
   xAxis:
-    multiplier: 10
+    multiplier: 5
     accelTime: 0.1
     decelTime: 0.1
-    name: Mouse X
     axisSpace: 0
     inputValue: 0
     speedMultiplier: 0.01
@@ -1898,11 +1898,11 @@ MonoBehaviour:
     multiplier: -0.05
     accelTime: 0.1
     decelTime: 0.1
-    name: Mouse Y
     axisSpace: 1
     inputValue: 0
     speedMultiplier: 0.01
   RecenterThreshold: 1
+  CanCancelRecenter: 0
 --- !u!114 &2895267444548320168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2017,9 +2017,9 @@ MonoBehaviour:
   m_CameraRadius: 1
   m_Strategy: 1
   m_MaximumEffort: 4
-  m_SmoothingTime: 1
-  m_Damping: 1
-  m_DampingWhenOccluded: 1
+  m_SmoothingTime: 2
+  m_Damping: 4
+  m_DampingWhenOccluded: 4
   m_OptimalTargetDistance: 0
 --- !u!4 &3642255909750820895
 Transform:
@@ -2199,7 +2199,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8660784859111640137}
-  m_LocalRotation: {x: 0.30518007, y: 7.7795635e-16, z: -4.3759165e-16, w: 0.9522947}
+  m_LocalRotation: {x: 0.30518007, y: 3e-45, z: -1e-45, w: 0.9522947}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2291,7 +2291,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.30518007, y: 2.3280518e-23, z: 1.1460679e-24, w: 0.9522947}
+  m_LocalRotation: {x: 0.30518007, y: 3e-45, z: -1e-45, w: 0.9522947}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

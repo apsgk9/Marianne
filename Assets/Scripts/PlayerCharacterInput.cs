@@ -45,8 +45,12 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     {
         _inputActions.Enable();
         _inputActions.Player.MovementAxis.performed+= HandleMovement;
+        _inputActions.Player.MovementAxis.canceled+= ctx=>HandleMovementCancel();
+
         _inputActions.Player.MouseAim.performed+= HandleMouseAim;
         _inputActions.Player.MouseDeltaAim.performed+= HandleMouseDeltaAim;
+        _inputActions.Player.MouseDeltaAim.canceled+= ctx=>_cursorDeltaPosition= Vector2.zero;
+
         _inputActions.Player.AnalogAim.performed+= HandleAnalogAim;
         //_inputActions.Player.Run.performed+= HandleRun;
         _inputActions.Player.Run.started+=HandleRunPressed;
@@ -57,15 +61,22 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     {
         _inputActions.Disable();
         _inputActions.Player.MovementAxis.performed-= HandleMovement;
+        _inputActions.Player.MovementAxis.canceled-= ctx=>HandleMovementCancel();
+
         _inputActions.Player.MouseAim.performed-= HandleMouseAim;
         _inputActions.Player.MouseDeltaAim.performed-= HandleMouseDeltaAim;
         _inputActions.Player.AnalogAim.performed-= HandleAnalogAim;
+        _inputActions.Player.MouseDeltaAim.canceled-= ctx=>_cursorDeltaPosition= Vector2.zero;
         //_inputActions.Player.Run.performed-= HandleRun;
         _inputActions.Player.Run.started+=HandleRunPressed;
         _inputActions.Player.Run.canceled+=HandleRunReleased;
     }
 
-    
+    private void HandleMovementCancel()
+    {
+        _horizontal = 0f;
+        _vertical = 0f;
+    }
 
     public void Tick()
     {
