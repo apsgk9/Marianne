@@ -14,6 +14,7 @@ public class PlayerAnimator : MonoBehaviour
     private Vector2 _rawDirection;
     public RunTransitionHandler _runTransitionHandler { get; private set;}
     public string ControllerDeltaParameterName ="ControllerDelta";
+    public string MovementPressedParameterName ="MovementPressed";
 
     public float AnimationSpeedTweaker=0.5f;
     public bool UseCurves=true;
@@ -39,15 +40,20 @@ public class PlayerAnimator : MonoBehaviour
         Animator.SetBool(ChangeInVelocityParameterName, ChangeInVelocity());
         Animator.SetFloat(DeltaVelocityParameterName, PlayerState.DeltaVelocity.magnitude);
 
-        float _ControllerMovementAxisDelta = NewMethod();
+        float _ControllerMovementAxisDelta = ReturnDeltaMovement();
         Animator.SetFloat(ControllerDeltaParameterName, _ControllerMovementAxisDelta);
+        bool getMovementPressed=MovementPressed();
+        Animator.SetBool(MovementPressedParameterName, getMovementPressed);
+    }
+    private bool MovementPressed()
+    {
+        return PlayerCharacterInput.Instance.IsThereMovement();
     }
 
-    private static float NewMethod()
+    private static float ReturnDeltaMovement()
     {
         var movementAxis=new Vector2(PlayerCharacterInput.Instance.Horizontal, PlayerCharacterInput.Instance.Vertical);
-        float delta= (movementAxis-_previousMovmementAxis).magnitude;
-        
+        float delta= (movementAxis-_previousMovmementAxis).magnitude;     
 
         _previousMovmementAxis=movementAxis;
         return delta;

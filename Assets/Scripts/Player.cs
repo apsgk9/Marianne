@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float rotationSpeed=4f;
     [SerializeField] private RunTransitionHandler RunTransitionHandlerInput;
     [SerializeField] private float Speed;
+    [SerializeField] private AnimationCurve MovementVectorBlend= AnimationCurve.Linear(0,0,1,1);
     
 
     public ILocomotion _Locomotion;
@@ -18,7 +19,7 @@ public class Player : MonoBehaviour
     private void Awake() 
     {
         _characterController = GetComponent<CharacterController>();
-        _Locomotion = new Locomotion (this,moveSpeed,runMoveSpeed,rotationSpeed,PlayerCamera,RunTransitionHandlerInput);
+        _Locomotion = new Locomotion (this,moveSpeed,runMoveSpeed,rotationSpeed,PlayerCamera,RunTransitionHandlerInput,MovementVectorBlend);
     }
 
 

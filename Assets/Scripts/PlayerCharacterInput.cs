@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -33,6 +34,11 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     //New actions    
     public PlayerInputActions _inputActions;
 
+    private LinkedList<float> verticalHistory= new LinkedList<float>();
+    private LinkedList<float> horizontalHistory= new LinkedList<float>();
+
+    private const int historyLength=8;
+
     private void Awake()
     {
         Instance=this;
@@ -52,7 +58,6 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         _inputActions.Player.MouseDeltaAim.canceled+= ctx=>_cursorDeltaPosition= Vector2.zero;
 
         _inputActions.Player.AnalogAim.performed+= HandleAnalogAim;
-        //_inputActions.Player.Run.performed+= HandleRun;
         _inputActions.Player.Run.started+=HandleRunPressed;
         _inputActions.Player.Run.canceled+=HandleRunReleased;
     }    
@@ -67,7 +72,6 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         _inputActions.Player.MouseDeltaAim.performed-= HandleMouseDeltaAim;
         _inputActions.Player.AnalogAim.performed-= HandleAnalogAim;
         _inputActions.Player.MouseDeltaAim.canceled-= ctx=>_cursorDeltaPosition= Vector2.zero;
-        //_inputActions.Player.Run.performed-= HandleRun;
         _inputActions.Player.Run.started+=HandleRunPressed;
         _inputActions.Player.Run.canceled+=HandleRunReleased;
     }
@@ -93,7 +97,21 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         PlayerMovementIdleCheck();
         LastCursorPosition = CursorPosition;
         LastDirectionVector=DirectionVector;
+
+        MovementHistory();
     }
+
+    private void MovementHistory()
+    {
+        verticalHistory.AddFirst(Vertical);
+        horizontalHistory.AddFirst(Horizontal);
+        if(verticalHistory.Count>historyLength)
+        {
+            verticalHistory.RemoveLast();
+            horizontalHistory.RemoveLast();            
+        }
+    }
+
     private void LateUpdate()
     {        
         _cursorDeltaPosition= Vector2.zero;
@@ -134,7 +152,26 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
 
     public bool IsThereMovement()
     {
-        return Vertical > Mathf.Epsilon || Horizontal > Mathf.Epsilon;
+        float verticalSum=0f;
+        float horizontalSum=0f;
+        foreach(float number in verticalHistory)
+        {
+            verticalSum+=Mathf.Abs(number);
+        }
+        
+        foreach(float number in horizontalHistory)
+        {
+            horizontalSum+=Mathf.Abs(number);
+        }
+        float verticalAverage=verticalSum/((float)verticalHistory.Count);
+        float horizontalAverage=horizontalSum/((float)horizontalHistory.Count);
+        //Debug.Log("verticalAverage: "+verticalAverage);
+        //Debug.Log("horizontalAverage: "+horizontalAverage);
+      
+        bool isMovementhere= verticalAverage > Mathf.Epsilon || horizontalAverage > Mathf.Epsilon;
+        //bool isMovementhere= Vertical != _previousVertical || _previousHorizontal != Horizontal;
+        //bool isAxisCenter= Mathf.Abs(Vertical) < Mathf.Epsilon || Mathf.Abs(Horizontal) < Mathf.Epsilon;
+        return isMovementhere;
     }
 
     private bool IsThereDifferenceInMovement()

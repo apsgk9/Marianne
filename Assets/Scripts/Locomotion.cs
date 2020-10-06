@@ -30,12 +30,14 @@ public class Locomotion : ILocomotion
     private float previousAnimatorMovementSpeed;
     private LocomotionMode locomotionMode;
     private event Action<Vector3> Change;
+    public AnimationCurve _MovementVectorBlend;
     enum LocomotionMode
     {
         Idle=0,Walk=1,Run=2,Sprint=3
     }
 
-    public Locomotion(Player player, float moveSpeed,float runMoveSpeed,float rotationSpeed,Camera playerCamera,RunTransitionHandler _runTransitionHandlerInput)
+    public Locomotion(Player player, float moveSpeed,float runMoveSpeed,float rotationSpeed,
+    Camera playerCamera,RunTransitionHandler _runTransitionHandlerInput,AnimationCurve movementVectorBlend)
     {
         _player = player;
         _characterController = player.GetComponent<CharacterController>();
@@ -43,6 +45,9 @@ public class Locomotion : ILocomotion
         _runMoveSpeed=runMoveSpeed;
         _playerCamera= playerCamera;
         _RotationSpeed = rotationSpeed;
+        _MovementVectorBlend=movementVectorBlend;
+
+
         _RootMotionDelta = player.GetComponentInChildren<RootMotionDelta>();
         if(_playerCamera==null)
         {
@@ -62,12 +67,16 @@ public class Locomotion : ILocomotion
 
     private void HandleRootMotion(Vector3 DeltaVector, Quaternion NewRotation)
     {
-        //_characterController.SimpleMove(DeltaVector*50);
-        _characterController.Move(DeltaVector);
+        float angleDifference = Vector3.Angle(DeltaVector,VectorForwardBasedOnPlayerCamera.normalized);
+        var multiplier=0f;        
+        multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
+        //Debug.Log(angleDifference+"||"+multiplier);        
+        var baseMovementComposite= DeltaVector* (multiplier);
+
+        //Vector3 baseMovementComposite = (VectorForwardBasedOnPlayerCamera.normalized * movementMagnitude * _moveSpeed);
+        
+        _characterController.Move(baseMovementComposite);
         OnMoveChange?.Invoke(DeltaVector);
-        //_player.transform.position += DeltaVector;
-        //PlayerGameobject.transform.rotation = Animator.rootRotation;
-        //PlayerGameobject.transform.position += Animator.deltaPosition;
     }
 
     public void Tick()
@@ -102,75 +111,13 @@ public class Locomotion : ILocomotion
 
     private void MoveTransform()
     {
-        //MovementSystem1();
-        //MovementSystem2();
         MovementSystem3();
-    }
-
-    private void MovementSystem2()
-    {
-        var movementMagnitude = _movementInput.magnitude;
-        float movementSpeed = 0f;
-        float movementAnimatorSpeed = 0f;
-        if (movementMagnitude >= runThreshold && movementMagnitude < sprintThreshold) //run
-        {
-            movementSpeed = runSpeed;
-            movementAnimatorSpeed = 2f;
-        }
-        else if (movementMagnitude >= sprintThreshold) //sprint
-        {
-            movementSpeed = sprintSpeed;
-            movementAnimatorSpeed = 3f;
-        }
-        else if (movementMagnitude < runThreshold && movementMagnitude > 0.1f) //walk
-        {
-            movementSpeed = walkSpeed;
-            movementAnimatorSpeed = 1f;
-        }
-
-        //var runMultiplierTarget = _runTransitionHandler.RunMultiplier;
-        //var runModifierAddition = ((runMultiplierTarget - (float)_runTransitionHandler.baseTarget) * _runMoveSpeed);
-
-        Vector3 baseMovementComposite = VectorForwardBasedOnPlayerCamera.normalized * movementSpeed;
-
-        //Vector3 baseMovementComposite = (VectorForwardBasedOnPlayerCamera.normalized * movementMagnitude * _moveSpeed);
-        finalMovementComposite = baseMovementComposite;
-
-        var DeltaMovementSpeed = movementAnimatorSpeed - previousAnimatorMovementSpeed;
-
-
-
-        _characterController.SimpleMove(finalMovementComposite);
-        OnMoveChange?.Invoke(finalMovementComposite);
-        OnMoveAnimatorSpeedChange?.Invoke(movementAnimatorSpeed);
-        previousAnimatorMovementSpeed = movementAnimatorSpeed;
-    }
-
-    private void MovementSystem1()
-    {
-        var movementMagnitude = _movementInput.magnitude * 2;
-        
-        float runModifierAddition=0f;
-
-        if(PlayerCharacterInput.Instance.RunPressed)
-        {
-            runModifierAddition=_runMoveSpeed;
-        }
-        Vector3 runcomposite = VectorForwardBasedOnPlayerCamera.normalized * runModifierAddition;
-
-        Vector3 baseMovementComposite = (VectorForwardBasedOnPlayerCamera.normalized * movementMagnitude * _moveSpeed);
-        finalMovementComposite = runcomposite + baseMovementComposite;
-
-
-        _characterController.SimpleMove(finalMovementComposite);
-        OnMoveChange?.Invoke(finalMovementComposite);
-        OnMoveAnimatorSpeedChange?.Invoke(finalMovementComposite.magnitude);
     }
 
     private void MovementSystem3()
     {
         var movementMagnitude = Mathf.Clamp(_movementInput.magnitude,0,1);
-        
+
 
         var runMultiplierTarget = _runTransitionHandler.RunMultiplier;
         var runModifierAddition = ((runMultiplierTarget - (float)_runTransitionHandler.baseTarget) * _runMoveSpeed);

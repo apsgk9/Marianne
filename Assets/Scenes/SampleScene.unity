@@ -1329,6 +1329,8 @@ MonoBehaviour:
   SpeedParameterName: Speed
   ChangeInVelocityParameterName: ChangeInVelocity
   DeltaVelocityParameterName: DeltaVelocity
+  ControllerDeltaParameterName: ControllerDelta
+  MovementPressedParameterName: MovementPressed
   AnimationSpeedTweaker: 1
   UseCurves: 0
 --- !u!1 &194576054847431903
@@ -1459,9 +1461,42 @@ MonoBehaviour:
   PlayerCamera: {fileID: 0}
   moveSpeed: 2
   runMoveSpeed: 2
-  rotationSpeed: 20
+  rotationSpeed: 12.5
   RunTransitionHandlerInput: {fileID: 194576056126775832}
   Speed: 0
+  MovementVectorBlend:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &194576056126775835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1770,7 +1805,7 @@ MonoBehaviour:
   m_BindingMode: 4
   m_SplineCurvature: 0.2
   m_Orbits:
-  - m_Height: 7
+  - m_Height: 9
     m_Radius: 3
   - m_Height: 4
     m_Radius: 5
@@ -1866,7 +1901,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.24996781, y: -0.000000018626611, z: 0.000000004808711, w: 0.96825415}
+  m_LocalRotation: {x: 0.24996781, y: 0.000000018626608, z: -0.0000000048087103, w: 0.96825415}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
