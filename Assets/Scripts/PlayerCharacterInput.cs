@@ -32,12 +32,12 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
 
     //New actions    
     public PlayerInputActions _inputActions;
-
     private LinkedList<float> verticalHistory= new LinkedList<float>();
     private LinkedList<float> horizontalHistory= new LinkedList<float>();
-
     private const int historyLength=16;
     
+    public string DeviceUsing=>_deviceUsing;
+    private string _deviceUsing;
     private void Awake()
     {
         Instance=this;
@@ -45,6 +45,7 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         LastDirectionVector=DirectionVector;
         
         _inputActions = new PlayerInputActions();
+        _deviceUsing="Keyboard"; //default to keyboard
     }
     private void OnEnable()
     {
@@ -71,9 +72,10 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     {
         if(change.ToString()=="DevicePaired" && device!=null)        
         {
-            ClearConsole.clear();
-            Debug.Log("Change: "+change);
-            Debug.Log("Device: "+device.name);
+            //ClearConsole.clear();
+            //Debug.Log("Change: "+change);
+            //Debug.Log("Device: "+device.name);
+            _deviceUsing=device.name;
         }
     }
 

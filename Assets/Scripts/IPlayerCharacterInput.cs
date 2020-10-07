@@ -13,4 +13,5 @@ public interface IPlayerCharacterInput
     Vector2 CursorDeltaPosition { get;}
     bool isPlayerLookIdle { get; }
     bool IsThereMovement();
+    string DeviceUsing{get;}
 }

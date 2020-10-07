@@ -15,6 +15,7 @@ public class PlayerAnimator : MonoBehaviour
     public RunTransitionHandler _runTransitionHandler { get; private set;}
     public string ControllerDeltaParameterName ="ControllerDelta";
     public string MovementPressedParameterName ="MovementPressed";
+    public string UsingControllerParameterName ="UsingController";
 
     public float AnimationSpeedTweaker=0.5f;
     public bool UseCurves=true;
@@ -42,12 +43,23 @@ public class PlayerAnimator : MonoBehaviour
 
         float _ControllerMovementAxisDelta = ReturnDeltaMovement();
         Animator.SetFloat(ControllerDeltaParameterName, _ControllerMovementAxisDelta);
-        bool getMovementPressed=MovementPressed();
-        Animator.SetBool(MovementPressedParameterName, getMovementPressed);
+
+        Animator.SetBool(MovementPressedParameterName, GetMovementPressed());
+        
+        Animator.SetBool(UsingControllerParameterName, IsUsingController());
     }
-    private bool MovementPressed()
+    private bool GetMovementPressed()
     {
         return PlayerCharacterInput.Instance.IsThereMovement();
+    }
+    private bool IsUsingController()
+    {
+        var deviceUsing=PlayerCharacterInput.Instance.DeviceUsing;
+        if(deviceUsing=="DualShock4GamepadHID" || deviceUsing=="XInputControllerWindows")
+        {
+            return true;
+        }
+        return false;
     }
 
     private static float ReturnDeltaMovement()
