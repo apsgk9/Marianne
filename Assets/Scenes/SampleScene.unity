@@ -584,7 +584,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh15880
+  m_Name: pb_Mesh15874
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1861,7 +1861,7 @@ MonoBehaviour:
     inputValue: 0
     speedMultiplier: 0.01
   yAxis:
-    multiplier: -0.05
+    multiplier: -0.035
     accelTime: 0.1
     decelTime: 0.1
     axisSpace: 1

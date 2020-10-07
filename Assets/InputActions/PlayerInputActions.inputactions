@@ -186,7 +186,7 @@
                     "id": "cac79751-f183-434e-92d7-be1b871172da",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=2,y=2)",
+                    "processors": "",
                     "groups": "Gamepad",
                     "action": "AnalogAim",
                     "isComposite": false,

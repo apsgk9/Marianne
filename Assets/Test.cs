@@ -7,8 +7,7 @@ public class Test : StateMachineBehaviour
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        
+    {       
 
         //Debug.Log("DeltaVelocity: "+animator.GetFloat("DeltaVelocity"));
         //Debug.Log("ControllerDelta: "+animator.GetFloat("ControllerDelta"));
