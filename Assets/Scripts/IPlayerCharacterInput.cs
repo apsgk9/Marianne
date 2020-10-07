@@ -3,7 +3,6 @@ using UnityEngine;
 
 public interface IPlayerCharacterInput
 {
-    event Action MoveModeTogglePressed;
     event Action<int> HotKeyPressed;
     float Vertical {get;}
     float Horizontal {get;}
@@ -13,7 +12,5 @@ public interface IPlayerCharacterInput
     Vector2 CursorPosition { get;}
     Vector2 CursorDeltaPosition { get;}
     bool isPlayerLookIdle { get; }
-    bool isPlayerTryingToMove { get; }
-    
     bool IsThereMovement();
 }

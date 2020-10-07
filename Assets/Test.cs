@@ -8,14 +8,11 @@ public class Test : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-        var type = assembly.GetType("UnityEditor.LogEntries");
-        var method = type.GetMethod("Clear");
-        method.Invoke(new object(), null);
+        
 
-        Debug.Log("DeltaVelocity: "+animator.GetFloat("DeltaVelocity"));
-        Debug.Log("ControllerDelta: "+animator.GetFloat("ControllerDelta"));
-        Debug.Log("MovementPressed: "+animator.GetBool("MovementPressed"));
+        //Debug.Log("DeltaVelocity: "+animator.GetFloat("DeltaVelocity"));
+        //Debug.Log("ControllerDelta: "+animator.GetFloat("ControllerDelta"));
+        //Debug.Log("MovementPressed: "+animator.GetBool("MovementPressed"));
         
     }
 

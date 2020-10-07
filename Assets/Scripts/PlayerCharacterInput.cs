@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
 {
     public static IPlayerCharacterInput Instance {get; set;}
-    public event Action MoveModeTogglePressed;
     public Vector2 DirectionVector => new Vector2(Horizontal,Vertical);
     public Vector2 LastDirectionVector;
     public event Action<int> HotKeyPressed;
@@ -15,7 +15,6 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     public Vector2 LastCursorPosition;
     public float IdleThreshold =2f;
     public bool isPlayerLookIdle =>MouseIdleTimer.Activated;
-    public bool isPlayerTryingToMove => _isPlayerTryingToMove;
     private Timer MouseIdleTimer;
     public float Vertical => _vertical;
     public float Horizontal => _horizontal;
@@ -37,8 +36,8 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     private LinkedList<float> verticalHistory= new LinkedList<float>();
     private LinkedList<float> horizontalHistory= new LinkedList<float>();
 
-    private const int historyLength=8;
-
+    private const int historyLength=16;
+    
     private void Awake()
     {
         Instance=this;
@@ -50,17 +49,33 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     private void OnEnable()
     {
         _inputActions.Enable();
-        _inputActions.Player.MovementAxis.performed+= HandleMovement;
-        _inputActions.Player.MovementAxis.canceled+= ctx=>HandleMovementCancel();
+        _inputActions.Player.MovementAxis.performed += HandleMovement;
+        _inputActions.Player.MovementAxis.canceled += ctx => HandleMovementCancel();
 
-        _inputActions.Player.MouseAim.performed+= HandleMouseAim;
-        _inputActions.Player.MouseDeltaAim.performed+= HandleMouseDeltaAim;
-        _inputActions.Player.MouseDeltaAim.canceled+= ctx=>_cursorDeltaPosition= Vector2.zero;
+        _inputActions.Player.MouseAim.performed += HandleMouseAim;
+        _inputActions.Player.MouseDeltaAim.performed += HandleMouseDeltaAim;
+        _inputActions.Player.MouseDeltaAim.canceled += ctx => _cursorDeltaPosition = Vector2.zero;
 
-        _inputActions.Player.AnalogAim.performed+= HandleAnalogAim;
-        _inputActions.Player.Run.started+=HandleRunPressed;
-        _inputActions.Player.Run.canceled+=HandleRunReleased;
-    }    
+        _inputActions.Player.AnalogAim.performed += HandleAnalogAim;
+        _inputActions.Player.Run.started += HandleRunPressed;
+        _inputActions.Player.Run.canceled += HandleRunReleased;
+        
+        //InputSystem.onDeviceChange += DeviceChange;
+
+        InputUser.onChange+= OnDeviceChanged;
+
+
+    }
+
+    private void OnDeviceChanged(InputUser user, InputUserChange change, InputDevice device)
+    {
+        if(change.ToString()=="DevicePaired" && device!=null)        
+        {
+            ClearConsole.clear();
+            Debug.Log("Change: "+change);
+            Debug.Log("Device: "+device.name);
+        }
+    }
 
     private void OnDisable()
     {
@@ -74,24 +89,19 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         _inputActions.Player.MouseDeltaAim.canceled-= ctx=>_cursorDeltaPosition= Vector2.zero;
         _inputActions.Player.Run.started+=HandleRunPressed;
         _inputActions.Player.Run.canceled+=HandleRunReleased;
+
+        //InputSystem.onDeviceChange -= DeviceChange;
+        //InputUser.onChange-= OnDeviceChanged;
     }
 
     private void HandleMovementCancel()
     {
+        //Debug.Log("value: 0");
         _horizontal = 0f;
         _vertical = 0f;
     }
-
+    
     public void Tick()
-    {
-        if (MoveModeTogglePressed != null && Input.GetKeyDown(KeyCode.Minus))
-        {
-            MoveModeTogglePressed();
-        }
-
-        HotKeyCheck();
-    }
-    private void Update()
     {
         PlayerMouseIdleCheck();
         PlayerMovementIdleCheck();
@@ -99,6 +109,11 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         LastDirectionVector=DirectionVector;
 
         MovementHistory();
+        
+    }
+    private void Update()
+    {
+        Tick();        
     }
 
     private void MovementHistory()
@@ -111,12 +126,6 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
             horizontalHistory.RemoveLast();            
         }
     }
-
-    private void LateUpdate()
-    {        
-        _cursorDeltaPosition= Vector2.zero;
-    }
-
     
     private void HandleMovement(InputAction.CallbackContext context)
     {
@@ -124,6 +133,7 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         _horizontal = value.x;
         _vertical = value.y;
     }
+    
 
     private void HandleMouseAim(InputAction.CallbackContext context)
     {
@@ -165,8 +175,6 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         }
         float verticalAverage=verticalSum/((float)verticalHistory.Count);
         float horizontalAverage=horizontalSum/((float)horizontalHistory.Count);
-        //Debug.Log("verticalAverage: "+verticalAverage);
-        //Debug.Log("horizontalAverage: "+horizontalAverage);
       
         bool isMovementhere= verticalAverage > Mathf.Epsilon || horizontalAverage > Mathf.Epsilon;
         //bool isMovementhere= Vertical != _previousVertical || _previousHorizontal != Horizontal;
@@ -211,5 +219,32 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
                 HotKeyPressed(i);
             }
         }
+    }
+
+    private static void DeviceChange(InputDevice device,InputDeviceChange change)
+    {
+        switch (change)
+        {
+            case InputDeviceChange.Added:
+                // New Device.
+                Debug.Log("Added: " + device.name);
+                break;
+            case InputDeviceChange.Disconnected:
+                // Device got unplugged.
+                Debug.Log("Disconnected: " + device.name);
+                break;
+            case InputDeviceChange.Reconnected:
+                // Plugged back in.
+                Debug.Log("Reconnected: " + device.name);
+                break;
+            case InputDeviceChange.Removed:
+                // Remove from Input System entirely; by default, Devices stay in the system once discovered.
+                Debug.Log("Removed: " + device.name);
+                break;
+            default:
+                // See InputDeviceChange reference for other event types.
+                break;
+        }
+                
     }
 }
