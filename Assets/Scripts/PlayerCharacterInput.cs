@@ -34,7 +34,7 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     public PlayerInputActions _inputActions;
     private LinkedList<float> verticalHistory= new LinkedList<float>();
     private LinkedList<float> horizontalHistory= new LinkedList<float>();
-    private const int historyLength=16;
+    private const int historyMaxLength=4;
     
     public string DeviceUsing=>_deviceUsing;
     private string _deviceUsing;
@@ -92,13 +92,10 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         _inputActions.Player.Run.started+=HandleRunPressed;
         _inputActions.Player.Run.canceled+=HandleRunReleased;
 
-        //InputSystem.onDeviceChange -= DeviceChange;
-        //InputUser.onChange-= OnDeviceChanged;
     }
 
     private void HandleMovementCancel()
     {
-        //Debug.Log("value: 0");
         _horizontal = 0f;
         _vertical = 0f;
     }
@@ -122,7 +119,12 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
     {
         verticalHistory.AddFirst(Vertical);
         horizontalHistory.AddFirst(Horizontal);
-        if(verticalHistory.Count>historyLength)
+        var multiplier=1f;
+        if(InputHelper.DeviceInputTool.IsUsingController())
+        {
+            multiplier=0.5f;            
+        }
+        while(verticalHistory.Count>historyMaxLength*multiplier)
         {
             verticalHistory.RemoveLast();
             horizontalHistory.RemoveLast();            
@@ -178,9 +180,7 @@ public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
         float verticalAverage=verticalSum/((float)verticalHistory.Count);
         float horizontalAverage=horizontalSum/((float)horizontalHistory.Count);
       
-        bool isMovementhere= verticalAverage > Mathf.Epsilon || horizontalAverage > Mathf.Epsilon;
-        //bool isMovementhere= Vertical != _previousVertical || _previousHorizontal != Horizontal;
-        //bool isAxisCenter= Mathf.Abs(Vertical) < Mathf.Epsilon || Mathf.Abs(Horizontal) < Mathf.Epsilon;
+        bool isMovementhere= verticalAverage > 0.0025 || horizontalAverage > 0.0025;
         return isMovementhere;
     }
 

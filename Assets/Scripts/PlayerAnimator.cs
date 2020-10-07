@@ -46,21 +46,13 @@ public class PlayerAnimator : MonoBehaviour
 
         Animator.SetBool(MovementPressedParameterName, GetMovementPressed());
         
-        Animator.SetBool(UsingControllerParameterName, IsUsingController());
+        Animator.SetBool(UsingControllerParameterName, InputHelper.DeviceInputTool.IsUsingController());
     }
     private bool GetMovementPressed()
     {
         return PlayerCharacterInput.Instance.IsThereMovement();
     }
-    private bool IsUsingController()
-    {
-        var deviceUsing=PlayerCharacterInput.Instance.DeviceUsing;
-        if(deviceUsing=="DualShock4GamepadHID" || deviceUsing=="XInputControllerWindows")
-        {
-            return true;
-        }
-        return false;
-    }
+    
 
     private static float ReturnDeltaMovement()
     {
