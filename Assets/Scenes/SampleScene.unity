@@ -213,7 +213,7 @@ Transform:
   m_LocalScale: {x: 5, y: 6, z: 6}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &551768712
 GameObject:
@@ -260,7 +260,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &551768716
 MonoBehaviour:
@@ -801,7 +801,7 @@ Transform:
   m_Children:
   - {fileID: 1694892062}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1694892057
 GameObject:
@@ -1113,36 +1113,6 @@ Transform:
   m_Father: {fileID: 1514372279}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2145652773
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2145652774}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2145652774
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2145652773}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &194576054847431898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1371,9 +1341,8 @@ MonoBehaviour:
   PlayerCamera: {fileID: 0}
   moveSpeed: 2
   runMoveSpeed: 2
-  rotationSpeed: 12.5
+  rotationSpeed: 10
   RunTransitionHandlerInput: {fileID: 194576056126775832}
-  Speed: 0
   MovementVectorBlend:
     serializedVersion: 2
     m_Curve:
@@ -1387,22 +1356,55 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.5
+      time: 0.85
       value: 0
       inSlope: 0
-      outSlope: 0
-      tangentMode: 136
+      outSlope: 9.338788
+      tangentMode: 1
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.061621666
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0.034999076
+      outSlope: 0.034999076
       tangentMode: 0
       weightedMode: 0
+      inWeight: 0.8086486
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  TurnRotationBlend:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
       inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9
+      value: 1
+      inSlope: -0
+      outSlope: 6.424641
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.04222846
+    - serializedVersion: 3
+      time: 1
+      value: 10
+      inSlope: 0.0747304
+      outSlope: 0.0747304
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.45953953
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1456,7 +1458,7 @@ Transform:
   - {fileID: 194576054847431900}
   - {fileID: 194576056071067329}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &194576056126775839
 GameObject:
@@ -2001,7 +2003,7 @@ Transform:
   - {fileID: 5641381598827573899}
   - {fileID: 963194228}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4641719796407763733
 MonoBehaviour:

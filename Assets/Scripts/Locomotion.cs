@@ -31,13 +31,14 @@ public class Locomotion : ILocomotion
     private LocomotionMode locomotionMode;
     private event Action<Vector3> Change;
     public AnimationCurve _MovementVectorBlend;
+    public AnimationCurve _RotationBlend;
     enum LocomotionMode
     {
         Idle=0,Walk=1,Run=2,Sprint=3
     }
 
     public Locomotion(Player player, float moveSpeed,float runMoveSpeed,float rotationSpeed,
-    Camera playerCamera,RunTransitionHandler _runTransitionHandlerInput,AnimationCurve movementVectorBlend)
+    Camera playerCamera,RunTransitionHandler _runTransitionHandlerInput,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend)
     {
         _player = player;
         _characterController = player.GetComponent<CharacterController>();
@@ -46,6 +47,7 @@ public class Locomotion : ILocomotion
         _playerCamera= playerCamera;
         _RotationSpeed = rotationSpeed;
         _MovementVectorBlend=movementVectorBlend;
+        _RotationBlend=rotationBlend;
 
 
         _RootMotionDelta = player.GetComponentInChildren<RootMotionDelta>();
@@ -89,9 +91,13 @@ public class Locomotion : ILocomotion
     private void RotateTransform()
     {
         if (VectorForwardBasedOnPlayerCamera != Vector3.zero)
-        {
+        {    
             var DesiredRotation = Quaternion.LookRotation(VectorForwardBasedOnPlayerCamera);
-            var FixedRotation = Quaternion.Slerp(_player.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed);
+            float angleDifference = Vector3.Angle(_player.transform.forward,VectorForwardBasedOnPlayerCamera.normalized);
+            var multiplier=0f;        
+            multiplier=_RotationBlend.Evaluate(angleDifference/180f);
+
+            var FixedRotation = Quaternion.Slerp(_player.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed*multiplier);
             
             //zero out y
             FixedRotation= Quaternion.Euler(0f,FixedRotation.eulerAngles.y,0f);
@@ -101,9 +107,7 @@ public class Locomotion : ILocomotion
 
     private void CalculatePlayerForwardVector()
     {
-        //figure how to differentiate console input and keyboard input
         _movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal, 0, PlayerCharacterInput.Instance.Vertical);
-
         var temp=_playerCamera.transform.TransformDirection(_movementInput);
         temp.y=0f;
         VectorForwardBasedOnPlayerCamera=temp;
