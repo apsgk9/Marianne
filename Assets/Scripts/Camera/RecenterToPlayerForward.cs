@@ -11,11 +11,14 @@ public class RecenterToPlayerForward : MonoBehaviour
     public float RecenterTime;
 
     public CinemachineFreeLook FreeLookPlayerVirtualCam { get; private set; }
+    
+    private Cinemachine.CinemachineTransposer.BindingMode initialBindingMode;
 
     void Start()
     {
         FreeLookPlayerVirtualCam = GetComponent<CinemachineFreeLook>();
         isRecentering=false;
+        initialBindingMode = FreeLookPlayerVirtualCam.m_BindingMode;
     }
 
     public void TryRecenter()
@@ -29,11 +32,18 @@ public class RecenterToPlayerForward : MonoBehaviour
     public void CancelRecentering()
     {
         isRecentering=false;
+        //FreeLookPlayerVirtualCam.m_BindingMode=initialBindingMode;
     }
 
     private IEnumerator Recenter()
     {
-        isRecentering=true;
+        if(FreeLookPlayerVirtualCam.m_BindingMode != Cinemachine.CinemachineTransposer.BindingMode.WorldSpace)
+        {
+            SetupBindingMode();
+        }
+        //ClearConsole.clear();
+        
+        isRecentering =true;
         var PlayerRotation= GameObject.FindObjectOfType<Player>().transform.rotation;
         var LastYRotation= PlayerRotation.eulerAngles.y;
 
@@ -61,16 +71,26 @@ public class RecenterToPlayerForward : MonoBehaviour
             FreeLookPlayerVirtualCam.m_YAxis.Value=0.5f;
             FreeLookPlayerVirtualCam.m_XAxis.Value=LastYRotation;
         }
-        isRecentering=false;
+        CancelRecentering();
         
+    }
+
+    private void SetupBindingMode()
+    {
+        FreeLookPlayerVirtualCam.m_BindingMode = Cinemachine.CinemachineTransposer.BindingMode.WorldSpace;
+        FreeLookPlayerVirtualCam.m_XAxis.m_Wrap=true;
+        FreeLookPlayerVirtualCam.m_XAxis.m_MinValue=0;
+        FreeLookPlayerVirtualCam.m_XAxis.m_MaxValue=360;
     }
 
     private float SmoothStepWrap(float from,float to,float min,float max, float t)
     {
+        
         float difference=Mathf.Abs(to-from);
         if(difference<=180f)
         {
-            return Mathf.SmoothStep(from, to, t);
+            var result=Mathf.SmoothStep(from, to, t);
+            return result;
         }
         else if(difference==360)
         {            
@@ -85,9 +105,12 @@ public class RecenterToPlayerForward : MonoBehaviour
         {
             float newStep= Mathf.SmoothStep(0, difference, t);
             float toreturn=from+newStep;
+            //Debug.Log("toreturn before:"+toreturn+"||max:"+max+"||target:"+to);
             if(toreturn>max)
             {
+                //Debug.Log("toreturn INITIAL:"+toreturn);
                 toreturn= min+(toreturn-max);
+                //Debug.Log("toreturn FINAL:"+toreturn);
             }
             return toreturn;
         }
@@ -95,9 +118,12 @@ public class RecenterToPlayerForward : MonoBehaviour
         {
             float newStep= Mathf.SmoothStep(0, difference, t);
             float toreturn=from-newStep;
-            if(newStep<min)
+            //Debug.Log("toreturn before:"+toreturn+"||min:"+min+"||target:"+to);
+            if(toreturn<min)
             {
+                //Debug.Log("toreturn INITIAL:"+toreturn);
                 toreturn= max+(toreturn-min);
+                //Debug.Log("toreturn FINAL:"+toreturn);
             }
             return toreturn;
         }

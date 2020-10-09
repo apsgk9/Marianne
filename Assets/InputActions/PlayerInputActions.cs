@@ -55,7 +55,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""c310d3a3-ba23-4930-a33a-2608fcdab2e4"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""ScaleVector2(x=1.5,y=1.5)"",
+                    ""processors"": ""ScaleVector2"",
                     ""interactions"": """"
                 },
                 {
@@ -199,7 +199,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""id"": ""cac79751-f183-434e-92d7-be1b871172da"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=1.5,y=1.5)"",
+                    ""processors"": ""ScaleVector2"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""AnalogAim"",
                     ""isComposite"": false,

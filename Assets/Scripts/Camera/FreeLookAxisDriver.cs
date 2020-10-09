@@ -104,7 +104,7 @@ public struct CinemachineInputAxisDriver
 [RequireComponent(typeof(CinemachineFreeLook)), DisallowMultipleComponent]
 public class FreeLookAxisDriver : MonoBehaviour
 {
-    public float SpeedMultiplier=0.1f;
+    public float SpeedMultiplier=0.0075f;
     public CinemachineInputAxisDriver xAxis;
     public CinemachineInputAxisDriver yAxis;
 
@@ -123,21 +123,24 @@ public class FreeLookAxisDriver : MonoBehaviour
         freeLook.m_YAxis.m_MaxSpeed = freeLook.m_YAxis.m_AccelTime = freeLook.m_YAxis.m_DecelTime = 0;
         freeLook.m_YAxis.m_InputAxisName = string.Empty;
         RecenterToPlayerForward = GetComponent<RecenterToPlayerForward>();
+        
     }
 
     private void OnValidate()
     {
         xAxis.Validate();
         yAxis.Validate();
+        xAxis.speedMultiplier=SpeedMultiplier;
+        yAxis.speedMultiplier=SpeedMultiplier;
         RecenterToPlayerForward = GetComponent<RecenterToPlayerForward>();
     }
 
     private void Reset()
     {
-        SpeedMultiplier=0.1f;
+        SpeedMultiplier=0.0075f;
         xAxis = new CinemachineInputAxisDriver
         {
-            multiplier = -10f,
+            multiplier = 5f,
             accelTime = 0.1f,
             decelTime = 0.1f,
             //name = "Mouse X",
@@ -146,7 +149,7 @@ public class FreeLookAxisDriver : MonoBehaviour
         };
         yAxis = new CinemachineInputAxisDriver
         {
-            multiplier = 0.1f,
+            multiplier = -0.025f,
             accelTime = 0.1f,
             decelTime = 0.1f,
             //name = "Mouse Y",

@@ -99,8 +99,7 @@ public class Locomotion : ILocomotion
 
             var FixedRotation = Quaternion.Slerp(_player.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed*multiplier);
             
-            //zero out y
-            FixedRotation= Quaternion.Euler(0f,FixedRotation.eulerAngles.y,0f);
+            //FixedRotation= Quaternion.Euler(0f,FixedRotation.eulerAngles.y,0f);
             _player.transform.rotation = FixedRotation;
         }
     }
