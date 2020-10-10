@@ -107,9 +107,8 @@ public class Locomotion : ILocomotion
     private void CalculatePlayerForwardVector()
     {
         _movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal, 0, PlayerCharacterInput.Instance.Vertical);
-        var temp=_playerCamera.transform.TransformDirection(_movementInput);
-        temp.y=0f;
-        VectorForwardBasedOnPlayerCamera=temp;
+        ClearConsole.clear();
+        VectorForwardBasedOnPlayerCamera = Quaternion.Euler(0,_playerCamera.transform.eulerAngles.y,0)*_movementInput;
     }
 
     private void MoveTransform()
@@ -120,7 +119,6 @@ public class Locomotion : ILocomotion
     private void MovementSystem3()
     {
         var movementMagnitude = Mathf.Clamp(_movementInput.magnitude,0,1);
-
 
         var runMultiplierTarget = _runTransitionHandler.RunMultiplier;
         var runModifierAddition = ((runMultiplierTarget - (float)_runTransitionHandler.baseTarget) * _runMoveSpeed);
