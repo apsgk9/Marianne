@@ -50,13 +50,13 @@ public class PlayerAnimator : MonoBehaviour
     }
     private bool GetMovementPressed()
     {
-        return PlayerCharacterInput.Instance.IsThereMovement();
+        return UserInput.Instance.IsThereMovement();
     }
     
 
     private static float ReturnDeltaMovement()
     {
-        var movementAxis=new Vector2(PlayerCharacterInput.Instance.Horizontal, PlayerCharacterInput.Instance.Vertical);
+        var movementAxis=new Vector2(UserInput.Instance.Horizontal, UserInput.Instance.Vertical);
         float delta= (movementAxis-_previousMovmementAxis).magnitude;     
 
         _previousMovmementAxis=movementAxis;
@@ -75,7 +75,7 @@ public class PlayerAnimator : MonoBehaviour
 
     private void CurveCalculations()
     {
-        _rawDirection = new Vector2(PlayerCharacterInput.Instance.Horizontal, PlayerCharacterInput.Instance.Vertical);
+        _rawDirection = new Vector2(UserInput.Instance.Horizontal, UserInput.Instance.Vertical);
         _compositeSpeedValue = _rawDirection.magnitude * _runTransitionHandler.RunMultiplier;
     }
 

@@ -6,10 +6,10 @@ public class Bootstrapper
     public static void Initialize()
     {
         QualitySettings.vSyncCount = 2;
-        if(!GameObject.FindObjectOfType<PlayerCharacterInput>())
+        if(!GameObject.FindObjectOfType<UserInput>())
         {
             var inputGameObject = new GameObject("INPUT SYSTEM");
-            inputGameObject.AddComponent<PlayerCharacterInput>();
+            inputGameObject.AddComponent<UserInput>();
             GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
         }
         

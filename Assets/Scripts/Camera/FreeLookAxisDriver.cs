@@ -43,23 +43,17 @@ public struct CinemachineInputAxisDriver
 
     public float Update(float deltaTime, ref AxisState axis)
     {
-        //if (!string.IsNullOrEmpty(name))
-        //{
-        //    try { inputValue = CinemachineCore.GetInputAxis(name); }
-        //    catch (ArgumentException) {}
-        //    //catch (ArgumentException e) { Debug.LogError(e.ToString()); }
-        //}
-        //
         if(axisSpace ==AxisSpace.x)
         {
-            inputValue = PlayerCharacterInput.Instance.CursorDeltaPosition.x;
+            try { inputValue = UserInput.Instance.CursorDeltaPosition.x; }
+            catch (ArgumentException) {}       
+            
         }
         else
         {
-            inputValue = PlayerCharacterInput.Instance.CursorDeltaPosition.y;
+            try { inputValue = UserInput.Instance.CursorDeltaPosition.y;}
+            catch (ArgumentException) {}       
         }
-        //Debug.Log("inputValue:"+inputValue);
-
 
         float input = inputValue * multiplier*speedMultiplier;
         if (deltaTime < Epsilon)
@@ -143,7 +137,6 @@ public class FreeLookAxisDriver : MonoBehaviour
             multiplier = 5f,
             accelTime = 0.1f,
             decelTime = 0.1f,
-            //name = "Mouse X",
             axisSpace = AxisSpace.x,
             speedMultiplier=SpeedMultiplier,
         };
@@ -152,7 +145,6 @@ public class FreeLookAxisDriver : MonoBehaviour
             multiplier = -0.025f,
             accelTime = 0.1f,
             decelTime = 0.1f,
-            //name = "Mouse Y",
             axisSpace = AxisSpace.y,
             speedMultiplier=SpeedMultiplier,
         };

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Locomotion : ILocomotion
+public partial class Locomotion : ILocomotion
 {
     private readonly Player _player;
     private readonly CharacterController _characterController;
@@ -13,7 +13,6 @@ public class Locomotion : ILocomotion
     private float _RotationSpeed { get;}
 
     private RootMotionDelta _RootMotionDelta;
-
     public Vector3 VectorForwardBasedOnPlayerCamera { get; private set; }
     private Vector3 _movementInput;
     public Vector3 finalMovementComposite{get; private set;}
@@ -30,10 +29,6 @@ public class Locomotion : ILocomotion
     private event Action<Vector3> Change;
     public AnimationCurve _MovementVectorBlend;
     public AnimationCurve _RotationBlend;
-    enum LocomotionMode
-    {
-        Idle=0,Walk=1,Run=2,Sprint=3
-    }
 
     public Locomotion(Player player, float moveSpeed,float runMoveSpeed,float rotationSpeed,
     Camera playerCamera,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend)
@@ -69,20 +64,17 @@ public class Locomotion : ILocomotion
         float angleDifference = Vector3.Angle(DeltaVector,VectorForwardBasedOnPlayerCamera.normalized);
         var multiplier=0f;        
         multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
-        //Debug.Log(angleDifference+"||"+multiplier);        
-        var baseMovementComposite= DeltaVector* (multiplier);
-
-        //Vector3 baseMovementComposite = (VectorForwardBasedOnPlayerCamera.normalized * movementMagnitude * _moveSpeed);
-        
+        var baseMovementComposite= DeltaVector* (multiplier);        
         _characterController.Move(baseMovementComposite);
+
         OnMoveChange?.Invoke(DeltaVector);
     }
 
     public void Tick()
     {
         CalculatePlayerForwardVector();
-        MoveTransform();
         RotateTransform();
+        SendAnimatorLocomotionCommands(UserInput.Instance.RunPressed);
     }
 
     private void RotateTransform()
@@ -96,22 +88,16 @@ public class Locomotion : ILocomotion
 
             var FixedRotation = Quaternion.Slerp(_player.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed*multiplier);
             
-            //FixedRotation= Quaternion.Euler(0f,FixedRotation.eulerAngles.y,0f);
             _player.transform.rotation = FixedRotation;
         }
     }
 
     private void CalculatePlayerForwardVector()
     {
-        _movementInput= new Vector3(PlayerCharacterInput.Instance.Horizontal, 0, PlayerCharacterInput.Instance.Vertical);
-        ClearConsole.clear();
+        _movementInput= new Vector3(UserInput.Instance.Horizontal, 0, UserInput.Instance.Vertical);
         VectorForwardBasedOnPlayerCamera = Quaternion.Euler(0,_playerCamera.transform.eulerAngles.y,0)*_movementInput;
     }
 
-    private void MoveTransform()
-    {
-        SendAnimatorLocomotionCommands(PlayerCharacterInput.Instance.RunPressed);
-    }
 
     private void SendAnimatorLocomotionCommands(bool isRunning)
     {

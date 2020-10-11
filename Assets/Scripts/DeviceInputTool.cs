@@ -4,7 +4,7 @@ namespace InputHelper
     {
         public static bool IsUsingController()
         {
-            var deviceUsing = PlayerCharacterInput.Instance.DeviceUsing;
+            var deviceUsing = UserInput.Instance.DeviceUsing;
             if (UsesControllerInput(deviceUsing))
             {
                 return true;

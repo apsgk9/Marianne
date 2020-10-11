@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public interface IPlayerCharacterInput
+public interface IUserInput
 {
     event Action<int> HotKeyPressed;
     float Vertical {get;}

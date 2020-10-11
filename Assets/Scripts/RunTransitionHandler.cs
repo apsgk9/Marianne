@@ -44,7 +44,7 @@ public class RunTransitionHandler: MonoBehaviour
 
     private AnimationCurve GetAnimationCurveToUse()
     {
-        if(PlayerCharacterInput.Instance.RunPressed)
+        if(UserInput.Instance.RunPressed)
         {
             return RunTransitionCurve;
         }
@@ -53,7 +53,7 @@ public class RunTransitionHandler: MonoBehaviour
 
     private float GetTransitionTimeToUse()
     {
-        if(PlayerCharacterInput.Instance.RunPressed)
+        if(UserInput.Instance.RunPressed)
         {
             return RunTransitionTime;
         }
@@ -61,7 +61,7 @@ public class RunTransitionHandler: MonoBehaviour
     }
     private int GetRunMuliplierTarget()
     {
-        return PlayerCharacterInput.Instance.RunPressed ? runningTarget : baseTarget;
+        return UserInput.Instance.RunPressed ? runningTarget : baseTarget;
     }
 
     private bool runMultiplierTargetHasChanged()

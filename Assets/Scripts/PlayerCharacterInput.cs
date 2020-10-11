@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
-public class PlayerCharacterInput : MonoBehaviour, IPlayerCharacterInput
+public class UserInput : MonoBehaviour, IUserInput
 {
-    public static IPlayerCharacterInput Instance {get; set;}
+    public static IUserInput Instance {get; set;}
     public Vector2 DirectionVector => new Vector2(Horizontal,Vertical);
     public Vector2 LastDirectionVector;
     public event Action<int> HotKeyPressed;
