@@ -10,9 +10,7 @@ public partial class Locomotion : ILocomotion
     private float _moveSpeed;
     private float _runMoveSpeed;
     private Camera _characterCamera;
-
     private float _RotationSpeed { get;}
-
     private RootMotionDelta _RootMotionDelta;
     public Vector3 VectorForwardBasedOnPlayerCamera { get; private set; }
     private Vector3 _movementInput;
@@ -20,14 +18,12 @@ public partial class Locomotion : ILocomotion
     public Vector3 DeltaMovement => finalMovementComposite;
     public event Action<Vector3> OnMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
-    public float runThreshold=0.6f;
+    public float runThreshold=0.5f;
     public float sprintThreshold=2.01f;
     public float sprintSpeed=6f;
     public float runSpeed=4f;
     public float walkSpeed=2f;
-    private float previousAnimatorMovementSpeed;
     private LocomotionMode locomotionMode;
-    private event Action<Vector3> Change;
     public AnimationCurve _MovementVectorBlend;
     public AnimationCurve _RotationBlend;
     public ICharacterInput _characterInput;
@@ -48,7 +44,6 @@ public partial class Locomotion : ILocomotion
 
 
         _RootMotionDelta = _characterGameObject.GetComponentInChildren<RootMotionDelta>();
-        previousAnimatorMovementSpeed=0f;
         locomotionMode= LocomotionMode.Idle;
 
         _RootMotionDelta.OnRootMotionChange+=HandleRootMotion;
