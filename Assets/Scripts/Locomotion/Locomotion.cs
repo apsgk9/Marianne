@@ -16,8 +16,6 @@ public class Locomotion : ILocomotion
 
     public Vector3 VectorForwardBasedOnPlayerCamera { get; private set; }
     private Vector3 _movementInput;
-    private RunTransitionHandler _runTransitionHandler;
-
     public Vector3 finalMovementComposite{get; private set;}
     public Vector3 DeltaMovement => finalMovementComposite;
     public event Action<Vector3> OnMoveChange;
@@ -38,7 +36,7 @@ public class Locomotion : ILocomotion
     }
 
     public Locomotion(Player player, float moveSpeed,float runMoveSpeed,float rotationSpeed,
-    Camera playerCamera,RunTransitionHandler _runTransitionHandlerInput,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend)
+    Camera playerCamera,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend)
     {
         _player = player;
         _characterController = player.GetComponent<CharacterController>();
@@ -56,7 +54,6 @@ public class Locomotion : ILocomotion
             var temp =GameObject.FindObjectOfType<PlayerCamera>();
             _playerCamera = temp?.GetComponent<Camera>();
         }
-        _runTransitionHandler = _runTransitionHandlerInput;
         previousAnimatorMovementSpeed=0f;
         locomotionMode= LocomotionMode.Idle;
 
@@ -113,15 +110,14 @@ public class Locomotion : ILocomotion
 
     private void MoveTransform()
     {
-        MovementSystem3();
+        SendAnimatorLocomotionCommands(PlayerCharacterInput.Instance.RunPressed);
     }
 
-    private void MovementSystem3()
+    private void SendAnimatorLocomotionCommands(bool isRunning)
     {
         var movementMagnitude = Mathf.Clamp(_movementInput.magnitude,0,1);
 
-        var runMultiplierTarget = _runTransitionHandler.RunMultiplier;
-        var runModifierAddition = ((runMultiplierTarget - (float)_runTransitionHandler.baseTarget) * _runMoveSpeed);
+        int runModifierAddition = isRunning? 2:0;
 
         Vector3 runcomposite = VectorForwardBasedOnPlayerCamera.normalized * runModifierAddition;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(RunTransitionHandler))]
 public class Player : MonoBehaviour
 {
     private CharacterController _characterController;
@@ -9,7 +8,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed=4f;
     [SerializeField] private float runMoveSpeed=2f;
     [SerializeField] private float rotationSpeed=4f;
-    [SerializeField] private RunTransitionHandler RunTransitionHandlerInput;
     [SerializeField] private AnimationCurve MovementVectorBlend= AnimationCurve.Linear(0,0,1,1);
     [SerializeField] private AnimationCurve TurnRotationBlend= AnimationCurve.Linear(0,0,1,1);
     
@@ -20,7 +18,7 @@ public class Player : MonoBehaviour
     {
         _characterController = GetComponent<CharacterController>();
         _Locomotion = new Locomotion (this,moveSpeed,runMoveSpeed,rotationSpeed,
-        PlayerCamera,RunTransitionHandlerInput,MovementVectorBlend,TurnRotationBlend);
+        PlayerCamera,MovementVectorBlend,TurnRotationBlend);
     }
 
 

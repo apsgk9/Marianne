@@ -602,13 +602,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018228, y: 0.000000006791268, z: -0.0000000011020711, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018227, y: 0.000000004252742, z: -6.901251e-10, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -3.0402346}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3642255909750820895}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 89.00001, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 18.435001, y: -0.09, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1447,70 +1447,6 @@ Transform:
   m_Father: {fileID: 194576056126775837}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &194576056126775832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194576056126775839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c269d94d7f5e3d4cb2c2d98c61ebae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RunTransitionTime: 0.25
-  StopTransitionTime: 0.35
-  RunTransitionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  StopTransitionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  baseTarget: 1
-  runningTarget: 2
 --- !u!114 &194576056126775834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1527,7 +1463,6 @@ MonoBehaviour:
   moveSpeed: 2
   runMoveSpeed: 2
   rotationSpeed: 15
-  RunTransitionHandlerInput: {fileID: 194576056126775832}
   MovementVectorBlend:
     serializedVersion: 2
     m_Curve:
@@ -1659,7 +1594,6 @@ GameObject:
   - component: {fileID: 194576056126775836}
   - component: {fileID: 194576056126775835}
   - component: {fileID: 194576056126775834}
-  - component: {fileID: 194576056126775832}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1891,13 +1825,13 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_BindingMode: 4
-  m_SplineCurvature: 0.789
+  m_SplineCurvature: 1
   m_Orbits:
-  - m_Height: 3
+  - m_Height: 4
     m_Radius: 0.001
   - m_Height: 1
     m_Radius: 3
-  - m_Height: -0.5
+  - m_Height: -2
     m_Radius: 1
   m_LegacyHeadingBias: 3.4028235e+38
   m_Rigs:
@@ -1989,7 +1923,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.16018227, y: -0.0000000067912675, z: 0.000000001102071, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018224, y: 0.000000004252742, z: -6.9012535e-10, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2010,7 +1944,9 @@ GameObject:
   - component: {fileID: 2895267444548320167}
   - component: {fileID: 1149526371348613096}
   - component: {fileID: 2895267444548320169}
+  - component: {fileID: 2895267444548320172}
   - component: {fileID: 2895267444548320170}
+  - component: {fileID: 2895267444548320171}
   m_Layer: 0
   m_Name: CM FreeLookPlayer
   m_TagString: Untagged
@@ -2039,7 +1975,7 @@ MonoBehaviour:
     inputValue: 0
     speedMultiplier: 0.01
   yAxis:
-    multiplier: -0.05
+    multiplier: -0.04
     accelTime: 0.1
     decelTime: 0.1
     axisSpace: 1
@@ -2059,7 +1995,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b25704389081a14faec53e60aa71454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RecenterButton: 116
   RecenterTime: 0.35
 --- !u!114 &2895267444548320169
 MonoBehaviour:
@@ -2163,8 +2098,35 @@ MonoBehaviour:
   m_MaximumEffort: 4
   m_SmoothingTime: 0.1
   m_Damping: 2
-  m_DampingWhenOccluded: 0.25
+  m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 4
+--- !u!114 &2895267444548320171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2895267444548320166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 161fb39450857bb47a7e51d38b16cfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2895267444548320172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2895267444548320166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d70cc20219cd84593f67d248eafe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Offset: {x: 0, y: 0, z: 0}
+  m_ApplyAfter: 3
+  m_PreserveComposition: 0
 --- !u!4 &3642255909750820895
 Transform:
   m_ObjectHideFlags: 0
@@ -2343,8 +2305,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8660784859111640137}
-  m_LocalRotation: {x: -0.22975294, y: -0, z: -0, w: 0.973249}
-  m_LocalPosition: {x: 0, y: -1.5, z: 2}
+  m_LocalRotation: {x: 0.16018225, y: -0, z: -0, w: 0.9870875}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 285258140525359255}
@@ -2420,7 +2382,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.16018227, y: 0.0000000067912675, z: -0.000000001102071, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: -0.000000023309845, z: 0.000000003782667, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

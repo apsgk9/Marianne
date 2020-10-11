@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class RecenterToPlayerForward : MonoBehaviour
 {
-    [SerializeField] KeyCode RecenterButton = KeyCode.T;
     bool isRecentering;
     public float RecenterTime;
 

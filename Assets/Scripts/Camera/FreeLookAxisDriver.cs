@@ -31,7 +31,7 @@ public struct CinemachineInputAxisDriver
     /// Internal state
     private float mCurrentSpeed;
     const float Epsilon =  UnityVectorExtensions.Epsilon;    
-    
+    [HideInInspector]    
     public float speedMultiplier;
 
     /// Call from OnValidate: Make sure the fields are sensible
@@ -163,18 +163,26 @@ public class FreeLookAxisDriver : MonoBehaviour
         //bool changed = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);
         //if (yAxis.Update(Time.deltaTime, ref freeLook.m_YAxis))
         //    changed = true;
-        float xAxisInput = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);
-        float yAxisInput= yAxis.Update(Time.deltaTime, ref freeLook.m_YAxis);
-        if(CanCancelRecenter)
+        if (isCursorLocked())
         {
-            
-            Vector2 axisInputs= new Vector2(xAxisInput,yAxisInput);
-            if (axisInputs.magnitude > RecenterThreshold)
+            float xAxisInput = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);
+            float yAxisInput = yAxis.Update(Time.deltaTime, ref freeLook.m_YAxis);
+            if (CanCancelRecenter)
             {
-                freeLook.m_RecenterToTargetHeading.CancelRecentering();
-                freeLook.m_YAxisRecentering.CancelRecentering();
-                RecenterToPlayerForward.CancelRecentering();
+
+                Vector2 axisInputs = new Vector2(xAxisInput, yAxisInput);
+                if (axisInputs.magnitude > RecenterThreshold)
+                {
+                    freeLook.m_RecenterToTargetHeading.CancelRecentering();
+                    freeLook.m_YAxisRecentering.CancelRecentering();
+                    RecenterToPlayerForward.CancelRecentering();
+                }
             }
         }
+    }
+
+    private static bool isCursorLocked()
+    {
+        return Cursor.lockState == CursorLockMode.Locked;
     }
 }
