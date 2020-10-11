@@ -1,6 +1,9 @@
 namespace CharacterInput
 {
-    internal interface ICharacterInput
+    public interface ICharacterInput
     {
+        float MovementHorizontal();
+        float MovementVertical();
+        bool IsRunning();
     }
 }

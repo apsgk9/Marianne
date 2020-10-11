@@ -8,13 +8,13 @@ public class RootMotionDelta : MonoBehaviour
 {
     public GameObject PlayerGameobject;
     public Animator Animator { get; private set; }
-    public Player Player { get; private set; }
+    public PlayerCharacter Player { get; private set; }
     public event Action<Vector3,Quaternion> OnRootMotionChange;
 
     private void Awake()
     {
         Animator = GetComponent<Animator>();    
-        Player = GetComponentInParent<Player>();
+        Player = GetComponentInParent<PlayerCharacter>();
     }   
     void OnAnimatorMove()
     {

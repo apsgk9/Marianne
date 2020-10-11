@@ -10,12 +10,12 @@ public class PlayerState : MonoBehaviour
     public Vector3 DeltaVelocity;
     public float Speed;
     public float AnimatorSpeed;
-    public Player _player;
+    public PlayerCharacter _player;
 
     private void Awake()
     {
         Velocity=Vector3.zero;
-        _player = GetComponent<Player>();
+        _player = GetComponent<PlayerCharacter>();
     }
     private void OnEnable()
     {

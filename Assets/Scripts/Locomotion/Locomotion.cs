@@ -1,14 +1,15 @@
 using System;
+using CharacterInput;
 using UnityEngine;
 using UnityEngine.AI;
 
 public partial class Locomotion : ILocomotion
 {
-    private readonly Player _player;
+    private readonly GameObject _characterGameObject;
     private readonly CharacterController _characterController;
     private float _moveSpeed;
     private float _runMoveSpeed;
-    private Camera _playerCamera;
+    private Camera _characterCamera;
 
     private float _RotationSpeed { get;}
 
@@ -29,26 +30,24 @@ public partial class Locomotion : ILocomotion
     private event Action<Vector3> Change;
     public AnimationCurve _MovementVectorBlend;
     public AnimationCurve _RotationBlend;
+    public ICharacterInput _characterInput;
 
-    public Locomotion(Player player, float moveSpeed,float runMoveSpeed,float rotationSpeed,
-    Camera playerCamera,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend)
+    public Locomotion(GameObject character, float moveSpeed,float runMoveSpeed,float rotationSpeed,
+    Camera characterCamera,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend,
+    ICharacterInput characterInput)
     {
-        _player = player;
-        _characterController = player.GetComponent<CharacterController>();
+        _characterGameObject = character;
+        _characterController = character.GetComponent<CharacterController>();
         _moveSpeed = moveSpeed;
         _runMoveSpeed=runMoveSpeed;
-        _playerCamera= playerCamera;
+        _characterCamera= characterCamera;
         _RotationSpeed = rotationSpeed;
         _MovementVectorBlend=movementVectorBlend;
         _RotationBlend=rotationBlend;
+        _characterInput=characterInput;
 
 
-        _RootMotionDelta = player.GetComponentInChildren<RootMotionDelta>();
-        if(_playerCamera==null)
-        {
-            var temp =GameObject.FindObjectOfType<PlayerCamera>();
-            _playerCamera = temp?.GetComponent<Camera>();
-        }
+        _RootMotionDelta = _characterGameObject.GetComponentInChildren<RootMotionDelta>();
         previousAnimatorMovementSpeed=0f;
         locomotionMode= LocomotionMode.Idle;
 
@@ -72,9 +71,9 @@ public partial class Locomotion : ILocomotion
 
     public void Tick()
     {
-        CalculatePlayerForwardVector();
+        CalculateCharacterForwardVector();
         RotateTransform();
-        SendAnimatorLocomotionCommands(UserInput.Instance.RunPressed);
+        SendAnimatorLocomotionCommands(_characterInput.IsRunning());
     }
 
     private void RotateTransform()
@@ -82,20 +81,20 @@ public partial class Locomotion : ILocomotion
         if (VectorForwardBasedOnPlayerCamera != Vector3.zero)
         {    
             var DesiredRotation = Quaternion.LookRotation(VectorForwardBasedOnPlayerCamera);
-            float angleDifference = Vector3.Angle(_player.transform.forward,VectorForwardBasedOnPlayerCamera.normalized);
+            float angleDifference = Vector3.Angle(_characterGameObject.transform.forward,VectorForwardBasedOnPlayerCamera.normalized);
             var multiplier=0f;        
             multiplier=_RotationBlend.Evaluate(angleDifference/180f);
 
-            var FixedRotation = Quaternion.Slerp(_player.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed*multiplier);
+            var FixedRotation = Quaternion.Slerp(_characterGameObject.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed*multiplier);
             
-            _player.transform.rotation = FixedRotation;
+            _characterGameObject.transform.rotation = FixedRotation;
         }
     }
 
-    private void CalculatePlayerForwardVector()
+    private void CalculateCharacterForwardVector()
     {
-        _movementInput= new Vector3(UserInput.Instance.Horizontal, 0, UserInput.Instance.Vertical);
-        VectorForwardBasedOnPlayerCamera = Quaternion.Euler(0,_playerCamera.transform.eulerAngles.y,0)*_movementInput;
+        _movementInput= new Vector3(_characterInput.MovementHorizontal(), 0, _characterInput.MovementVertical());
+        VectorForwardBasedOnPlayerCamera = Quaternion.Euler(0,_characterCamera.transform.eulerAngles.y,0)*_movementInput;
     }
 
 
