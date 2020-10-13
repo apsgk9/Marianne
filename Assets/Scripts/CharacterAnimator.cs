@@ -8,11 +8,8 @@ public class CharacterAnimator : MonoBehaviour
     public Animator Animator;
     public PlayerState PlayerState;
     public string SpeedParameterName = "Speed";
-    public string ChangeInVelocityParameterName = "ChangeInVelocity";
-    public string DeltaVelocityParameterName = "DeltaVelocity";
     private float _compositeSpeedValue;
     private Vector2 _rawDirection;
-    public string ControllerDeltaParameterName ="ControllerDelta";
     public string MovementPressedParameterName ="MovementPressed";
     public string UsingControllerParameterName ="UsingController";
     private static Vector2 _previousMovmementAxis;
@@ -32,11 +29,6 @@ public class CharacterAnimator : MonoBehaviour
         SpeedCalculations();
 
         Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
-        Animator.SetBool(ChangeInVelocityParameterName, ChangeInVelocity());
-        Animator.SetFloat(DeltaVelocityParameterName, PlayerState.DeltaVelocity.magnitude);
-
-        float _ControllerMovementAxisDelta = ReturnDeltaMovement();
-        Animator.SetFloat(ControllerDeltaParameterName, _ControllerMovementAxisDelta);
 
         Animator.SetBool(MovementPressedParameterName, GetMovementPressed());
         
