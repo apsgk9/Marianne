@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public partial class Locomotion : ILocomotion
 {
     private readonly GameObject _characterGameObject;
-    private readonly CharacterController _characterController;
+    private readonly ICharacterMover _characterMover;
     private float _moveSpeed;
     private float _runMoveSpeed;
     private Camera _characterCamera;
@@ -26,14 +26,15 @@ public partial class Locomotion : ILocomotion
     private LocomotionMode locomotionMode;
     public AnimationCurve _MovementVectorBlend;
     public AnimationCurve _RotationBlend;
+    [SerializeReference]
     public ICharacterInput _characterInput;
 
     public Locomotion(GameObject character, float moveSpeed,float runMoveSpeed,float rotationSpeed,
     Camera characterCamera,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend,
-    ICharacterInput characterInput)
+    ICharacterInput characterInput,ICharacterMover characterMover)
     {
         _characterGameObject = character;
-        _characterController = character.GetComponent<CharacterController>();
+        _characterMover = characterMover;
         _moveSpeed = moveSpeed;
         _runMoveSpeed=runMoveSpeed;
         _characterCamera= characterCamera;
@@ -58,8 +59,9 @@ public partial class Locomotion : ILocomotion
         float angleDifference = Vector3.Angle(DeltaVector,VectorForwardBasedOnPlayerCamera.normalized);
         var multiplier=0f;        
         multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
-        var baseMovementComposite= DeltaVector* (multiplier);        
-        _characterController.Move(baseMovementComposite);
+        var baseMovementComposite= DeltaVector* (multiplier);
+        
+        _characterMover.Move(baseMovementComposite);
 
         OnMoveChange?.Invoke(DeltaVector);
     }
