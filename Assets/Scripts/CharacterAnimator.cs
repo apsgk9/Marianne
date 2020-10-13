@@ -22,7 +22,7 @@ public class CharacterAnimator : MonoBehaviour
     {   
         if(_characterInput==null)
         {
-            _characterInput = GetComponent<ICharacterInput>();
+            _characterInput = GetComponentInParent<ICharacterInput>();
         }
         _previousMovmementAxis=Vector2.zero;
     }
@@ -44,13 +44,13 @@ public class CharacterAnimator : MonoBehaviour
     }
     private bool GetMovementPressed()
     {
-        return UserInput.Instance.IsThereMovement();
+        return _characterInput.IsThereMovement();
     }
     
 
-    private static float ReturnDeltaMovement()
+    private float ReturnDeltaMovement()
     {
-        var movementAxis=new Vector2(UserInput.Instance.Horizontal, UserInput.Instance.Vertical);
+        var movementAxis=new Vector2(_characterInput.MovementHorizontal(), _characterInput.MovementVertical());
         float delta= (movementAxis-_previousMovmementAxis).magnitude;     
 
         _previousMovmementAxis=movementAxis;

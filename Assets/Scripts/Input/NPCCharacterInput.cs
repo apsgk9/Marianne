@@ -48,5 +48,10 @@ namespace CharacterInput
         {
             return false;
         }
+
+        public bool IsThereMovement()
+        {
+            return vertical>Mathf.Epsilon || horizontal>Mathf.Epsilon;
+        }
     }
 }

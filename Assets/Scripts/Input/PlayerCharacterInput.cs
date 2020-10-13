@@ -20,5 +20,9 @@ namespace CharacterInput
         {
             return UserInput.Instance.RunPressed;
         }
+        public bool IsThereMovement()
+        {
+            return UserInput.Instance.IsThereMovement();
+        }
     }
 }

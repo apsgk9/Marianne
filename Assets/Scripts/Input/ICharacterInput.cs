@@ -5,5 +5,6 @@ namespace CharacterInput
         float MovementHorizontal();
         float MovementVertical();
         bool IsRunning();
+        bool IsThereMovement();
     }
 }

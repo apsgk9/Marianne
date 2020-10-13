@@ -16,7 +16,6 @@ public class RecenterToPlayerForward : MonoBehaviour
     {
         FreeLookPlayerVirtualCam = GetComponent<CinemachineFreeLook>();
         isRecentering=false;
-        initialBindingMode = FreeLookPlayerVirtualCam.m_BindingMode;
     }
 
     public void TryRecenter()
@@ -30,7 +29,6 @@ public class RecenterToPlayerForward : MonoBehaviour
     public void CancelRecentering()
     {
         isRecentering=false;
-        //FreeLookPlayerVirtualCam.m_BindingMode=initialBindingMode;
     }
 
     private IEnumerator Recenter()
@@ -39,7 +37,6 @@ public class RecenterToPlayerForward : MonoBehaviour
         {
             SetupBindingMode();
         }
-        //ClearConsole.clear();
         
         isRecentering =true;
         var PlayerRotation= FreeLookPlayerVirtualCam.LookAt.transform.rotation;

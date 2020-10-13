@@ -88,7 +88,6 @@ public partial class Locomotion : ILocomotion
     private void CalculateCharacterDesiredVector()
     {
         _movementInput= new Vector3(_characterInput.MovementHorizontal(), 0, _characterInput.MovementVertical());
-        Debug.Log(_movementInput);
         DesiredCharacterVectorForward = Quaternion.Euler(0,_viewTransform.eulerAngles.y,0)*_movementInput;
     }
 
