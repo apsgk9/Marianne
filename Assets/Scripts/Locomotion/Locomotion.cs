@@ -7,37 +7,29 @@ public partial class Locomotion : ILocomotion
 {
     private readonly GameObject _characterGameObject;
     private readonly ICharacterMover _characterMover;
-    private float _moveSpeed;
-    private float _runMoveSpeed;
-    private Camera _characterCamera;
+    private Transform _viewTransform;
     private float _RotationSpeed { get;}
     private RootMotionDelta _RootMotionDelta;
-    public Vector3 VectorForwardBasedOnPlayerCamera { get; private set; }
+    public Vector3 DesiredCharacterVectorForward { get; private set; }
     private Vector3 _movementInput;
     public Vector3 finalMovementComposite{get; private set;}
-    public Vector3 DeltaMovement => finalMovementComposite;
     public event Action<Vector3> OnMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
     public float runThreshold=0.5f;
     public float sprintThreshold=2.01f;
-    public float sprintSpeed=6f;
-    public float runSpeed=4f;
-    public float walkSpeed=2f;
     private LocomotionMode locomotionMode;
     public AnimationCurve _MovementVectorBlend;
     public AnimationCurve _RotationBlend;
     [SerializeReference]
     public ICharacterInput _characterInput;
 
-    public Locomotion(GameObject character, float moveSpeed,float runMoveSpeed,float rotationSpeed,
-    Camera characterCamera,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend,
+    public Locomotion(GameObject character,float rotationSpeed,
+    Transform viewTransform,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend,
     ICharacterInput characterInput,ICharacterMover characterMover)
     {
         _characterGameObject = character;
         _characterMover = characterMover;
-        _moveSpeed = moveSpeed;
-        _runMoveSpeed=runMoveSpeed;
-        _characterCamera= characterCamera;
+        _viewTransform= viewTransform;
         _RotationSpeed = rotationSpeed;
         _MovementVectorBlend=movementVectorBlend;
         _RotationBlend=rotationBlend;
@@ -46,17 +38,22 @@ public partial class Locomotion : ILocomotion
 
         _RootMotionDelta = _characterGameObject.GetComponentInChildren<RootMotionDelta>();
         locomotionMode= LocomotionMode.Idle;
-
-        _RootMotionDelta.OnRootMotionChange+=HandleRootMotion;
+        if(_RootMotionDelta!=null)
+        {
+            _RootMotionDelta.OnRootMotionChange+=HandleRootMotion;
+        }
     }
     private void OnDestroy()
     {
-        _RootMotionDelta.OnRootMotionChange-=HandleRootMotion;
+        if(_RootMotionDelta!=null)
+        {
+            _RootMotionDelta.OnRootMotionChange-=HandleRootMotion;
+        }
     }
 
     private void HandleRootMotion(Vector3 DeltaVector, Quaternion NewRotation)
     {
-        float angleDifference = Vector3.Angle(DeltaVector,VectorForwardBasedOnPlayerCamera.normalized);
+        float angleDifference = Vector3.Angle(DeltaVector,DesiredCharacterVectorForward.normalized);
         var multiplier=0f;        
         multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
         var baseMovementComposite= DeltaVector* (multiplier);
@@ -68,17 +65,17 @@ public partial class Locomotion : ILocomotion
 
     public void Tick()
     {
-        CalculateCharacterForwardVector();
+        CalculateCharacterDesiredVector();
         RotateTransform();
         SendAnimatorLocomotionCommands(_characterInput.IsRunning());
     }
 
     private void RotateTransform()
     {
-        if (VectorForwardBasedOnPlayerCamera != Vector3.zero)
+        if (DesiredCharacterVectorForward != Vector3.zero)
         {    
-            var DesiredRotation = Quaternion.LookRotation(VectorForwardBasedOnPlayerCamera);
-            float angleDifference = Vector3.Angle(_characterGameObject.transform.forward,VectorForwardBasedOnPlayerCamera.normalized);
+            var DesiredRotation = Quaternion.LookRotation(DesiredCharacterVectorForward);
+            float angleDifference = Vector3.Angle(_characterGameObject.transform.forward,DesiredCharacterVectorForward.normalized);
             var multiplier=0f;        
             multiplier=_RotationBlend.Evaluate(angleDifference/180f);
 
@@ -88,22 +85,26 @@ public partial class Locomotion : ILocomotion
         }
     }
 
-    private void CalculateCharacterForwardVector()
+    private void CalculateCharacterDesiredVector()
     {
         _movementInput= new Vector3(_characterInput.MovementHorizontal(), 0, _characterInput.MovementVertical());
-        VectorForwardBasedOnPlayerCamera = Quaternion.Euler(0,_characterCamera.transform.eulerAngles.y,0)*_movementInput;
+        ClearConsole.clear();
+        Debug.Log(_movementInput);
+        DesiredCharacterVectorForward = Quaternion.Euler(0,_viewTransform.eulerAngles.y,0)*_movementInput;
     }
 
 
     private void SendAnimatorLocomotionCommands(bool isRunning)
     {
         var movementMagnitude = Mathf.Clamp(_movementInput.magnitude,0,1);
+        ClearConsole.clear();
+        Debug.Log(movementMagnitude);
 
         int runModifierAddition = isRunning? 2:0;
 
-        Vector3 runcomposite = VectorForwardBasedOnPlayerCamera.normalized * runModifierAddition;
+        Vector3 runcomposite = DesiredCharacterVectorForward.normalized * runModifierAddition;
 
-        Vector3 baseMovementComposite = (VectorForwardBasedOnPlayerCamera.normalized * movementMagnitude * _moveSpeed);
+        Vector3 baseMovementComposite = (DesiredCharacterVectorForward.normalized * movementMagnitude);
         finalMovementComposite = runcomposite + baseMovementComposite;
         var runGap=0.00f;
         var walkGap=0.00f;

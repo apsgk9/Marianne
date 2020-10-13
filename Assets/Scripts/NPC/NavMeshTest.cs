@@ -19,8 +19,7 @@ public class NavMeshTest : MonoBehaviour
         _RootMotionDelta = GetComponentInChildren<RootMotionDelta>();
 
         //_RootMotionDelta.OnRootMotionChange += HandleRootMotionChange;
-        
-        agent.updatePosition=false;
+
         previousTime=0f;
     }
 
@@ -34,7 +33,6 @@ public class NavMeshTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        agent.nextPosition=transform.position;
         //CalculateAnimator();
         if(Input.GetKeyDown(KeyCode.P))
         {
@@ -48,16 +46,11 @@ public class NavMeshTest : MonoBehaviour
         {
             agent.velocity=Vector3.zero;
         }
-        if(agent.remainingDistance> StoppingDistance)
-        {
-            Debug.Log(agent.nextPosition);
-        }
     }
 
     [ContextMenu("Set Destination")]
     void SetDestination()
     {        
         agent.SetDestination(target.position);
-        agent.velocity=Vector3.zero;
     }
 }

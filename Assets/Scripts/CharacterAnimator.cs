@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using CharacterInput;
 using UnityEngine;
 
-[RequireComponent(typeof(RunTransitionHandler))]
-public class PlayerAnimator : MonoBehaviour
+public class CharacterAnimator : MonoBehaviour
 {
     public Animator Animator;
     public PlayerState PlayerState;
@@ -12,30 +12,24 @@ public class PlayerAnimator : MonoBehaviour
     public string DeltaVelocityParameterName = "DeltaVelocity";
     private float _compositeSpeedValue;
     private Vector2 _rawDirection;
-    public RunTransitionHandler _runTransitionHandler { get; private set;}
     public string ControllerDeltaParameterName ="ControllerDelta";
     public string MovementPressedParameterName ="MovementPressed";
     public string UsingControllerParameterName ="UsingController";
-
-    public float AnimationSpeedTweaker=0.5f;
-    public bool UseCurves=true;
     private static Vector2 _previousMovmementAxis;
+    private ICharacterInput _characterInput;
 
     private void Awake()
-    {
-        _runTransitionHandler= GetComponent<RunTransitionHandler>();
+    {   
+        if(_characterInput==null)
+        {
+            _characterInput = GetComponent<ICharacterInput>();
+        }
         _previousMovmementAxis=Vector2.zero;
     }
     public void Update()
     {
-        if (UseCurves)
-        {
-            CurveCalculations();
-        }
-        else
-        {
-            SpeedCalculations();
-        }
+        
+        SpeedCalculations();
 
         Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
         Animator.SetBool(ChangeInVelocityParameterName, ChangeInVelocity());
@@ -70,14 +64,9 @@ public class PlayerAnimator : MonoBehaviour
 
     private void SpeedCalculations()
     {
-        _compositeSpeedValue=PlayerState.AnimatorSpeed*AnimationSpeedTweaker;
+        _compositeSpeedValue=PlayerState.AnimatorSpeed;
     }
 
-    private void CurveCalculations()
-    {
-        _rawDirection = new Vector2(UserInput.Instance.Horizontal, UserInput.Instance.Vertical);
-        _compositeSpeedValue = _rawDirection.magnitude * _runTransitionHandler.RunMultiplier;
-    }
 
     private void OnValidate()
     {
