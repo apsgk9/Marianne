@@ -28,13 +28,18 @@ namespace CharacterInput
 
         private void CalculateVariables()
         {
-            var tempDirection=agent.nextPosition-transform.position;
-            if(tempDirection.magnitude>threshold)
+            if(agent.stoppingDistance >= Vector3.Distance(transform.position,agent.destination))
             {
-                DesiredDirection=  agent.nextPosition-transform.position;
-                var temp=transform.TransformDirection(agent.nextPosition);
-                //horizontal=temp.x;
-                //vertical=temp.z;
+                horizontal=0f;
+                vertical=0f;
+                DesiredDirection=Vector3.zero;
+            }
+            else if(agent.hasPath)
+            {
+                var firstPoint=  agent.path.corners[1];
+                DesiredDirection =firstPoint-transform.position;
+                horizontal=DesiredDirection.x;
+                vertical=DesiredDirection.z;
             }
         }
 

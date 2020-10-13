@@ -23,6 +23,13 @@ public class PlayerCharacter : MonoBehaviour
         {
             _characterMover = GetComponent<ICharacterMover>();
         }
+        if(PlayerCamera==null)
+        {
+            if(GameObject.Find("[WorldTransform]")==false)
+            {
+                PlayerCamera= new GameObject("[WorldTransform]").transform;
+            }
+        }
         _Locomotion = new Locomotion (this.gameObject,rotationSpeed,
         PlayerCamera,MovementVectorBlend,TurnRotationBlend,_characterInput,_characterMover);
     }

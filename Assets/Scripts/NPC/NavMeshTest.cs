@@ -37,16 +37,6 @@ public class NavMeshTest : MonoBehaviour
     [ContextMenu("Set Destination")]
     void SetDestination()
     {        
-        Debug.Log("Before:"+agent.path.corners.Length);
-        foreach(var corner in agent.path.corners)
-        {            
-            Debug.Log("corner:"+corner);
-        }
         agent.SetDestination(target.position);
-        Debug.Log("After:"+agent.path.corners.Length);
-        foreach(var corner in agent.path.corners)
-        {            
-            Debug.Log("corner:"+corner);
-        }
     }
 }
