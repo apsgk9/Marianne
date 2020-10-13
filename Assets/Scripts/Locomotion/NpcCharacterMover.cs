@@ -10,7 +10,7 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
 
     public void Move(Vector3 motion)
     {
-        agent.nextPosition=transform.position+motion;
+        transform.position+=motion;
     }
 
     private void Awake()

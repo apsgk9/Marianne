@@ -12,6 +12,8 @@ namespace CharacterInput
         public float horizontal;
         public float vertical;
         public Vector3 DesiredDirection;
+        public bool isRunning=false;
+        [SerializeField] private float threshold=0.0001f;
 
         private void Awake()
         {
@@ -21,18 +23,19 @@ namespace CharacterInput
         {
             
             CalculateVariables();            
-            agent.nextPosition=transform.position;
+            //agent.nextPosition=transform.position;
         }
 
         private void CalculateVariables()
         {
-            //if(!(agent.nextPosition==transform.position))
-            //{
-            //    DesiredDirection= agent.nextPosition;
-            //    var temp=transform.TransformDirection(agent.nextPosition);
-            //    horizontal=temp.x;
-            //    vertical=temp.z;
-            //}
+            var tempDirection=agent.nextPosition-transform.position;
+            if(tempDirection.magnitude>threshold)
+            {
+                DesiredDirection=  agent.nextPosition-transform.position;
+                var temp=transform.TransformDirection(agent.nextPosition);
+                //horizontal=temp.x;
+                //vertical=temp.z;
+            }
         }
 
         public float MovementHorizontal()
@@ -46,12 +49,12 @@ namespace CharacterInput
         }
         public bool IsRunning()
         {
-            return false;
+            return isRunning;
         }
 
         public bool IsThereMovement()
         {
-            return vertical>Mathf.Epsilon || horizontal>Mathf.Epsilon;
+            return Mathf.Abs(vertical)>Mathf.Epsilon || Mathf.Abs(horizontal)>Mathf.Epsilon;
         }
     }
 }

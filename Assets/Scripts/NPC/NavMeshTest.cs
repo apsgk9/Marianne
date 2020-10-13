@@ -6,28 +6,14 @@ using UnityEngine.AI;
 
 public class NavMeshTest : MonoBehaviour
 {
-    [SerializeField]private const float StoppingDistance = 1f;
     [SerializeField] public Transform target;
     private NavMeshAgent agent;
-    private RootMotionDelta _RootMotionDelta;
     private float previousTime;
 
     // Start is called before the first frame update
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        _RootMotionDelta = GetComponentInChildren<RootMotionDelta>();
-
-        //_RootMotionDelta.OnRootMotionChange += HandleRootMotionChange;
-
-        previousTime=0f;
-    }
-
-    private void HandleRootMotionChange(Vector3 DeltaVector, Quaternion NewRotation)
-    {
-        var newPosition=DeltaVector+transform.position;
-        agent.velocity=DeltaVector/Time.deltaTime;
-        agent.nextPosition=newPosition;
     }
 
     // Update is called once per frame
@@ -51,6 +37,16 @@ public class NavMeshTest : MonoBehaviour
     [ContextMenu("Set Destination")]
     void SetDestination()
     {        
+        Debug.Log("Before:"+agent.path.corners.Length);
+        foreach(var corner in agent.path.corners)
+        {            
+            Debug.Log("corner:"+corner);
+        }
         agent.SetDestination(target.position);
+        Debug.Log("After:"+agent.path.corners.Length);
+        foreach(var corner in agent.path.corners)
+        {            
+            Debug.Log("corner:"+corner);
+        }
     }
 }

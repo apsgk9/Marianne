@@ -95,8 +95,6 @@ public partial class Locomotion : ILocomotion
     private void SendAnimatorLocomotionCommands(bool isRunning)
     {
         var movementMagnitude = Mathf.Clamp(_movementInput.magnitude,0,1);
-        ClearConsole.clear();
-        Debug.Log(movementMagnitude);
 
         int runModifierAddition = isRunning? 2:0;
 
