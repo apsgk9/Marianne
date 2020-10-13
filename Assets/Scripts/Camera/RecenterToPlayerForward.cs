@@ -12,8 +12,6 @@ public class RecenterToPlayerForward : MonoBehaviour
     public CinemachineFreeLook FreeLookPlayerVirtualCam { get; private set; }
     
     private Cinemachine.CinemachineTransposer.BindingMode initialBindingMode;
-    public GameObject PlayerCharacter;
-
     void Start()
     {
         FreeLookPlayerVirtualCam = GetComponent<CinemachineFreeLook>();
@@ -44,8 +42,9 @@ public class RecenterToPlayerForward : MonoBehaviour
         //ClearConsole.clear();
         
         isRecentering =true;
-        var PlayerRotation= PlayerCharacter.transform.rotation;
-        var LastYRotation= PlayerRotation.eulerAngles.y;
+        var PlayerRotation= FreeLookPlayerVirtualCam.LookAt.transform.rotation;
+        var LastYRotation= FreeLookPlayerVirtualCam.LookAt.transform.rotation.eulerAngles.y;
+        
 
         var initialYAxis=FreeLookPlayerVirtualCam.m_YAxis.Value;
         var initialXAxis=FreeLookPlayerVirtualCam.m_XAxis.Value;
