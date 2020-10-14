@@ -13,25 +13,21 @@ namespace CharacterInput
         public float vertical;
         public Vector3 DesiredDirection;
         public bool isRunning=false;
-        [SerializeField] private float threshold=0.0001f;
+        private MovementHistory _verticalHistory;
+        private MovementHistory _horizontalHistory;
+        private int historyMaxLength=4;
 
         private void Awake()
         {
             agent=GetComponent<NavMeshAgent>();
+            _verticalHistory= new MovementHistory(historyMaxLength);
+            _horizontalHistory= new MovementHistory(historyMaxLength);
         }
         private void Update()
         {
 
             CalculateVariables();
-            CheckifStopped();
         }
-
-        private void CheckifStopped()
-        {
-            //previousPosition=transform.position;
-            
-        }
-
         private void CalculateVariables()
         {
             if(agent.stoppingDistance >= Vector3.Distance(transform.position,agent.destination))
@@ -47,6 +43,8 @@ namespace CharacterInput
                 horizontal=DesiredDirection.x;
                 vertical=DesiredDirection.z;
             }
+            _verticalHistory.Tick(vertical);
+            _horizontalHistory.Tick(horizontal);
         }
 
         public float MovementHorizontal()
@@ -65,7 +63,11 @@ namespace CharacterInput
 
         public bool IsThereMovement()
         {
-            return Mathf.Abs(vertical)>Mathf.Epsilon || Mathf.Abs(horizontal)>Mathf.Epsilon;
+            float verticalAverage=_verticalHistory.Average();
+            float horizontalAverage=_horizontalHistory.Average();
+        
+            bool isMovementhere= verticalAverage > 0.0025 || horizontalAverage > 0.0025;
+            return isMovementhere;
         }
     }
 }

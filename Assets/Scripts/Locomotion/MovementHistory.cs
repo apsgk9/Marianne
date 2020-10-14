@@ -16,20 +16,19 @@ public class MovementHistory
 
 
     // Update is called once per frame
-    public void Tick(float input)
+    public void Tick(float input,bool applyMultiplier=false)
     {
         _History.AddFirst(input);
-        var multiplier=1f;
-        if(InputHelper.DeviceInputTool.IsUsingController())
+        var multiplier = 1f;
+        if (applyMultiplier)
         {
-            multiplier=0.5f;            
+            multiplier = 0.5f;
         }
-        while(_History.Count>historyMaxLength*multiplier)
+        while (_History.Count > historyMaxLength * multiplier)
         {
             _History.RemoveLast();
         }
     }
-
     public float Average()
     {
         Sum=0f;

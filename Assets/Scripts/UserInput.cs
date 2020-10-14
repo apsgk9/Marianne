@@ -32,8 +32,6 @@ public class UserInput : MonoBehaviour, IUserInput
 
     //New actions    
     public PlayerInputActions _inputActions;
-    //private LinkedList<float> verticalHistory= new LinkedList<float>();
-    //private LinkedList<float> horizontalHistory= new LinkedList<float>();
     private const int historyMaxLength=4;
     
     public string DeviceUsing=>_deviceUsing;
@@ -68,8 +66,6 @@ public class UserInput : MonoBehaviour, IUserInput
         _inputActions.Player.Run.started += HandleRunPressed;
         _inputActions.Player.Run.canceled += HandleRunReleased;
         
-        //InputSystem.onDeviceChange += DeviceChange;
-
         InputUser.onChange+= OnDeviceChanged;
 
 
@@ -79,9 +75,6 @@ public class UserInput : MonoBehaviour, IUserInput
     {
         if(change.ToString()=="DevicePaired" && device!=null)        
         {
-            //ClearConsole.clear();
-            //Debug.Log("Change: "+change);
-            //Debug.Log("Device: "+device.name);
             _deviceUsing=device.name;
         }
     }
@@ -124,21 +117,8 @@ public class UserInput : MonoBehaviour, IUserInput
 
     private void MovementHistory()
     {
-        _verticalHistory.Tick(Vertical);
-        _horizontalHistory.Tick(Horizontal);
-
-        //verticalHistory.AddFirst(Vertical);
-        //horizontalHistory.AddFirst(Horizontal);
-        //var multiplier=1f;
-        //if(InputHelper.DeviceInputTool.IsUsingController())
-        //{
-        //    multiplier=0.5f;            
-        //}
-        //while(verticalHistory.Count>historyMaxLength*multiplier)
-        //{
-        //    horizontalHistory.RemoveLast();    
-        //    verticalHistory.RemoveLast();        
-        //}
+        _verticalHistory.Tick(Vertical,InputHelper.DeviceInputTool.IsUsingController());
+        _horizontalHistory.Tick(Horizontal,InputHelper.DeviceInputTool.IsUsingController());
     }
     
     private void HandleMovement(InputAction.CallbackContext context)
@@ -176,19 +156,6 @@ public class UserInput : MonoBehaviour, IUserInput
 
     public bool IsThereMovement()
     {
-        //float verticalSum=0f;
-        //float horizontalSum=0f;
-        //foreach(float number in verticalHistory)
-        //{
-        //    verticalSum+=Mathf.Abs(number);
-        //}
-        //
-        //foreach(float number in horizontalHistory)
-        //{
-        //    horizontalSum+=Mathf.Abs(number);
-        //}
-        //float verticalAverage=verticalSum/((float)verticalHistory.Count);
-        //float horizontalAverage=horizontalSum/((float)horizontalHistory.Count);
         float verticalAverage=_verticalHistory.Average();
         float horizontalAverage=_horizontalHistory.Average();
       
