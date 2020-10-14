@@ -21,9 +21,15 @@ namespace CharacterInput
         }
         private void Update()
         {
+
+            CalculateVariables();
+            CheckifStopped();
+        }
+
+        private void CheckifStopped()
+        {
+            //previousPosition=transform.position;
             
-            CalculateVariables();            
-            //agent.nextPosition=transform.position;
         }
 
         private void CalculateVariables()

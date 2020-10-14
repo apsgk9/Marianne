@@ -35,7 +35,7 @@ public class PlayerCharacter : MonoBehaviour
     }
 
 
-    private void Update()
+    private void FixedUpdate()
     {
         _Locomotion.Tick();
     }

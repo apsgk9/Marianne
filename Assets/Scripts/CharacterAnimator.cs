@@ -12,6 +12,7 @@ public class CharacterAnimator : MonoBehaviour
     private Vector2 _rawDirection;
     public string MovementPressedParameterName ="MovementPressed";
     public string UsingControllerParameterName ="UsingController";
+    public string ControllerDeltaParameterName ="ControllerDelta";
     private static Vector2 _previousMovmementAxis;
     private ICharacterInput _characterInput;
 
@@ -31,6 +32,8 @@ public class CharacterAnimator : MonoBehaviour
         Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
 
         Animator.SetBool(MovementPressedParameterName, GetMovementPressed());
+
+        Animator.SetFloat(ControllerDeltaParameterName, ReturnDeltaMovement());
         
         Animator.SetBool(UsingControllerParameterName, InputHelper.DeviceInputTool.IsUsingController());
     }

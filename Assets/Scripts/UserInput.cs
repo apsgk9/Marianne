@@ -32,12 +32,15 @@ public class UserInput : MonoBehaviour, IUserInput
 
     //New actions    
     public PlayerInputActions _inputActions;
-    private LinkedList<float> verticalHistory= new LinkedList<float>();
-    private LinkedList<float> horizontalHistory= new LinkedList<float>();
+    //private LinkedList<float> verticalHistory= new LinkedList<float>();
+    //private LinkedList<float> horizontalHistory= new LinkedList<float>();
     private const int historyMaxLength=4;
     
     public string DeviceUsing=>_deviceUsing;
     private string _deviceUsing;
+    private MovementHistory _verticalHistory;
+    private MovementHistory _horizontalHistory;
+
     private void Awake()
     {
         Instance=this;
@@ -46,6 +49,10 @@ public class UserInput : MonoBehaviour, IUserInput
         
         _inputActions = new PlayerInputActions();
         _deviceUsing="Keyboard"; //default to keyboard
+
+        //MovementAxisHistory
+        _verticalHistory= new MovementHistory(historyMaxLength);
+        _horizontalHistory= new MovementHistory(historyMaxLength);
     }
     private void OnEnable()
     {
@@ -117,18 +124,21 @@ public class UserInput : MonoBehaviour, IUserInput
 
     private void MovementHistory()
     {
-        verticalHistory.AddFirst(Vertical);
-        horizontalHistory.AddFirst(Horizontal);
-        var multiplier=1f;
-        if(InputHelper.DeviceInputTool.IsUsingController())
-        {
-            multiplier=0.5f;            
-        }
-        while(verticalHistory.Count>historyMaxLength*multiplier)
-        {
-            verticalHistory.RemoveLast();
-            horizontalHistory.RemoveLast();            
-        }
+        _verticalHistory.Tick(Vertical);
+        _horizontalHistory.Tick(Horizontal);
+
+        //verticalHistory.AddFirst(Vertical);
+        //horizontalHistory.AddFirst(Horizontal);
+        //var multiplier=1f;
+        //if(InputHelper.DeviceInputTool.IsUsingController())
+        //{
+        //    multiplier=0.5f;            
+        //}
+        //while(verticalHistory.Count>historyMaxLength*multiplier)
+        //{
+        //    horizontalHistory.RemoveLast();    
+        //    verticalHistory.RemoveLast();        
+        //}
     }
     
     private void HandleMovement(InputAction.CallbackContext context)
@@ -166,19 +176,21 @@ public class UserInput : MonoBehaviour, IUserInput
 
     public bool IsThereMovement()
     {
-        float verticalSum=0f;
-        float horizontalSum=0f;
-        foreach(float number in verticalHistory)
-        {
-            verticalSum+=Mathf.Abs(number);
-        }
-        
-        foreach(float number in horizontalHistory)
-        {
-            horizontalSum+=Mathf.Abs(number);
-        }
-        float verticalAverage=verticalSum/((float)verticalHistory.Count);
-        float horizontalAverage=horizontalSum/((float)horizontalHistory.Count);
+        //float verticalSum=0f;
+        //float horizontalSum=0f;
+        //foreach(float number in verticalHistory)
+        //{
+        //    verticalSum+=Mathf.Abs(number);
+        //}
+        //
+        //foreach(float number in horizontalHistory)
+        //{
+        //    horizontalSum+=Mathf.Abs(number);
+        //}
+        //float verticalAverage=verticalSum/((float)verticalHistory.Count);
+        //float horizontalAverage=horizontalSum/((float)horizontalHistory.Count);
+        float verticalAverage=_verticalHistory.Average();
+        float horizontalAverage=_horizontalHistory.Average();
       
         bool isMovementhere= verticalAverage > 0.0025 || horizontalAverage > 0.0025;
         return isMovementhere;

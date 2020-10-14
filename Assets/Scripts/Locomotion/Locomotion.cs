@@ -13,6 +13,8 @@ public partial class Locomotion : ILocomotion
     public Vector3 DesiredCharacterVectorForward { get; private set; }
     private Vector3 _movementInput;
     public Vector3 finalMovementComposite{get; private set;}
+    public Quaternion CompositeRotation { get; private set; }
+
     public event Action<Vector3> OnMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
     public float runThreshold=0.5f;
@@ -42,6 +44,7 @@ public partial class Locomotion : ILocomotion
         {
             _RootMotionDelta.OnRootMotionChange+=HandleRootMotion;
         }
+
     }
     private void OnDestroy()
     {
@@ -66,22 +69,30 @@ public partial class Locomotion : ILocomotion
     public void Tick()
     {
         CalculateCharacterDesiredVector();
-        RotateTransform();
+        RotateTransform(DesiredCharacterVectorForward);
+
+        var previousRotation=_characterGameObject.transform.rotation;
+        ApplyRotation(CompositeRotation);
         SendAnimatorLocomotionCommands(_characterInput.IsRunning());
     }
 
-    private void RotateTransform()
+    private void ApplyRotation(Quaternion FinalRotation)
     {
-        if (DesiredCharacterVectorForward != Vector3.zero)
+        _characterGameObject.transform.rotation = FinalRotation;
+    }
+
+    private void RotateTransform(Vector3 ForwardDirection)
+    {
+        if (ForwardDirection != Vector3.zero)
         {    
-            var DesiredRotation = Quaternion.LookRotation(DesiredCharacterVectorForward);
-            float angleDifference = Vector3.Angle(_characterGameObject.transform.forward,DesiredCharacterVectorForward.normalized);
+            var DesiredRotation = Quaternion.LookRotation(ForwardDirection);
+            float angleDifference = Vector3.Angle(_characterGameObject.transform.forward,ForwardDirection.normalized);
             var multiplier=0f;        
             multiplier=_RotationBlend.Evaluate(angleDifference/180f);
 
-            var FixedRotation = Quaternion.Slerp(_characterGameObject.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed*multiplier);
+            CompositeRotation = Quaternion.Slerp(_characterGameObject.transform.rotation, DesiredRotation, Time.deltaTime * _RotationSpeed*multiplier);
             
-            _characterGameObject.transform.rotation = FixedRotation;
+            ApplyRotation(CompositeRotation);
         }
     }
 
