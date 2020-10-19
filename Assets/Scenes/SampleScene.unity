@@ -923,7 +923,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018227, y: 0.0000000042527444, z: -6.901254e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: -0.000000004252742, z: 6.901254e-10, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -21.790234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2200,7 +2200,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.16018225, y: -0.000000023309845, z: 0.000000003782667, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018224, y: -0.000000004252742, z: 6.9012535e-10, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2744,7 +2744,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.16018224, y: 0.000000004252742, z: -6.9012535e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018224, y: -0.000000004252742, z: 6.9012535e-10, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2761,7 +2761,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8086208002976284131}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f7403bdd1685a14abd9a4402867781f, type: 3}
+  m_Script: {fileID: 11500000, guid: b8ab99d8c9019bd44b616725b91391b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerCamera: {fileID: 0}
@@ -2849,6 +2849,7 @@ GameObject:
   - component: {fileID: 8086208002976284133}
   - component: {fileID: 8086208002976284132}
   - component: {fileID: 8086208002976284137}
+  - component: {fileID: 8086208002976284138}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Player
@@ -2884,6 +2885,34 @@ MonoBehaviour:
   vertical: 0
   DesiredDirection: {x: 0, y: 0, z: 0}
   isRunning: 0
+  OnRun:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8086208002976284138}
+        m_MethodName: SetTargetSwitch
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnWalk:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8086208002976284138}
+        m_MethodName: SetTargetSwitch
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!195 &8086208002976284134
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2915,7 +2944,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8086208002976284131}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe5f46ec343565047a489db7666091b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 326502dfb0b1c7b42b63f8b011f9172e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Velocity: {x: 0, y: 0, z: 0}
@@ -2954,6 +2983,70 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 1055259082}
+--- !u!114 &8086208002976284138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8086208002976284131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d750936f5a6e3e340bf05fc34c16146b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetTransitionTime: 0.25
+  BaseTransitionTime: 0.35
+  TargetTransitionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  BaseTransitionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _baseTarget: 0
+  _target: 1
 --- !u!1 &8086208003583265084
 GameObject:
   m_ObjectHideFlags: 0
@@ -3029,7 +3122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 8251930089857728268}
-  PlayerState: {fileID: 8086208002976284135}
+  CharacterState: {fileID: 8086208002976284135}
   SpeedParameterName: Speed
   MovementPressedParameterName: MovementPressed
   UsingControllerParameterName: UsingController
@@ -3046,13 +3139,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c269d94d7f5e3d4cb2c2d98c61ebae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _runMultiplierTarget: 0
+  <RunMultiplier>k__BackingField: 0
+  _isTransitioning: 0
+  _runMultiplierTargetPrevious: 0
   RunTransitionTime: 0.25
   StopTransitionTime: 0.35
+  TransitionTimeToUse: 0
+  <AnimationCurveToUse>k__BackingField:
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   RunTransitionCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 0
       inSlope: 0
       outSlope: 0
@@ -3060,8 +3161,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    - serializedVersion: 3
-      time: 1
+    - time: 1
       value: 1
       inSlope: 2
       outSlope: 2
@@ -3073,10 +3173,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   StopTransitionCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 0
       inSlope: 1
       outSlope: 1
@@ -3084,8 +3182,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    - serializedVersion: 3
-      time: 1
+    - time: 1
       value: 1
       inSlope: 1
       outSlope: 1
@@ -3096,6 +3193,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  Event:
+    m_PersistentCalls:
+      m_Calls: []
+    m_CallsDirty: 1
   baseTarget: 1
   runningTarget: 2
 --- !u!114 &8251930089085010255

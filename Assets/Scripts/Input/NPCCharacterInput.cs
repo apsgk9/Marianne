@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace CharacterInput
 {
@@ -9,25 +10,53 @@ namespace CharacterInput
     public class NPCCharacterInput : MonoBehaviour, ICharacterInput
     {
         private NavMeshAgent agent;
+        private TransitionHandler _walkruntransitionHandler;
         public float horizontal;
         public float vertical;
         public Vector3 DesiredDirection;
-        public bool isRunning=false;
+        public bool isSprinting=false;
         private MovementHistory _verticalHistory;
         private MovementHistory _horizontalHistory;
         private int historyMaxLength=4;
+        
+        public const float SprintDistanceThreshold = 10f;
+
+        public UnityEvent OnRun;
+        public UnityEvent OnWalk;
 
         private void Awake()
         {
             agent=GetComponent<NavMeshAgent>();
+            _walkruntransitionHandler=GetComponent<TransitionHandler>();
             _verticalHistory= new MovementHistory(historyMaxLength);
             _horizontalHistory= new MovementHistory(historyMaxLength);
         }
         private void Update()
         {
-
             CalculateVariables();
+            CalculateRunning();
         }
+
+        private void CalculateRunning()
+        {
+            if(agent.remainingDistance> SprintDistanceThreshold)
+            {
+                OnRun?.Invoke();
+            }
+            else
+            {
+                OnWalk?.Invoke();
+            }
+            if(_walkruntransitionHandler.TargetMultiplier==1f)
+            {
+                isSprinting=true;
+            }
+            else if(_walkruntransitionHandler.TargetMultiplier==0f)
+            {
+                isSprinting=false;
+            }
+        }
+
         private void CalculateVariables()
         {
             if(agent.stoppingDistance >= Vector3.Distance(transform.position,agent.destination))
@@ -58,7 +87,7 @@ namespace CharacterInput
         }
         public bool IsRunning()
         {
-            return isRunning;
+            return isSprinting;
         }
 
         public bool IsThereMovement()
