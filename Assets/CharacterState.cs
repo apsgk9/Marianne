@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerState : MonoBehaviour
+public class CharacterState : MonoBehaviour
 {
     public Vector3 Velocity;
     public Vector3 DeltaVelocity;
     public float Speed;
     public float AnimatorSpeed;
-    public PlayerCharacter _player;
+    public Character _player;
 
     private void Awake()
     {
         Velocity=Vector3.zero;
-        _player = GetComponent<PlayerCharacter>();
+        _player = GetComponent<Character>();
     }
     private void OnEnable()
     {

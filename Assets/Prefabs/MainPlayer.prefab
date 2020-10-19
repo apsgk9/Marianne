@@ -5994,7 +5994,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3385572741890983469}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe5f46ec343565047a489db7666091b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 326502dfb0b1c7b42b63f8b011f9172e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Velocity: {x: 0, y: 0, z: 0}
@@ -6011,7 +6011,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3385572741890983469}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f7403bdd1685a14abd9a4402867781f, type: 3}
+  m_Script: {fileID: 11500000, guid: b8ab99d8c9019bd44b616725b91391b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerCamera: {fileID: 0}
@@ -6160,13 +6160,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 3191008816282567874}
-  PlayerState: {fileID: 3385572741890983465}
+  CharacterState: {fileID: 3385572741890983465}
   SpeedParameterName: Speed
-  ChangeInVelocityParameterName: ChangeInVelocity
-  DeltaVelocityParameterName: DeltaVelocity
-  ControllerDeltaParameterName: ControllerDelta
   MovementPressedParameterName: MovementPressed
   UsingControllerParameterName: UsingController
+  ControllerDeltaParameterName: ControllerDelta
 --- !u!114 &3385572742742507752
 MonoBehaviour:
   m_ObjectHideFlags: 0

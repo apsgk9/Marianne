@@ -1,7 +1,7 @@
 ﻿using System;
 using CharacterInput;
 using UnityEngine;
-public class PlayerCharacter : MonoBehaviour
+public class Character : MonoBehaviour
 {
     [SerializeField] private Transform PlayerCamera;
     [SerializeField] private float rotationSpeed=15f;

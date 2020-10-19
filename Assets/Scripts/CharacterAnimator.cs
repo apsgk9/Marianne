@@ -6,7 +6,7 @@ using UnityEngine;
 public class CharacterAnimator : MonoBehaviour
 {
     public Animator Animator;
-    public PlayerState PlayerState;
+    public CharacterState CharacterState;
     public string SpeedParameterName = "Speed";
     private float _compositeSpeedValue;
     private Vector2 _rawDirection;
@@ -54,12 +54,12 @@ public class CharacterAnimator : MonoBehaviour
 
     private bool ChangeInVelocity()
     {
-        return !(PlayerState.DeltaVelocity.magnitude<Mathf.Epsilon);
+        return !(CharacterState.DeltaVelocity.magnitude<Mathf.Epsilon);
     }
 
     private void SpeedCalculations()
     {
-        _compositeSpeedValue=PlayerState.AnimatorSpeed;
+        _compositeSpeedValue=CharacterState.AnimatorSpeed;
     }
 
 
@@ -69,7 +69,7 @@ public class CharacterAnimator : MonoBehaviour
         {
             Debug.LogWarning("PlayerAnimator must have an animator.");
         }
-        if(PlayerState==null)
+        if(CharacterState==null)
         {
             Debug.LogWarning("PlayerState is missing for PlayerAnimator.");
         }
