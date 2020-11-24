@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using CharacterInput;
 using UnityEngine;
 
-public class CharacterAnimator : MonoBehaviour
+namespace CharacterProperties
+{
+    public class CharacterAnimator : MonoBehaviour
 {
     public Animator Animator;
     public CharacterState CharacterState;
@@ -74,4 +76,6 @@ public class CharacterAnimator : MonoBehaviour
             Debug.LogWarning("PlayerState is missing for PlayerAnimator.");
         }
     }
+}
+
 }
