@@ -3,12 +3,13 @@ using UnityEngine;
 
 namespace CharacterProperties
 {
-    namespace CharacterProperties
+    public interface ICharacterStamina
     {
-        public interface ICharacterStamina
-        {
-            void Tick();
-            event Action<Vector3> OnStaminaChanged;
-        }
+        bool HasStamina();
+        bool IsStaminaBeingUsed{get;set;}
+        event Action<float> OnStaminaChanged;
+        float ChangeStamina(float newStamina);
+        float AddStamina(float changeToAdd);
+        float GetCurrentStamina();
     }
 }

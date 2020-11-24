@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace CharacterProperties
 {
-
     public class CharacterState : MonoBehaviour
     {
         public Vector3 Velocity;
@@ -13,11 +12,15 @@ namespace CharacterProperties
         public float Speed;
         public float AnimatorSpeed;
         public Character _player;
+        public ICharacterStamina _staminaHandler;
+
+        public bool HasStamina { get {return _staminaHandler.HasStamina();} }
 
         private void Awake()
         {
             Velocity=Vector3.zero;
             _player = GetComponent<Character>();
+            _staminaHandler= GetComponentInChildren<ICharacterStamina>();
         }
         private void OnEnable()
         {
