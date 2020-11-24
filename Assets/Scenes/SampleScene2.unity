@@ -688,7 +688,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17206
+  m_Name: pb_Mesh17208
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -923,7 +923,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018227, y: 0.000000023309846, z: -0.000000003782667, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018227, y: 0.000000023309845, z: -0.0000000037826675, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -21.790234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2522,12 +2522,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a727fd6e413ef374896f69c5e5baa4f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentStamina: 100
-  MaxStamina: 100
+  CurrentStamina: 200
+  MaxStamina: 200
+  MinStaminaUsage: 20
   MinStamina: 0
   CapMaxStamina: 1
   CapMinStamina: 1
-  RegenRate: 1
+  RegenRate: 10
+  HasDrained: 0
 --- !u!114 &2758135347812932648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2679,7 +2681,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.16018224, y: -0.000000004252742, z: 6.9012535e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: 0.000000023309845, z: -0.000000003782667, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3139,7 +3141,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.16018225, y: 0.000000023309845, z: -0.000000003782667, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018224, y: 0.000000004252742, z: -6.9012535e-10, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

@@ -38,7 +38,7 @@ namespace CharacterProperties
 
             Animator.SetBool(UsingControllerParameterName, InputHelper.DeviceInputTool.IsUsingController());            
 
-            Animator.SetBool(CharacterHasStaminaParameterName, CharacterState.HasStamina);
+            Animator.SetBool(CharacterHasStaminaParameterName, CharacterState.CanUseStamina);
         }
         private bool GetMovementPressed()
         {

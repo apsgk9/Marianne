@@ -7,6 +7,7 @@ namespace CharacterProperties
     {
         bool HasStamina();
         bool IsStaminaBeingUsed{get;set;}
+        bool CanUse();
         event Action<float> OnStaminaChanged;
         float ChangeStamina(float newStamina);
         float AddStamina(float changeToAdd);

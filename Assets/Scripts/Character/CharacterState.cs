@@ -13,8 +13,7 @@ namespace CharacterProperties
         public float AnimatorSpeed;
         public Character _player;
         public ICharacterStamina _staminaHandler;
-
-        public bool HasStamina { get {return _staminaHandler.HasStamina();} }
+        public bool CanUseStamina { get {return _staminaHandler.CanUse();} }
 
         private void Awake()
         {
