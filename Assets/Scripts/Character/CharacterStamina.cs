@@ -16,16 +16,32 @@ public class CharacterStamina : MonoBehaviour,ICharacterStamina
     private bool _isStaminaBeingUsed=false;
     public bool IsStaminaBeingUsed { get => _isStaminaBeingUsed; set => _isStaminaBeingUsed=value ; }
     public bool HasDrained=false;
+    
+    [Tooltip("Wait time before stamina regen.")]
+    public uint StaminaRechargeTime=2;
+    private Timer StaminaRechargeTimer;
 
     public event Action<float,float,float> OnStaminaChanged;
 
+    private void Start()
+    {        
+        StaminaRechargeTimer = new Timer(StaminaRechargeTime);
+        StaminaRechargeTimer.FinishTimer();
+    }
+
     //Try to call only if there is change.
-    public float AddStamina(float changeToAdd)
+    public float AddStamina(float changeToAdd,bool shouldWaitForRegen=true)
     {
         CurrentStamina += changeToAdd;
         CheckIfStaminaHasRecovered();
         CapStamina();
         OnStaminaChanged?.Invoke(CurrentStamina,MinStamina,MaxStamina);
+
+        if(shouldWaitForRegen==true)
+        {
+            StaminaRechargeTimer.ResetTimer();            
+        }
+
         return CurrentStamina;
     }
 
@@ -52,13 +68,17 @@ public class CharacterStamina : MonoBehaviour,ICharacterStamina
             HasDrained=true;
         }
     }
-
-    public float ChangeStamina(float newStamina)
-    {
-        
+    
+    public float ChangeStamina(float newStamina,bool shouldWaitForRegen=true)
+    {        
         CurrentStamina=newStamina;
         CapStamina();
         OnStaminaChanged?.Invoke(CurrentStamina,MinStamina,MaxStamina);
+
+        if(shouldWaitForRegen==true)
+        {
+            StaminaRechargeTimer.ResetTimer();            
+        }
         return CurrentStamina;
     }
 
@@ -86,7 +106,17 @@ public class CharacterStamina : MonoBehaviour,ICharacterStamina
         {
             if(CapMaxStamina && CurrentStamina<MaxStamina)
             {
-                AddStamina(RegenRate*Time.deltaTime);
+                
+                if (StaminaRechargeTimer.Activated)
+                {
+                    AddStamina(RegenRate*Time.deltaTime,false);                    
+                }
+                else
+                {
+                    StaminaRechargeTimer.Tick();
+                    //To prevent timer ui from fading out
+                    OnStaminaChanged?.Invoke(CurrentStamina,MinStamina,MaxStamina);
+                }
             }
         }
     }

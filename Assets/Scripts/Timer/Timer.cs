@@ -18,4 +18,8 @@ public class Timer
     {
         timer=0;
     }
+    public void FinishTimer()
+    {
+        timer=threshold+1;
+    }
 }

@@ -26,8 +26,8 @@ public class UIStaminaBar : MonoBehaviour
         FadeOutTimer = new Timer(FadeOutWaitTiming);
         ChangeImageAlphaValue(0f);
         
-        FadeOutWaitTimer.timer=FadeOutWaitTiming+1f;
-        FadeOutTimer.timer=FadeOutTime+1f;
+        FadeOutWaitTimer.FinishTimer();
+        FadeOutTimer.FinishTimer();
     }
 
     private void HandleStamina(float CurrentStamina,float minStamina,float maxStamina)
@@ -44,19 +44,21 @@ public class UIStaminaBar : MonoBehaviour
 
     void Update()
     {
-        if(!FadeOutWaitTimer.Activated)
+        FadeOutSequence();
+    }
+
+    private void FadeOutSequence()
+    {
+        
+        if (!FadeOutWaitTimer.Activated)
         {
             FadeOutWaitTimer.Tick();
         }
-        else if(!FadeOutTimer.Activated)
+        else if (!FadeOutTimer.Activated)
         {
             FadeOutTimer.Tick();
-            float percentAlpha =(1 - (FadeOutTimer.timer / FadeOutTime));
+            float percentAlpha = (1 - (FadeOutTimer.timer / FadeOutTime));
             ChangeImageAlphaValue(percentAlpha);
-        }
-        else
-        {
-
         }
     }
 

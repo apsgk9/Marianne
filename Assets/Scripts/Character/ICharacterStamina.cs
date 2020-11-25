@@ -11,8 +11,8 @@ namespace CharacterProperties
         
         //current,min,max
         event Action<float,float,float> OnStaminaChanged;
-        float ChangeStamina(float newStamina);
-        float AddStamina(float changeToAdd);
+        float ChangeStamina(float newStamina,bool shouldWaitForRegen=true);
+        float AddStamina(float changeToAdd,bool shouldWaitForRegen=true);
         float GetCurrentStamina();
     }
 }
