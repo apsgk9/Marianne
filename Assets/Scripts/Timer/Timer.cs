@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Timer
 {
-    public event Action TimerReset;
     public float timer;
     public float threshold;
     public bool Activated=>timer>=threshold;
@@ -18,6 +17,5 @@ public class Timer
     public void ResetTimer()
     {
         timer=0;
-        TimerReset?.Invoke();
     }
 }

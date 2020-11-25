@@ -8,7 +8,9 @@ namespace CharacterProperties
         bool HasStamina();
         bool IsStaminaBeingUsed{get;set;}
         bool CanUse();
-        event Action<float> OnStaminaChanged;
+        
+        //current,min,max
+        event Action<float,float,float> OnStaminaChanged;
         float ChangeStamina(float newStamina);
         float AddStamina(float changeToAdd);
         float GetCurrentStamina();

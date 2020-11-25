@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11e5b4d400b16d249bcda5a40dca90f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StaminaChange: -20
+  StaminaChange: -40
   StaminaAdding: 0
 --- !u!1102 &-7861590733155135100
 AnimatorState:

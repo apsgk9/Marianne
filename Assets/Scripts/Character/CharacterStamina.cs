@@ -17,13 +17,15 @@ public class CharacterStamina : MonoBehaviour,ICharacterStamina
     public bool IsStaminaBeingUsed { get => _isStaminaBeingUsed; set => _isStaminaBeingUsed=value ; }
     public bool HasDrained=false;
 
-    public event Action<float> OnStaminaChanged;
+    public event Action<float,float,float> OnStaminaChanged;
+
+    //Try to call only if there is change.
     public float AddStamina(float changeToAdd)
     {
         CurrentStamina += changeToAdd;
         CheckIfStaminaHasRecovered();
         CapStamina();
-        OnStaminaChanged?.Invoke(CurrentStamina);
+        OnStaminaChanged?.Invoke(CurrentStamina,MinStamina,MaxStamina);
         return CurrentStamina;
     }
 
@@ -56,7 +58,7 @@ public class CharacterStamina : MonoBehaviour,ICharacterStamina
         
         CurrentStamina=newStamina;
         CapStamina();
-        OnStaminaChanged?.Invoke(CurrentStamina);
+        OnStaminaChanged?.Invoke(CurrentStamina,MinStamina,MaxStamina);
         return CurrentStamina;
     }
 
