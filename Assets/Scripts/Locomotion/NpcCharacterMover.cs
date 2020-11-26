@@ -17,6 +17,7 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
 
     public void Move(Vector3 motion)
     {
+        motion = motion+Physics.gravity*Time.deltaTime;
         _characterController.Move(motion);
     }
     private void Awake()

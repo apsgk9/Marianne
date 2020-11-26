@@ -13,6 +13,12 @@ public class PlayerCharacterMover: MonoBehaviour, ICharacterMover
     }
     public void Move(Vector3 motion)
     {
-        _CharacterController.Move(motion);
+        Vector3 MotionWithGravity= ApplyGravity(motion);
+        _CharacterController.Move(MotionWithGravity);
+    }
+
+    private Vector3 ApplyGravity(Vector3 motion)
+    {
+        return motion+Physics.gravity*Time.deltaTime;
     }
 }
