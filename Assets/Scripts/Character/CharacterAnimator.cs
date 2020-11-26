@@ -16,8 +16,11 @@ namespace CharacterProperties
         public string UsingControllerParameterName ="UsingController";
         public string ControllerDeltaParameterName ="ControllerDelta";
         public string CharacterHasStaminaParameterName ="HasStamina";
+        public string JumpTriggerParameterName ="Jump";
         private static Vector2 _previousMovmementAxis;
         private ICharacterInput _characterInput;
+
+        private bool isJumping=false;
         private void Awake()
         {   
             if(_characterInput==null)
@@ -36,15 +39,26 @@ namespace CharacterProperties
 
             Animator.SetFloat(ControllerDeltaParameterName, ReturnDeltaMovement());
 
-            Animator.SetBool(UsingControllerParameterName, InputHelper.DeviceInputTool.IsUsingController());            
+            Animator.SetBool(UsingControllerParameterName, InputHelper.DeviceInputTool.IsUsingController());
 
             Animator.SetBool(CharacterHasStaminaParameterName, CharacterState.CanUseStamina);
+
+            HandleJump();
         }
+
+        private void HandleJump()
+        {
+            bool currentJumpStatus = CharacterState.isJumping;
+            if(currentJumpStatus==true)
+            {
+                Animator.SetTrigger(JumpTriggerParameterName);
+            }
+        }
+
         private bool GetMovementPressed()
         {
             return _characterInput.IsThereMovement();
         }
-
 
         private float ReturnDeltaMovement()
         {
@@ -62,6 +76,7 @@ namespace CharacterProperties
 
         private void SpeedCalculations()
         {
+            //please clarify more of this
             _compositeSpeedValue=CharacterState.AnimatorSpeed;
         }
 

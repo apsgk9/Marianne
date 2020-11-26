@@ -17,6 +17,8 @@ public partial class Locomotion : ILocomotion
 
     public event Action<Vector3> OnMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
+    public event Action<bool> OnJump;
+
     public float runThreshold=0.5f;
     public float sprintThreshold=2.01f;
     private LocomotionMode locomotionMode;
@@ -87,7 +89,8 @@ public partial class Locomotion : ILocomotion
     {
         //TODO FINISH THIS, FIGURE OUT HOW YOUR CODE IS SETUP AGAIN
         bool isJumping=_characterInput.IsJump();
-        return false;
+        OnJump?.Invoke(isJumping);
+        return isJumping;
     }
 
     private void ApplyRotation(Quaternion FinalRotation)

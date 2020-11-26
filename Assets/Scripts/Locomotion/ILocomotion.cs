@@ -6,4 +6,5 @@ public interface ILocomotion
     void Tick();
     event Action<Vector3> OnMoveChange;
     event Action<float> OnMoveAnimatorSpeedChange;
+    event Action<bool> OnJump;
 }

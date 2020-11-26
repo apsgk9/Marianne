@@ -54,7 +54,7 @@ public class UserInput : MonoBehaviour, IUserInput
         _verticalHistory= new MovementHistory(historyMaxLength);
         _horizontalHistory= new MovementHistory(historyMaxLength);
     }
-    private void OnEnable(Action<InputAction.CallbackContext> HandleJumpStart)
+    private void OnEnable()
     {
         _inputActions.Enable();
         _inputActions.Player.MovementAxis.performed += HandleMovement;

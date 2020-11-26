@@ -12,6 +12,7 @@ namespace CharacterProperties
         float DesiredSpeed { get; }
         float AnimatorSpeed { get; }
         bool CanUseStamina { get; }
+        bool isJumping { get; }
     }
 
     //What the character wants to do instead of what's happening
@@ -23,7 +24,10 @@ namespace CharacterProperties
         public float AnimatorSpeed { get; private set; }
         public Character _player;
         public ICharacterStamina _staminaHandler;
+
         public bool CanUseStamina { get { return _staminaHandler.CanUse(); }}
+
+        public bool isJumping{ get; private set; }
 
         private void Awake()
         {
@@ -37,9 +41,13 @@ namespace CharacterProperties
             {
                 _player._Locomotion.OnMoveChange += UpdateVector;
                 _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateAnimatorSpeed;
+                _player._Locomotion.OnJump += UpdateJump;
             }
 
         }
+
+        
+
         private void Start()
         {
             if (_player._Locomotion != null)
@@ -50,6 +58,10 @@ namespace CharacterProperties
 
                 _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateAnimatorSpeed;
                 _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateAnimatorSpeed;
+
+                
+                _player._Locomotion.OnJump -= UpdateJump;
+                _player._Locomotion.OnJump += UpdateJump;
             }
         }
         private void OnDisable()
@@ -62,6 +74,7 @@ namespace CharacterProperties
 
         }
 
+        #region Handlers
         private void UpdateVector(Vector3 MoveVector)
         {
             DesiredDeltaVelocity = MoveVector - DesiredVelocity;
@@ -72,5 +85,12 @@ namespace CharacterProperties
         {
             AnimatorSpeed = InputSpeed;
         }
+
+        private void UpdateJump(bool JumpGiven)
+        {
+            isJumping=JumpGiven;
+        }
+
+        #endregion
     }
 }
