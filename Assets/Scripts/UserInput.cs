@@ -24,11 +24,13 @@ public class UserInput : MonoBehaviour, IUserInput
     public Vector2 _cursorDeltaPosition;
     private Vector2 _mousePosition;
     private Vector2 _analogAimPosition;
-    public float _vertical;
-    public float _horizontal;
+    private float _vertical;
+    private float _horizontal;
     public float AnalogAimSensitivity=15f;
     public bool RunPressed => _runPressed;
-    public bool _runPressed;
+    private bool _runPressed;
+    public bool JumpPressed =>_jumpPressed;
+    private bool _jumpPressed;
 
     //New actions    
     public PlayerInputActions _inputActions;
@@ -52,7 +54,7 @@ public class UserInput : MonoBehaviour, IUserInput
         _verticalHistory= new MovementHistory(historyMaxLength);
         _horizontalHistory= new MovementHistory(historyMaxLength);
     }
-    private void OnEnable()
+    private void OnEnable(Action<InputAction.CallbackContext> HandleJumpStart)
     {
         _inputActions.Enable();
         _inputActions.Player.MovementAxis.performed += HandleMovement;
@@ -65,10 +67,23 @@ public class UserInput : MonoBehaviour, IUserInput
         _inputActions.Player.AnalogAim.performed += HandleAnalogAim;
         _inputActions.Player.Run.started += HandleRunPressed;
         _inputActions.Player.Run.canceled += HandleRunReleased;
+
+        
+        _inputActions.Player.Jump.started += HandleJumpStart;
+        _inputActions.Player.Jump.canceled += HandleJumpEnd;
         
         InputUser.onChange+= OnDeviceChanged;
 
 
+    }
+    private void HandleJumpStart(InputAction.CallbackContext obj)
+    {
+        _jumpPressed=true;
+    }
+
+    private void HandleJumpEnd(InputAction.CallbackContext obj)
+    {
+        _jumpPressed=false;
     }
 
     private void OnDeviceChanged(InputUser user, InputUserChange change, InputDevice device)
@@ -91,6 +106,9 @@ public class UserInput : MonoBehaviour, IUserInput
         _inputActions.Player.MouseDeltaAim.canceled-= ctx=>_cursorDeltaPosition= Vector2.zero;
         _inputActions.Player.Run.started+=HandleRunPressed;
         _inputActions.Player.Run.canceled+=HandleRunReleased;
+
+        _inputActions.Player.Jump.started -= HandleJumpStart;
+        _inputActions.Player.Jump.canceled -= HandleJumpEnd;
 
     }
 

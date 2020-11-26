@@ -57,7 +57,7 @@ namespace CharacterProperties
 
         private bool ChangeInVelocity()
         {
-            return !(CharacterState.DeltaVelocity.magnitude<Mathf.Epsilon);
+            return !(CharacterState.DesiredDeltaVelocity.magnitude<Mathf.Epsilon);
         }
 
         private void SpeedCalculations()

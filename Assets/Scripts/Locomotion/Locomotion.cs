@@ -68,12 +68,26 @@ public partial class Locomotion : ILocomotion
 
     public void Tick()
     {
-        CalculateCharacterDesiredVector();
-        RotateTransform(DesiredCharacterVectorForward);
+        bool isjumping = HandleJump();
+        
+        if(!isjumping)
+        {
+            CalculateCharacterDesiredVector();
+            RotateTransform(DesiredCharacterVectorForward);
 
-        var previousRotation=_characterGameObject.transform.rotation;
-        ApplyRotation(CompositeRotation);
-        SendAnimatorLocomotionCommands(_characterInput.IsRunning());
+            var previousRotation=_characterGameObject.transform.rotation;
+            ApplyRotation(CompositeRotation);
+            SendAnimatorLocomotionCommands(_characterInput.IsRunning());
+
+        }
+        
+    }
+
+    private bool HandleJump()
+    {
+        //TODO FINISH THIS, FIGURE OUT HOW YOUR CODE IS SETUP AGAIN
+        bool isJumping=_characterInput.IsJump();
+        return false;
     }
 
     private void ApplyRotation(Quaternion FinalRotation)

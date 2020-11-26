@@ -34,7 +34,6 @@ public class Character : MonoBehaviour
         PlayerCamera,MovementVectorBlend,TurnRotationBlend,_characterInput,_characterMover);
     }
 
-
     private void FixedUpdate()
     {
         _Locomotion.Tick();

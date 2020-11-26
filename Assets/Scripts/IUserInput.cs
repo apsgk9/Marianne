@@ -8,6 +8,7 @@ public interface IUserInput
     float Horizontal {get;}
     void Tick();
     bool PausePressed {get;}
+    bool JumpPressed {get;}
     bool RunPressed {get;}
     Vector2 CursorPosition { get;}
     Vector2 CursorDeltaPosition { get;}

@@ -98,5 +98,10 @@ namespace CharacterInput
             bool isMovementhere= verticalAverage > 0.0025 || horizontalAverage > 0.0025;
             return isMovementhere;
         }
+
+        public bool IsJump()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
