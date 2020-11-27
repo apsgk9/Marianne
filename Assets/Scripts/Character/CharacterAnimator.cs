@@ -17,10 +17,10 @@ namespace CharacterProperties
         public string ControllerDeltaParameterName ="ControllerDelta";
         public string CharacterHasStaminaParameterName ="HasStamina";
         public string JumpTriggerParameterName ="Jump";
+        public string isGroundedParameterName ="isGrounded";
         private static Vector2 _previousMovmementAxis;
         private ICharacterInput _characterInput;
 
-        private bool isJumping=false;
         private void Awake()
         {   
             if(_characterInput==null)
@@ -42,6 +42,8 @@ namespace CharacterProperties
             Animator.SetBool(UsingControllerParameterName, InputHelper.DeviceInputTool.IsUsingController());
 
             Animator.SetBool(CharacterHasStaminaParameterName, CharacterState.CanUseStamina);
+
+            Animator.SetBool(isGroundedParameterName, CharacterState.isGrounded);
 
             HandleJump();
         }

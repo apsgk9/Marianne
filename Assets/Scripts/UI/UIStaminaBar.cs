@@ -78,7 +78,6 @@ public class UIStaminaBar : MonoBehaviour
 
     private void HandleStaminaImageColor(float percent)
     {
-        Debug.Log(percent);
         if(percent<=ColorStartChangeThreshold && percent>ColorEndChangeThreshold)
         {
             Debug.Log(percent);

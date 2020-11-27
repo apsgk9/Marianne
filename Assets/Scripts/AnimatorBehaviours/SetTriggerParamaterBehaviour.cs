@@ -2,23 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SetParamater : StateMachineBehaviour
+public class SetTriggerParamaterBehaviour : StateMachineBehaviour
 {
     public enum SetAt{
         Enter,
         Exit
     }
+    public enum Trigger{
+        Trigger,
+        Reset
+    }
     public string ParameterName;
-    public bool SetTo= false;
+    public Trigger SetTo;
     public SetAt Set;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if(Set==SetAt.Enter)
         {
-            animator.SetBool(ParameterName,SetTo);
+            TriggerHandler(animator);
+
         }
     }
+
+    
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -31,8 +38,19 @@ public class SetParamater : StateMachineBehaviour
     {
         if(Set==SetAt.Exit)
         {
-            animator.SetBool(ParameterName,SetTo);
+            TriggerHandler(animator);
         }        
+    }
+    private void TriggerHandler(Animator animator)
+    {
+        if (SetTo == Trigger.Trigger)
+        {
+            animator.SetTrigger(ParameterName);
+        }
+        else
+        {
+            animator.ResetTrigger(ParameterName);
+        }
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

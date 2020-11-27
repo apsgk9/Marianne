@@ -13,6 +13,7 @@ namespace CharacterProperties
         float AnimatorSpeed { get; }
         bool CanUseStamina { get; }
         bool isJumping { get; }
+        bool isGrounded { get; }
     }
 
     //What the character wants to do instead of what's happening
@@ -24,13 +25,19 @@ namespace CharacterProperties
         public float AnimatorSpeed { get; private set; }
         public Character _player;
         public ICharacterStamina _staminaHandler;
+        public CheckGrounded CheckGroundedScript;
 
         public bool CanUseStamina { get { return _staminaHandler.CanUse(); }}
 
         public bool isJumping{ get; private set; }
 
+        public bool isGrounded {get;private set;}
+
         private void Awake()
         {
+            //prevent from starting fall in the beginning
+            isGrounded=true;
+            
             DesiredVelocity = Vector3.zero;
             _player = GetComponent<Character>();
             _staminaHandler = GetComponentInChildren<ICharacterStamina>();
@@ -42,6 +49,7 @@ namespace CharacterProperties
                 _player._Locomotion.OnMoveChange += UpdateVector;
                 _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateAnimatorSpeed;
                 _player._Locomotion.OnJump += UpdateJump;
+                CheckGroundedScript.OnGroundedChange+=UpdateGrounded;
             }
 
         }
@@ -62,6 +70,10 @@ namespace CharacterProperties
                 
                 _player._Locomotion.OnJump -= UpdateJump;
                 _player._Locomotion.OnJump += UpdateJump;
+
+                
+                CheckGroundedScript.OnGroundedChange-=UpdateGrounded;
+                CheckGroundedScript.OnGroundedChange+=UpdateGrounded;
             }
         }
         private void OnDisable()
@@ -70,6 +82,8 @@ namespace CharacterProperties
             {
                 _player._Locomotion.OnMoveChange -= UpdateVector;
                 _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateAnimatorSpeed;
+                _player._Locomotion.OnJump -= UpdateJump;
+                CheckGroundedScript.OnGroundedChange-=UpdateGrounded;
             }
 
         }
@@ -90,7 +104,10 @@ namespace CharacterProperties
         {
             isJumping=JumpGiven;
         }
-
+        private void UpdateGrounded(bool inputIsGrounded)
+        {
+            isGrounded=inputIsGrounded;
+        }
         #endregion
     }
 }
