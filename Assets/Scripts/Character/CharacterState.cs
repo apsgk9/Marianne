@@ -25,7 +25,7 @@ namespace CharacterProperties
         public float AnimatorSpeed { get; private set; }
         public Character _player;
         public ICharacterStamina _staminaHandler;
-        public CheckGrounded CheckGroundedScript;
+        public ICheckGrounded CheckGroundedScript;
 
         public bool CanUseStamina { get { return _staminaHandler.CanUse(); }}
 
@@ -41,6 +41,7 @@ namespace CharacterProperties
             DesiredVelocity = Vector3.zero;
             _player = GetComponent<Character>();
             _staminaHandler = GetComponentInChildren<ICharacterStamina>();
+            CheckGroundedScript=GetComponent<ICheckGrounded>();
         }
         private void OnEnable()
         {

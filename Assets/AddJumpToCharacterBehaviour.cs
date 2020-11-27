@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using CharacterProperties;
 using UnityEngine;
 
-public class AddSpeedToCharacterBehaviour : StateMachineBehaviour
+public class AddJumpToCharacterBehaviour : StateMachineBehaviour
 {
     private CharacterController CharacterController;
     public Vector3 InitialSpeed;
-    private float LastSpeed;
+    public float ForwardSpeedMultiplier=1f;
+
+    public Vector3 LastVector;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -15,7 +18,9 @@ public class AddSpeedToCharacterBehaviour : StateMachineBehaviour
         {
             CharacterController=animator.GetComponentInParent<CharacterController>();
         }
-        LastSpeed=animator.GetFloat("Speed");
+        LastVector=animator.GetComponentInParent<CharacterState>().DesiredVelocity;
+        LastVector.y=0f;
+        //OriginalForward=animator.transform.forward.normalized;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -23,9 +28,9 @@ public class AddSpeedToCharacterBehaviour : StateMachineBehaviour
     {
         if(stateInfo.normalizedTime<1f)
         {
-            float percentage=(1-stateInfo.normalizedTime);
+            float percentage=Mathf.Clamp((1-stateInfo.normalizedTime),0,1);
             Vector3 JumpForce=InitialSpeed*Time.deltaTime*percentage;
-            JumpForce+= animator.transform.forward*LastSpeed*Time.deltaTime*2;
+            JumpForce+= LastVector*ForwardSpeedMultiplier;
             
             CharacterController.Move(JumpForce);
         }

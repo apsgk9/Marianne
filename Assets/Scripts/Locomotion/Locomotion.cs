@@ -1,5 +1,6 @@
 using System;
 using CharacterInput;
+using CharacterProperties;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,6 +11,8 @@ public partial class Locomotion : ILocomotion
     private Transform _viewTransform;
     private float _RotationSpeed { get;}
     private RootMotionDelta _RootMotionDelta;
+    private ICheckGrounded _CheckGrounded;
+
     public Vector3 DesiredCharacterVectorForward { get; private set; }
     private Vector3 _movementInput;
     public Vector3 finalMovementComposite{get; private set;}
@@ -26,7 +29,6 @@ public partial class Locomotion : ILocomotion
     public AnimationCurve _RotationBlend;
     [SerializeReference]
     public ICharacterInput _characterInput;
-
     public Locomotion(GameObject character,float rotationSpeed,
     Transform viewTransform,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend,
     ICharacterInput characterInput,ICharacterMover characterMover)
@@ -41,6 +43,7 @@ public partial class Locomotion : ILocomotion
 
 
         _RootMotionDelta = _characterGameObject.GetComponentInChildren<RootMotionDelta>();
+        _CheckGrounded = _characterGameObject.GetComponentInChildren<ICheckGrounded>();
         locomotionMode= LocomotionMode.Idle;
         if(_RootMotionDelta!=null)
         {
@@ -70,9 +73,8 @@ public partial class Locomotion : ILocomotion
 
     public void Tick()
     {
-        bool isjumping = HandleJump();
-        
-        if(!isjumping)
+        HandleJump();           
+        if(_CheckGrounded.isGrounded)
         {
             CalculateCharacterDesiredVector();
             RotateTransform(DesiredCharacterVectorForward);
@@ -87,7 +89,6 @@ public partial class Locomotion : ILocomotion
 
     private bool HandleJump()
     {
-        //TODO FINISH THIS, FIGURE OUT HOW YOUR CODE IS SETUP AGAIN
         bool isJumping=_characterInput.IsJump();
         OnJump?.Invoke(isJumping);
         return isJumping;

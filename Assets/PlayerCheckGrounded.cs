@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
-public class CheckGrounded : MonoBehaviour
+[ExecuteInEditMode]
+[RequireComponent(typeof(CharacterController))]
+public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
 {
-    public float DistanceToGround=0.1f;
+    public float DistanceToGround = 0.1f;
     public Transform Origin;
-    public bool isGrounded;//{ get;private set;}
+    private CharacterController _CharacterController;
+    public bool isGrounded{ get;private set;}
 
-    public Vector3 Scale=new Vector3(1f,1f,1f);
-    public Vector3 Offset=new Vector3(0f,0f,0f);
+    public Vector3 Scale = new Vector3(1f, 1f, 1f);
+    public Vector3 Offset = new Vector3(0f, 0f, 0f);
     //public LayerMask Mask;
 
     public event Action<bool> OnGroundedChange;
@@ -20,7 +22,13 @@ public class CheckGrounded : MonoBehaviour
 
     private void Start()
     {
-        isGrounded=true;
+        _CharacterController = GetComponent<CharacterController>();
+        isGrounded = true;
+    }
+    private void Update()
+    {
+        CheckGround();
+        
     }
     private void FixedUpdate()
     {
@@ -32,19 +40,20 @@ public class CheckGrounded : MonoBehaviour
     {
         //Debug.DrawLine(Origin.position,Origin.position+(-Vector3.up*DistanceToGround),Color.red);
         //bool tempisGrounded = Physics.Raycast(Origin.position, -Vector3.up, DistanceToGround);
-        bool tempisGrounded = Physics.BoxCast(transform.position+Offset, Scale,Vector3.down, out m_Hit, transform.rotation, DistanceToGround);
-        if (isGrounded != tempisGrounded)
+        bool tempisGrounded = Physics.BoxCast(transform.position + Offset, Scale, Vector3.down, out m_Hit, transform.rotation, DistanceToGround);
+        bool grounded=(tempisGrounded||_CharacterController.isGrounded);
+        if (isGrounded != grounded)
         {
-            OnGroundedChange?.Invoke(tempisGrounded);
+            OnGroundedChange?.Invoke(grounded);
         }
         //if (tempisGrounded)
         //{
         //    //Output the name of the Collider your Box hit
         //    //Debug.Log("Hit : " + m_Hit.collider.name);
         //}
-        isGrounded = tempisGrounded;
+        isGrounded = grounded;
     }
-
+    
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -53,17 +62,17 @@ public class CheckGrounded : MonoBehaviour
         if (isGrounded)
         {
             //Draw a Ray forward from GameObject toward the hit
-            Gizmos.DrawRay(transform.position+Offset, Vector3.down * m_Hit.distance);
+            Gizmos.DrawRay(transform.position + Offset, Vector3.down * m_Hit.distance);
             //Draw a cube that extends to where the hit exists
-            Gizmos.DrawWireCube(transform.position+Offset + Vector3.down * m_Hit.distance, Scale);
+            Gizmos.DrawWireCube(transform.position + Offset + Vector3.down * m_Hit.distance, Scale);
         }
         //If there hasn't been a hit yet, draw the ray at the maximum distance
         else
         {
             //Draw a Ray forward from GameObject toward the maximum distance
-            Gizmos.DrawRay(transform.position+Offset,Vector3.down * DistanceToGround);
+            Gizmos.DrawRay(transform.position + Offset, Vector3.down * DistanceToGround);
             //Draw a cube at the maximum distance
-            Gizmos.DrawWireCube(transform.position+Offset +Vector3.down * DistanceToGround, Scale);
+            Gizmos.DrawWireCube(transform.position + Offset + Vector3.down * DistanceToGround, Scale);
         }
     }
 }
