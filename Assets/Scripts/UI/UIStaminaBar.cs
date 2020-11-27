@@ -80,9 +80,7 @@ public class UIStaminaBar : MonoBehaviour
     {
         if(percent<=ColorStartChangeThreshold && percent>ColorEndChangeThreshold)
         {
-            Debug.Log(percent);
             float lerped=1-((percent-ColorEndChangeThreshold)/(ColorStartChangeThreshold-ColorEndChangeThreshold));
-            Debug.Log(lerped);
             StaminaImage.color = Color.Lerp(NormalColor, DangerColor,lerped);
         }
         else if (percent<=ColorEndChangeThreshold)
