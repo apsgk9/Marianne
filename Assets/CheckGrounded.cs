@@ -6,7 +6,7 @@ using UnityEngine;
 [ExecuteAlways]
 public class CheckGrounded : MonoBehaviour
 {
-    public float DistanceToGround;
+    public float DistanceToGround=0.1f;
     public Transform Origin;
     public bool isGrounded;//{ get;private set;}
     
@@ -24,8 +24,8 @@ public class CheckGrounded : MonoBehaviour
 
     private void CheckGround()
     {
-        //Debug.DrawLine(Origin.position,Origin.position+(-Vector3.up),Color.red);
-        bool tempisGrounded = Physics.Raycast(Origin.position, -Vector3.up, DistanceToGround + 0.1f);
+        Debug.DrawLine(Origin.position,Origin.position+(-Vector3.up*DistanceToGround),Color.red);
+        bool tempisGrounded = Physics.Raycast(Origin.position, -Vector3.up, DistanceToGround);
 
         if (isGrounded != tempisGrounded)
         {
