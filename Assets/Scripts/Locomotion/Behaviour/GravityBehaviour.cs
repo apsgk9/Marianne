@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AnimatorStateMachineEnums;
 
-public partial class SetBooleanParamaterBehaviour : StateMachineBehaviour
+public class GravityBehaviour : StateMachineBehaviour
 {
-    public string ParameterName;
-    public bool SetTo= false;
-    public SetAt Set;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    public bool SetAtEnter=false;
+    public bool SetAtExit=false;
+    ICharacterMover CharacterMover;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(Set==SetAt.Enter)
+        if(CharacterMover==null)
         {
-            animator.SetBool(ParameterName,SetTo);
-        }
+            CharacterMover=animator.GetComponentInParent<ICharacterMover>();
+        }        
+        CharacterMover.UseGravity=SetAtEnter;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -23,13 +24,10 @@ public partial class SetBooleanParamaterBehaviour : StateMachineBehaviour
     //    
     //}
 
-    //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if(Set==SetAt.Exit)
-        {
-            animator.SetBool(ParameterName,SetTo);
-        }        
+    {        
+        CharacterMover.UseGravity=SetAtExit;        
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

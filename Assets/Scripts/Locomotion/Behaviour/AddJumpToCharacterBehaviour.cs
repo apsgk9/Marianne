@@ -18,19 +18,20 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
         {
             CharacterController=animator.GetComponentInParent<CharacterController>();
         }
-        LastVector=animator.GetComponentInParent<CharacterState>().DesiredVelocity;
-        LastVector.y=0f;
+        //LastVector=animator.GetComponentInParent<CharacterState>().DesiredVelocity;
+        //LastVector.y=0f;
         //OriginalForward=animator.transform.forward.normalized;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        //Do not change transition offset or fix later
         if(stateInfo.normalizedTime<1f)
         {
             float percentage=Mathf.Clamp((1-stateInfo.normalizedTime),0,1);
             Vector3 JumpForce=InitialSpeed*Time.deltaTime*percentage;
-            JumpForce+= LastVector*ForwardSpeedMultiplier;
+            //JumpForce+= LastVector*ForwardSpeedMultiplier;
             
             CharacterController.Move(JumpForce);
         }

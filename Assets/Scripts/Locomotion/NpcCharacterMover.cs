@@ -11,15 +11,12 @@ using UnityEngine.AI;
 public class NpcCharacterMover : MonoBehaviour, ICharacterMover
 {
     private NavMeshAgent _agent;
-    private CharacterController _characterController;
+    private CharacterController _CharacterController;
     private NPCCharacterInput _npcCharacterInput;
     private Vector3 nextposition;
+    private bool _useGravity=true;
+    public bool UseGravity { get {return _useGravity;} set {_useGravity=value;} }    
 
-    public void Move(Vector3 motion)
-    {
-        motion = motion+Physics.gravity*Time.deltaTime;
-        _characterController.Move(motion);
-    }
     private void Awake()
     {
         SetUp();
@@ -28,7 +25,7 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
 
     private void SetUp()
     {
-        _characterController = GetComponent<CharacterController>();
+        _CharacterController = GetComponent<CharacterController>();
         _npcCharacterInput = GetComponent<NPCCharacterInput>();
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false;
@@ -37,6 +34,19 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
         _agent.acceleration = 0f;
         _agent.angularSpeed = 0f;
         _agent.speed = 0f;
+    }
+
+    public void Move(Vector3 motion)
+    {
+        if(_useGravity)
+        {
+            motion = ApplyGravity(motion);
+        }
+        _CharacterController.Move(motion);
+    }
+    private Vector3 ApplyGravity(Vector3 motion)
+    {
+        return motion+Physics.gravity*Time.deltaTime;
     }
 
     private void Update()

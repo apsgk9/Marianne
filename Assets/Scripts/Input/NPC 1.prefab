@@ -74,7 +74,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 4643955076429251797}
-  CheckGroundedScript: {fileID: 0}
 --- !u!114 &4643955076429251797
 MonoBehaviour:
   m_ObjectHideFlags: 0

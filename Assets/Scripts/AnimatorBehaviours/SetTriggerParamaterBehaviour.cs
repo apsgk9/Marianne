@@ -1,20 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AnimatorStateMachineEnums;
 
-public class SetTriggerParamaterBehaviour : StateMachineBehaviour
+public partial class SetTriggerParamaterBehaviour : StateMachineBehaviour
 {
-    public enum SetAt{
-        Enter,
-        Exit
-    }
-    public enum Trigger{
-        Trigger,
-        Reset
-    }
+    
     public string ParameterName;
     public Trigger SetTo;
     public SetAt Set;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
