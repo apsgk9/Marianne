@@ -17,12 +17,16 @@ namespace CharacterProperties
         public string ControllerDeltaParameterName ="ControllerDelta";
         public string CharacterHasStaminaParameterName ="HasStamina";
         public string JumpTriggerParameterName ="Jump";
+        public string IsJumpingParameterName ="IsJumping";
         public string isGroundedParameterName ="isGrounded";
         private static Vector2 _previousMovmementAxis;
         private ICharacterInput _characterInput;
+        private bool _currentJumpButtonStatus;
+        private bool _jumpbuttonIsLifted;
 
         private void Awake()
-        {   
+        {
+            _jumpbuttonIsLifted=true;
             if(_characterInput==null)
             {
                 _characterInput = GetComponentInParent<ICharacterInput>();
@@ -50,11 +54,20 @@ namespace CharacterProperties
 
         private void HandleJump()
         {
-            bool currentJumpStatus = CharacterState.isJumping;
-            if(currentJumpStatus==true)
+            _currentJumpButtonStatus = CharacterState.TryingToJump;
+            if(_currentJumpButtonStatus==false) //released/up
+            {
+                _jumpbuttonIsLifted=true;                
+            }
+            else if(_jumpbuttonIsLifted)
             {
                 Animator.SetTrigger(JumpTriggerParameterName);
+                _jumpbuttonIsLifted=false;
             }
+            //if(_currentJumpButtonStatus)
+            //{
+            //    Animator.SetTrigger(JumpTriggerParameterName);
+            //}
         }
 
         private bool GetMovementPressed()
@@ -80,6 +93,10 @@ namespace CharacterProperties
         {
             //please clarify more of this
             _compositeSpeedValue=CharacterState.AnimatorSpeed;
+        }
+        private void OnAnimatorMove()
+        {
+            
         }
 
 

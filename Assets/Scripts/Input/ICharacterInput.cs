@@ -6,6 +6,6 @@ namespace CharacterInput
         float MovementVertical();
         bool IsRunning();
         bool IsThereMovement();
-        bool IsJump();
+        bool AttemptingToJump();
     }
 }

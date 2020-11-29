@@ -12,7 +12,7 @@ namespace CharacterProperties
         float DesiredSpeed { get; }
         float AnimatorSpeed { get; }
         bool CanUseStamina { get; }
-        bool isJumping { get; }
+        bool TryingToJump { get; }
         bool isGrounded { get; }
     }
 
@@ -29,7 +29,7 @@ namespace CharacterProperties
 
         public bool CanUseStamina { get { return _staminaHandler.CanUse(); }}
 
-        public bool isJumping{ get; private set; }
+        public bool TryingToJump{ get; private set; }
 
         public bool isGrounded {get;private set;}
 
@@ -103,7 +103,7 @@ namespace CharacterProperties
 
         private void UpdateJump(bool JumpGiven)
         {
-            isJumping=JumpGiven;
+            TryingToJump=JumpGiven;
         }
         private void UpdateGrounded(bool inputIsGrounded)
         {

@@ -10,6 +10,8 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
     public float ForwardSpeedMultiplier=1f;
 
     public Vector3 LastVector;
+    public string SpeedParameterName="Speed";
+    public float Speed;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -18,8 +20,11 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
         {
             CharacterController=animator.GetComponentInParent<CharacterController>();
         }
+        Speed=animator.GetFloat(SpeedParameterName);
         //LastVector=animator.GetComponentInParent<CharacterState>().DesiredVelocity;
         //LastVector.y=0f;
+        //LastVector.Normalize();
+        LastVector=animator.transform.forward.normalized;
         //OriginalForward=animator.transform.forward.normalized;
     }
 
@@ -31,7 +36,7 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
         {
             float percentage=Mathf.Clamp((1-stateInfo.normalizedTime),0,1);
             Vector3 JumpForce=InitialSpeed*Time.deltaTime*percentage;
-            //JumpForce+= LastVector*ForwardSpeedMultiplier;
+            JumpForce+= LastVector*Time.deltaTime*ForwardSpeedMultiplier*Speed;
             
             CharacterController.Move(JumpForce);
         }

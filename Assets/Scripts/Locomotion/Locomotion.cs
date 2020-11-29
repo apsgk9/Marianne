@@ -89,9 +89,9 @@ public partial class Locomotion : ILocomotion
 
     private bool HandleJump()
     {
-        bool isJumping=_characterInput.IsJump();
-        OnJump?.Invoke(isJumping);
-        return isJumping;
+        bool TryingToJump=_characterInput.AttemptingToJump();
+        OnJump?.Invoke(TryingToJump);
+        return TryingToJump;
     }
 
     private void ApplyRotation(Quaternion FinalRotation)

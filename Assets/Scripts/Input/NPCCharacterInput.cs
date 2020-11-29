@@ -99,7 +99,7 @@ namespace CharacterInput
             return isMovementhere;
         }
 
-        public bool IsJump()
+        public bool AttemptingToJump()
         {
             throw new NotImplementedException();
         }

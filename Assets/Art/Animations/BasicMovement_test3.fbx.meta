@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7d800f2bf8260d246bf078a0c57397ae
+guid: e257f9a64fc82aa4695ad04227252b85
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
@@ -12,6 +12,33 @@ ModelImporter:
   - first:
       74: 5279790560421502875
     second: Armature|Idle_Relax
+  - first:
+      74: 3358201427097512745
+    second: Armature|Jump1_end
+  - first:
+      74: 4313880791891221717
+    second: Armature|Jump1_full
+  - first:
+      74: 6778632724056970654
+    second: Armature|Jump1_loop
+  - first:
+      74: -7612242190501488082
+    second: Armature|Jump1_start
+  - first:
+      74: -2651799787581551309
+    second: Armature|Jump2_end_idle
+  - first:
+      74: 7798154412655775927
+    second: Armature|Jump2_end_run
+  - first:
+      74: 1654773844941768632
+    second: Armature|Jump2_full
+  - first:
+      74: -6538336061006755381
+    second: Armature|Jump2_loop
+  - first:
+      74: -2091697465676926800
+    second: Armature|Jump2_start
   - first:
       74: -6916701234184849179
     second: Armature|RunCycle
@@ -48,7 +75,29 @@ ModelImporter:
       DOF on avatar to improve retargeting quality.\n\t'Right knee' has scale animation
       that will be discarded.\n\t'Right ankle' has scale animation that will be discarded.\n\t'Left
       knee' has scale animation that will be discarded.\n\t'Left ankle' has scale
-      animation that will be discarded.\n"
+      animation that will be discarded.\n\nClip 'Armature|Jump2_end_idle' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Right knee' has scale animation
+      that will be discarded.\n\t'Right ankle' has scale animation that will be discarded.\n\t'Right
+      toe' has scale animation that will be discarded.\n\t'Left knee' has scale animation
+      that will be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n\nClip
+      'Armature|Jump2_end_run' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Right
+      knee' has scale animation that will be discarded.\n\t'Right ankle' has scale
+      animation that will be discarded.\n\t'Right toe' has scale animation that will
+      be discarded.\n\t'Left knee' has scale animation that will be discarded.\n\t'Left
+      ankle' has scale animation that will be discarded.\n\t'Left toe' has scale
+      animation that will be discarded.\n\nClip 'Armature|Jump2_full' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Right knee' has scale animation
+      that will be discarded.\n\t'Right ankle' has scale animation that will be discarded.\n\t'Right
+      toe' has scale animation that will be discarded.\n\t'Left knee' has scale animation
+      that will be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n\nClip
+      'Armature|Jump2_start' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Right
+      knee' has scale animation that will be discarded.\n\t'Right ankle' has scale
+      animation that will be discarded.\n\t'Left knee' has scale animation that will
+      be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -62,18 +111,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|DashCycle
-      takeName: Armature|DashCycle
+      name: Armature|Jump2_end_idle
+      takeName: Armature|Jump2_end_idle
       internalID: 0
       firstFrame: 0
-      lastFrame: 15
+      lastFrame: 10
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -91,11 +140,40 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Fists
-      takeName: Armature|Fists
+      name: Armature|Jump2_end_run
+      takeName: Armature|Jump2_end_run
       internalID: 0
       firstFrame: 0
-      lastFrame: 2
+      lastFrame: 13
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|Jump2_full
+      takeName: Armature|Jump2_full
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 38
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -120,22 +198,22 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Idle_Relax
-      takeName: Armature|Idle_Relax
+      name: Armature|Jump2_loop
+      takeName: Armature|Jump2_loop
       internalID: 0
       firstFrame: 0
-      lastFrame: 59
+      lastFrame: 18
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -149,51 +227,22 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|RunCycle
-      takeName: Armature|RunCycle
+      name: Armature|Jump2_start
+      takeName: Armature|Jump2_start
       internalID: 0
       firstFrame: 0
-      lastFrame: 21
+      lastFrame: 15
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|WalkCycle
-      takeName: Armature|WalkCycle
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 49
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 1
-      loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
