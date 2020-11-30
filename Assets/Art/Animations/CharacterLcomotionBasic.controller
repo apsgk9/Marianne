@@ -227,10 +227,10 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.46494815
+  m_TransitionDuration: 0.2
   m_TransitionOffset: 0.3072168
   m_ExitTime: 0.09515564
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 2
   m_OrderedInterruption: 1
@@ -519,7 +519,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.01
+  m_TransitionDuration: 0.025
   m_TransitionOffset: 0
   m_ExitTime: 0.5833334
   m_HasExitTime: 0
@@ -1554,10 +1554,10 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.46494815
+  m_TransitionDuration: 0.2
   m_TransitionOffset: 0.3072168
   m_ExitTime: 0.09515564
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 2
   m_OrderedInterruption: 1
@@ -2407,7 +2407,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.1
+  m_TransitionDuration: 0.025
   m_TransitionOffset: 0
   m_ExitTime: 0.5833334
   m_HasExitTime: 0
@@ -2498,7 +2498,8 @@ AnimatorState:
   m_Transitions:
   - {fileID: -861139487681171929}
   - {fileID: -7151358368537890358}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 9140908485053230658}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -4767,8 +4768,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
-  - {fileID: -4208947499221168611}
   - {fileID: -2305786772199440897}
+  - {fileID: -4208947499221168611}
   - {fileID: -8703248475657981882}
   m_StateMachineBehaviours:
   - {fileID: 6190108696827676935}
@@ -5231,3 +5232,18 @@ AnimatorTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 1
+--- !u!114 &9140908485053230658
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParameterName: IsJumping
+  SetTo: 0
+  Set: 1
