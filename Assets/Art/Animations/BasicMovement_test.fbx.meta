@@ -38,14 +38,35 @@ ModelImporter:
       to improve retargeting quality.\n\t'Chest' has scale animation that will be
       discarded.\n\t'Neck' has scale animation that will be discarded.\n\t'Right
       shoulder' has scale animation that will be discarded.\n\t'Left shoulder' has
-      scale animation that will be discarded.\n\nClip 'Armature|Jump1_end' has import
-      animation warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'Right knee' has scale animation
-      that will be discarded.\n\t'Right ankle' has scale animation that will be discarded.\n\t'Left
-      knee' has scale animation that will be discarded.\n\t'Left ankle' has scale
-      animation that will be discarded.\n\nClip 'Armature|Jump1_start' has import
-      animation warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'Right knee' has scale animation
+      scale animation that will be discarded.\n\nClip 'Armature|Jump1_start' has
+      import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'Right knee' has
+      scale animation that will be discarded.\n\t'Right ankle' has scale animation
+      that will be discarded.\n\t'Left knee' has scale animation that will be discarded.\n\t'Left
+      ankle' has scale animation that will be discarded.\n\nClip 'Armature|Jump2_end_idle'
+      has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Neck'
+      has scale animation that will be discarded.\n\t'Right knee' has scale animation
+      that will be discarded.\n\t'Right ankle' has scale animation that will be discarded.\n\t'Right
+      toe' has scale animation that will be discarded.\n\t'Left knee' has scale animation
+      that will be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n\nClip
+      'Armature|Jump2_end_run' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Neck'
+      has scale animation that will be discarded.\n\t'Left shoulder' has scale animation
+      that will be discarded.\n\t'Right knee' has scale animation that will be discarded.\n\t'Right
+      ankle' has scale animation that will be discarded.\n\t'Right toe' has scale
+      animation that will be discarded.\n\t'Left knee' has scale animation that will
+      be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n\t'Left
+      toe' has scale animation that will be discarded.\n\nClip 'Armature|Jump2_full'
+      has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Neck'
+      has scale animation that will be discarded.\n\t'Right knee' has scale animation
+      that will be discarded.\n\t'Right ankle' has scale animation that will be discarded.\n\t'Right
+      toe' has scale animation that will be discarded.\n\t'Left knee' has scale animation
+      that will be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n\nClip
+      'Armature|Jump2_start' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Neck'
+      has scale animation that will be discarded.\n\t'Right knee' has scale animation
       that will be discarded.\n\t'Right ankle' has scale animation that will be discarded.\n\t'Left
       knee' has scale animation that will be discarded.\n\t'Left ankle' has scale
       animation that will be discarded.\n"
@@ -182,7 +203,7 @@ ModelImporter:
       takeName: Armature|WalkCycle
       internalID: 0
       firstFrame: 0
-      lastFrame: 49
+      lastFrame: 48
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
