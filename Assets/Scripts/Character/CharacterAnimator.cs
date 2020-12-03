@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CharacterInput;
 using UnityEngine;
+using static LocomotionEnmus;
 
 namespace CharacterProperties
 {
@@ -21,8 +22,19 @@ namespace CharacterProperties
         public string isGroundedParameterName ="isGrounded";
         private static Vector2 _previousMovmementAxis;
         private ICharacterInput _characterInput;
+
+        #region SwitchStatuses
         private bool _currentJumpButtonStatus;
         private bool _jumpbuttonIsLifted;
+
+
+        private LocomotionMode LocomotionMode;
+        
+        private bool _currentDashButtonStatus;
+        private bool _dashbuttonIsLifted;
+        private bool canDash;
+
+        #endregion
 
         private void Awake()
         {
@@ -36,7 +48,13 @@ namespace CharacterProperties
         public void Update()
         {
             SpeedCalculations();
+            SetParameters();
 
+            HandleJump();
+        }
+
+        private void SetParameters()
+        {
             Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
 
             Animator.SetBool(MovementPressedParameterName, GetMovementPressed());
@@ -48,8 +66,6 @@ namespace CharacterProperties
             Animator.SetBool(CharacterHasStaminaParameterName, CharacterState.CanUseStamina);
 
             Animator.SetBool(isGroundedParameterName, CharacterState.isGrounded);
-
-            HandleJump();
         }
 
         private void HandleJump()
@@ -64,10 +80,6 @@ namespace CharacterProperties
                 Animator.SetTrigger(JumpTriggerParameterName);
                 _jumpbuttonIsLifted=false;
             }
-            //if(_currentJumpButtonStatus)
-            //{
-            //    Animator.SetTrigger(JumpTriggerParameterName);
-            //}
         }
 
         private bool GetMovementPressed()
@@ -91,12 +103,33 @@ namespace CharacterProperties
 
         private void SpeedCalculations()
         {
-            //please clarify more of this
-            _compositeSpeedValue=CharacterState.AnimatorSpeed;
-        }
-        private void OnAnimatorMove()
-        {
-            
+            //Calculates what speed input to put into the animator
+
+            _currentDashButtonStatus = CharacterState.CharacterAnimatorSpeed > (float)LocomotionMode.Sprint - 0.001 &&
+                           CharacterState.CharacterAnimatorSpeed < (float)LocomotionMode.Sprint + 0.001;
+            if(_currentDashButtonStatus==false) //released/up
+            {
+                _dashbuttonIsLifted=true;
+                canDash=true;
+            }
+
+            if(!_dashbuttonIsLifted)
+            {
+                //Prevent Dashing until button is lifted again
+                if(CharacterState.CanUseStamina==false)
+                {
+                    canDash=false;
+                }
+
+                _compositeSpeedValue = (CharacterState.CharacterAnimatorSpeed>(float)LocomotionMode.Run && !canDash)?
+                (float)LocomotionMode.Run:
+                CharacterState.CharacterAnimatorSpeed;
+            }
+            else
+            {
+                _compositeSpeedValue=CharacterState.CharacterAnimatorSpeed;
+                _dashbuttonIsLifted=false;
+            }            
         }
 
 

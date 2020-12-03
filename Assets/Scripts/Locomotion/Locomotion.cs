@@ -3,6 +3,7 @@ using CharacterInput;
 using CharacterProperties;
 using UnityEngine;
 using UnityEngine.AI;
+using static LocomotionEnmus;
 
 public partial class Locomotion : ILocomotion
 {

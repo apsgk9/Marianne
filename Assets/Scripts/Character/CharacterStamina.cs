@@ -34,7 +34,7 @@ public class CharacterStamina : MonoBehaviour,ICharacterStamina
     {
         CurrentStamina += changeToAdd;
         CheckIfStaminaHasRecovered();
-        CapStamina();
+        ProcessStamina();
         OnStaminaChanged?.Invoke(CurrentStamina,MinStamina,MaxStamina);
 
         if(shouldWaitForRegen==true)
@@ -56,7 +56,7 @@ public class CharacterStamina : MonoBehaviour,ICharacterStamina
         }
     }
 
-    private void CapStamina()
+    private void ProcessStamina()
     {
         if (CurrentStamina > MaxStamina && CapMaxStamina)
         {
@@ -72,7 +72,7 @@ public class CharacterStamina : MonoBehaviour,ICharacterStamina
     public float ChangeStamina(float newStamina,bool shouldWaitForRegen=true)
     {        
         CurrentStamina=newStamina;
-        CapStamina();
+        ProcessStamina();
         OnStaminaChanged?.Invoke(CurrentStamina,MinStamina,MaxStamina);
 
         if(shouldWaitForRegen==true)

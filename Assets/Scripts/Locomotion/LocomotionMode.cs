@@ -1,6 +1,6 @@
-public partial class Locomotion
+public partial class LocomotionEnmus
 {
-    enum LocomotionMode
+    public enum LocomotionMode
     {
         Idle=0,Walk=1,Run=2,Sprint=3
     } 

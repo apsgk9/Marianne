@@ -15,7 +15,7 @@ public class NormalizedTimeBehaviour : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetFloat(NormalizedTimeParameterName,stateInfo.normalizedTime%1);        
-    }
+    }   
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

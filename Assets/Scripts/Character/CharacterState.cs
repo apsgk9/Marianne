@@ -9,8 +9,8 @@ namespace CharacterProperties
     {
         Vector3 DesiredVelocity { get; }
         Vector3 DesiredDeltaVelocity { get; }
-        float DesiredSpeed { get; }
-        float AnimatorSpeed { get; }
+        float DesiredMagnitudeSpeed { get; }
+        float CharacterAnimatorSpeed { get; }
         bool CanUseStamina { get; }
         bool TryingToJump { get; }
         bool isGrounded { get; }
@@ -21,8 +21,8 @@ namespace CharacterProperties
     {
         public Vector3 DesiredVelocity { get; private set; }
         public Vector3 DesiredDeltaVelocity { get; private set; }
-        public float DesiredSpeed { get; private set; }
-        public float AnimatorSpeed { get; private set; }
+        public float DesiredMagnitudeSpeed { get; private set; }
+        public float CharacterAnimatorSpeed { get; private set; }
         public Character _player;
         public ICharacterStamina _staminaHandler;
         public ICheckGrounded CheckGroundedScript;
@@ -48,7 +48,7 @@ namespace CharacterProperties
             if (_player._Locomotion != null)
             {
                 _player._Locomotion.OnMoveChange += UpdateVector;
-                _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateAnimatorSpeed;
+                _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateCharacterSpeed;
                 _player._Locomotion.OnJump += UpdateJump;
                 CheckGroundedScript.OnGroundedChange+=UpdateGrounded;
             }
@@ -65,8 +65,8 @@ namespace CharacterProperties
                 _player._Locomotion.OnMoveChange += UpdateVector;
 
 
-                _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateAnimatorSpeed;
-                _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateAnimatorSpeed;
+                _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateCharacterSpeed;
+                _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateCharacterSpeed;
 
                 
                 _player._Locomotion.OnJump -= UpdateJump;
@@ -82,7 +82,7 @@ namespace CharacterProperties
             if (_player._Locomotion != null)
             {
                 _player._Locomotion.OnMoveChange -= UpdateVector;
-                _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateAnimatorSpeed;
+                _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateCharacterSpeed;
                 _player._Locomotion.OnJump -= UpdateJump;
                 CheckGroundedScript.OnGroundedChange-=UpdateGrounded;
             }
@@ -94,11 +94,11 @@ namespace CharacterProperties
         {
             DesiredDeltaVelocity = MoveVector - DesiredVelocity;
             DesiredVelocity = MoveVector;
-            DesiredSpeed = MoveVector.magnitude;
+            DesiredMagnitudeSpeed = MoveVector.magnitude;
         }
-        private void UpdateAnimatorSpeed(float InputSpeed)
+        private void UpdateCharacterSpeed(float InputSpeed)
         {
-            AnimatorSpeed = InputSpeed;
+            CharacterAnimatorSpeed = InputSpeed;
         }
 
         private void UpdateJump(bool JumpGiven)
