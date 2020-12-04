@@ -5,7 +5,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(CharacterController))]
-public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
+public class PlayerCharacterControllerCheckGrounded : MonoBehaviour, ICheckGrounded
 {
     public float DistanceToGround = 0.1f;
     public Transform Origin;
