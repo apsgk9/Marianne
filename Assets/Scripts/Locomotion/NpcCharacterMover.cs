@@ -15,7 +15,11 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
     private NPCCharacterInput _npcCharacterInput;
     private Vector3 nextposition;
     private bool _useGravity=true;
-    public bool UseGravity { get {return _useGravity;} set {_useGravity=value;} }    
+    public bool UseGravity { get {return _useGravity;} set {_useGravity=value;} }
+
+    public Vector3 _finalVector;
+    
+    public Vector3 TotalVector { get => _finalVector; set => _finalVector=value; }
 
     private void Awake()
     {
@@ -40,18 +44,21 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
     {
         if(_useGravity)
         {
-            motion = ApplyGravity(motion);
+            _finalVector = ApplyGravity(motion);
         }
-        _CharacterController.Move(motion);
+        _finalVector=motion;
     }
+    
     private Vector3 ApplyGravity(Vector3 motion)
     {
         return motion+Physics.gravity*Time.deltaTime;
     }
+    
 
     private void Update()
     {        
         BindAgentToTransform();
+        _CharacterController.Move(_finalVector);
     }
 
     private void BindAgentToTransform()
@@ -63,4 +70,8 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
         SetUp();
     }
 
+    public void AddExtraMotion(Vector3 motion)
+    {
+        _finalVector+=motion;
+    }
 }
