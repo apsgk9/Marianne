@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerCharacterMover: MonoBehaviour, ICharacterMover
+public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
 {
     public CharacterController _CharacterController { get; private set; }
     private bool _useGravity=true;
