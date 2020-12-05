@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -15,17 +16,17 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     
     private Vector3 _totalDisplacement;
     public Vector3 TotalVector { get => _totalDisplacement; set => _totalDisplacement=value; }
+    public float JumpHeight=2f;
+
+    public Vector3 Drag= new Vector3(1,1,1);
 
     public Vector3 Velocity;
-
-    public float TerminalVelocity=55.56f;
 
     private void Awake()
     {
         _CharacterController= GetComponent<CharacterController>();
         _CheckGrounded= GetComponent<ICheckGrounded>();
-        UseGravity=true;
-        
+        UseGravity=true;        
     }
     public void Move(Vector3 motion)
     {
@@ -38,21 +39,39 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
             Velocity.y=0f;
         }
         Velocity.y+= Physics.gravity.y*Time.deltaTime;
-        Velocity.y=Mathf.Clamp(Velocity.y,-TerminalVelocity,TerminalVelocity);
     }
-
     private void Update()
     {
         if(_useGravity)
         {
             ProcessGravity();
         }
-        _CharacterController.Move(_totalDisplacement+Velocity*Time.deltaTime);
+
+        Velocity.x /= 1 + Drag.x * Time.deltaTime;
+        Velocity.y /= 1 + Drag.y * Time.deltaTime;
+        Velocity.z /= 1 + Drag.z * Time.deltaTime;
+        _CharacterController.Move(Velocity*Time.deltaTime);
+    }
+
+    private void LateUpdate()
+    {
+        _CharacterController.Move(_totalDisplacement);
         _totalDisplacement=Vector3.zero;
     }
 
     public void AddExtraMotion(Vector3 motion)
     {
         _totalDisplacement+=motion;
+    }
+    public void AddVelocity(Vector3 vInput)
+    {
+        Velocity+=vInput;
+    }
+    
+    [ContextMenu("JUMP")]
+    public void Jump()
+    {
+        if (Input.GetButtonDown("Jump") && _CheckGrounded.isGrounded)
+            Velocity.y += Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
     }
 }
