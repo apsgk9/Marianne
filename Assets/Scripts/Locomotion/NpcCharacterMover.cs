@@ -74,4 +74,14 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
     {
         _finalVector+=motion;
     }
+
+    public void AddVelocity(Vector3 vInput)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetVelocity(Vector3 vInput)
+    {
+        throw new NotImplementedException();
+    }
 }

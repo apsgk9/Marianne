@@ -959,7 +959,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17312
+  m_Name: pb_Mesh17316
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1324,7 +1324,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018225, y: 0.000000025470568, z: -0.0000000041333044, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018227, y: 0.000000023309845, z: -0.0000000037826675, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -21.790234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2434,7 +2434,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1724313554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.162278}
+  m_LocalPosition: {x: 0, y: 0, z: 3.16228}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 1219923809}
@@ -2443,7 +2443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 90.00003, y: 0.00018310547}
+  m_AnchoredPosition: {x: 89.99994, y: -0.000091552734}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724313556
@@ -3124,13 +3124,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1.7
-  m_Radius: 0.2
+  m_Height: 1.75
+  m_Radius: 0.25
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0.01}
 --- !u!1 &2758135347812932630
 GameObject:
   m_ObjectHideFlags: 0
@@ -3187,10 +3187,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32c361709ebdb97438d137ce49a55be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DistanceToGround: 0.11
+  DistanceToGround: 0.16
   Origin: {fileID: 1106745408}
-  _isGrounded: 1
-  Scale: {x: 0.15, y: 0.1, z: 0.2}
+  _isGrounded: 0
+  Scale: {x: 0.3, y: 0.2, z: 0.3}
   radius: 0.1
   Offset: {x: 0, y: 0.15, z: 0}
   Ground:
@@ -3309,8 +3309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a49978789dd9c41b5fbb81e7d0b888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpHeight: 20
-  Drag: {x: 0.01, y: 0.01, z: 0.01}
+  Drag: {x: 1, y: 0.1, z: 1}
   Velocity: {x: 0, y: 0, z: 0}
 --- !u!4 &2758135348268935368
 Transform:
@@ -3350,7 +3349,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.16018222, y: 0.000000025470568, z: -0.0000000041333035, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: 0.000000023309845, z: -0.000000003782667, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3810,7 +3809,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.16018224, y: 0.000000004252742, z: -6.9012535e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: -0.000000023309845, z: 0.000000003782667, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

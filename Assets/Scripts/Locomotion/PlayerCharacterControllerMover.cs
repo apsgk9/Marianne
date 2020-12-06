@@ -16,7 +16,6 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     
     private Vector3 _totalDisplacement;
     public Vector3 TotalVector { get => _totalDisplacement; set => _totalDisplacement=value; }
-    public float JumpHeight=2f;
 
     public Vector3 Drag= new Vector3(1,1,1);
 
@@ -35,7 +34,8 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     private void ProcessGravity()
     {
         if (_CheckGrounded.isGrounded && Velocity.y<0)
-        {          
+        {
+            Debug.Log("A");
             Velocity.y=0f;
         }
         Velocity.y+= Physics.gravity.y*Time.deltaTime;
@@ -68,10 +68,13 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
         Velocity+=vInput;
     }
     
-    [ContextMenu("JUMP")]
-    public void Jump()
+    public void Jump(float height)
     {
-        if (Input.GetButtonDown("Jump") && _CheckGrounded.isGrounded)
-            Velocity.y += Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y);
+        Velocity.y += Mathf.Sqrt(height * -2f * Physics.gravity.y);
+    }
+
+    public void SetVelocity(Vector3 vInput)
+    {
+        Velocity=vInput;
     }
 }

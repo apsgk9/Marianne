@@ -12,6 +12,7 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
     public Vector3 LastVector;
     public string SpeedParameterName="Speed";
     public float Speed;
+    public float Height;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -25,23 +26,29 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
         //LastVector.y=0f;
         //LastVector.Normalize();
         LastVector=animator.transform.forward.normalized;
+        float speedY=Mathf.Sqrt(Height * -2f * Physics.gravity.y);
+        
+        Vector3 JumpForce=InitialSpeed;
+        JumpForce+= LastVector*ForwardSpeedMultiplier*Speed;
+        JumpForce.y+=speedY;
+        CharacterMover.AddVelocity(JumpForce);
         //OriginalForward=animator.transform.forward.normalized;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        //Do not change transition offset or fix later
-        if(stateInfo.normalizedTime<1f)
-        {
-            float percentage=Mathf.Clamp((1-stateInfo.normalizedTime),0,1);
-            Vector3 JumpForce=InitialSpeed*Time.deltaTime*percentage;
-            JumpForce+= LastVector*Time.deltaTime*ForwardSpeedMultiplier*Speed;
-            
-            CharacterMover.AddExtraMotion(JumpForce);
-        }        
-        
-    }
+    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    //Do not change transition offset or fix later
+    //    if(stateInfo.normalizedTime<1f)
+    //    {
+    //        float percentage=Mathf.Clamp((1-stateInfo.normalizedTime),0,1);
+    //        Vector3 JumpForce=InitialSpeed*Time.deltaTime*percentage;
+    //        JumpForce+= LastVector*Time.deltaTime*ForwardSpeedMultiplier*Speed;
+    //        
+    //        CharacterMover.AddExtraMotion(JumpForce);
+    //    }        
+    //    
+    //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

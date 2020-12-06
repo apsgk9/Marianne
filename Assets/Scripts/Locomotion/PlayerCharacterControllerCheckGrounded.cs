@@ -31,7 +31,6 @@ public class PlayerCharacterControllerCheckGrounded : MonoBehaviour, ICheckGroun
     }
     private void Update()
     {
-        _isGrounded=isGrounded;
         CheckGround();
         
     }
@@ -49,11 +48,13 @@ public class PlayerCharacterControllerCheckGrounded : MonoBehaviour, ICheckGroun
         bool tempisGrounded = Physics.BoxCast(transform.position + Offset, Scale, Vector3.down, out m_Hit, transform.rotation, DistanceToGround);
         //bool tempisGrounded = Physics.SphereCast(transform.position + Offset,radius,Vector3.down,out m_Hit,DistanceToGround, Ground, QueryTriggerInteraction.Ignore);
         bool grounded=(tempisGrounded||_CharacterController.isGrounded);
-        if (grounded)
+        if (isGrounded != grounded)
         {
             OnGroundedChange?.Invoke(grounded);
         }
         isGrounded = grounded;
+
+        _isGrounded=isGrounded;
     }
     
     void OnDrawGizmos()
