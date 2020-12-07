@@ -27,7 +27,7 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
         _CheckGrounded= GetComponent<ICheckGrounded>();
         initialradius=_CharacterController.radius;
         UseGravity=true;
-        newRadius=initialradius*0.5f;
+        newRadius=initialradius*0.8f;
     }
     public void Move(Vector3 motion)
     {
@@ -59,18 +59,18 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     {
         if (!_CheckGrounded.isGrounded)
         {
-            _CharacterController.radius =Mathf.Lerp(_CharacterController.radius,newRadius,Time.deltaTime*40);
-            _CharacterController.skinWidth =Mathf.Lerp(_CharacterController.skinWidth,newRadius*0.1f,Time.deltaTime*40);
-            //_CharacterController.radius =newRadius;
-            //_CharacterController.skinWidth =_CharacterController.radius*0.15f;
+            //_CharacterController.radius =Mathf.Lerp(_CharacterController.radius,newRadius,Time.deltaTime*40);
+            //_CharacterController.skinWidth =Mathf.Lerp(_CharacterController.skinWidth,newRadius*0.1f,Time.deltaTime*40);
+            _CharacterController.radius =newRadius;
+            _CharacterController.skinWidth =_CharacterController.radius*0.15f;
         }
         else
         {
             
-            _CharacterController.radius =Mathf.Lerp(_CharacterController.radius,initialradius,Time.deltaTime*40);
-            _CharacterController.skinWidth =Mathf.Lerp(_CharacterController.skinWidth,initialradius*0.1f,Time.deltaTime*40);
-            //_CharacterController.radius = initialradius;
-            //_CharacterController.skinWidth =_CharacterController.radius*0.15f;
+            //_CharacterController.radius =Mathf.Lerp(_CharacterController.radius,initialradius,Time.deltaTime*40);
+            //_CharacterController.skinWidth =Mathf.Lerp(_CharacterController.skinWidth,initialradius*0.1f,Time.deltaTime*40);
+            _CharacterController.radius = initialradius;
+            _CharacterController.skinWidth =_CharacterController.radius*0.1f;
         }
     }
 

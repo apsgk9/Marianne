@@ -847,7 +847,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh123662
+  m_Name: pb_Mesh17300
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1212,7 +1212,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018227, y: 0.000000023309846, z: -0.000000003782667, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: 0.000000025470568, z: -0.0000000041333035, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -21.790234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2227,7 +2227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 89.99997, y: -0.000061035156}
+  m_AnchoredPosition: {x: 89.99997, y: -0.00012207031}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724313556
@@ -2405,12 +2405,12 @@ PrefabInstance:
     - target: {fileID: 7083189469481763163, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
       propertyPath: m_SkinWidth
-      value: 0.03
+      value: 0.025
       objectReference: {fileID: 0}
     - target: {fileID: 7083189469481763163, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
       propertyPath: m_Radius
-      value: 0.3
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 7083189469481763173, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
@@ -2424,9 +2424,104 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
       propertyPath: PlayerCamera
       value: 
       objectReference: {fileID: 963194228}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[1].value
+      value: 1.7082672
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[2].value
+      value: 2.5783832
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[3].value
+      value: 3.480163
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[1].time
+      value: 0.41999465
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[1].inSlope
+      value: 5.642302
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[1].outSlope
+      value: 5.642302
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[1].outWeight
+      value: 0.20646068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[2].time
+      value: 0.56627643
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[2].inSlope
+      value: 6.396907
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[2].outSlope
+      value: 6.396907
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[2].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[2].outWeight
+      value: 0.09408337
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[3].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[3].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[3].tangentMode
+      value: 136
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[3].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[3].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: TurnRotationBlend.m_Curve.Array.data[2].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc, type: 3}
 --- !u!1 &1884107137 stripped
@@ -3316,7 +3411,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.16018225, y: 0.000000023309845, z: -0.000000003782667, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018222, y: 0.000000025470568, z: -0.0000000041333035, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
