@@ -154,7 +154,7 @@ MonoBehaviour:
   LastVector: {x: 0, y: 0, z: 0}
   SpeedParameterName: Speed
   Speed: 0
-  Height: 1
+  Height: 1.5
 --- !u!1101 &-8821493554348971797
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -4389,7 +4389,7 @@ MonoBehaviour:
   LastVector: {x: 0, y: 0, z: 0}
   SpeedParameterName: Speed
   Speed: 0
-  Height: 1
+  Height: 1.5
 --- !u!1102 &4363226689703139216
 AnimatorState:
   serializedVersion: 5

@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-[RequireComponent(typeof(CharacterController))]
-public class PlayerCharacterControllerCheckGrounded : MonoBehaviour, ICheckGrounded
+public class PlayerRigidbodyCheckGrounded : MonoBehaviour, ICheckGrounded
 {
+
     public float DistanceToGround = 0.1f;
     public Transform Origin;
-    private CharacterController _CharacterController;
     public bool isGrounded{get;private set;}
 
     public bool _isGrounded;
@@ -26,7 +25,6 @@ public class PlayerCharacterControllerCheckGrounded : MonoBehaviour, ICheckGroun
 
     private void Start()
     {
-        _CharacterController = GetComponent<CharacterController>();
         isGrounded = true;
     }
     private void Update()
@@ -47,15 +45,11 @@ public class PlayerCharacterControllerCheckGrounded : MonoBehaviour, ICheckGroun
 
         bool tempisGrounded = Physics.BoxCast(transform.position + Offset, Scale, Vector3.down, out m_Hit, transform.rotation, DistanceToGround);
         //bool tempisGrounded = Physics.SphereCast(transform.position + Offset,radius,Vector3.down,out m_Hit,DistanceToGround, Ground, QueryTriggerInteraction.Ignore);
-        //Debug.Log("tempisGrounded: "+tempisGrounded);
-        //Debug.Log("_CharacterController.isGrounded: "+_CharacterController.isGrounded);
-        bool grounded=(tempisGrounded||_CharacterController.isGrounded);
-        if (isGrounded != grounded)
+        if (isGrounded != tempisGrounded)
         {
-            OnGroundedChange?.Invoke(grounded);
+            OnGroundedChange?.Invoke(tempisGrounded);
         }
-        isGrounded = grounded;
-
+        isGrounded = tempisGrounded;
         _isGrounded=isGrounded;
     }
     
