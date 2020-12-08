@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 102030682}
   - component: {fileID: 102030681}
   m_Layer: 0
-  m_Name: Cube (7)
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -557,7 +557,7 @@ GameObject:
   - component: {fileID: 387441708}
   - component: {fileID: 387441707}
   m_Layer: 0
-  m_Name: Cube (9)
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1212,7 +1212,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018225, y: 0.000000025470568, z: -0.0000000041333035, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: 0.000000025470568, z: -0.0000000041333044, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -21.790234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1804,7 +1804,7 @@ GameObject:
   - component: {fileID: 1694892059}
   - component: {fileID: 1694892058}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2218,7 +2218,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1724313554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.16228}
+  m_LocalPosition: {x: 0, y: 0, z: 3.162278}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 1219923809}
@@ -2227,7 +2227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 89.99997, y: -0.00012207031}
+  m_AnchoredPosition: {x: 90.00006, y: 0.00015258789}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724313556
@@ -2325,7 +2325,7 @@ PrefabInstance:
     - target: {fileID: 7083189469481763158, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
       propertyPath: DistanceToGround
-      value: 0.06
+      value: 0.07
       objectReference: {fileID: 0}
     - target: {fileID: 7083189469481763158, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
@@ -2421,6 +2421,11 @@ PrefabInstance:
         type: 3}
       propertyPath: Drag.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083189469481763173, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
+        type: 3}
+      propertyPath: SlipSpeed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7083189469481763174, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
@@ -2549,7 +2554,7 @@ GameObject:
   - component: {fileID: 1999906986}
   - component: {fileID: 1999906985}
   m_Layer: 0
-  m_Name: Cube (8)
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2951,7 +2956,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.16018224, y: -0.000000004252742, z: 6.9012535e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018222, y: 0.000000025470568, z: -0.0000000041333035, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

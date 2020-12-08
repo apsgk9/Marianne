@@ -13,6 +13,8 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     
     private Vector3 _totalDisplacement;
     public Vector3 TotalVector { get => _totalDisplacement; set => _totalDisplacement=value; }
+    public float SlipSpeed=2f;
+
     public float GravityMultiplier=1f;
 
     public Vector3 Drag= new Vector3(1,1,1);
@@ -20,6 +22,9 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     public Vector3 Velocity;
     private float initialradius;
     private float newRadius;
+    private ControllerColliderHit ColliderHit;
+
+    private float hitDistance;
 
     private void Awake()
     {
@@ -27,7 +32,8 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
         _CheckGrounded= GetComponent<ICheckGrounded>();
         initialradius=_CharacterController.radius;
         UseGravity=true;
-        newRadius=initialradius*0.8f;
+        newRadius=initialradius*0.5f;        
+        _CharacterController.skinWidth =_CharacterController.radius*0.1f;
     }
     public void Move(Vector3 motion)
     {
@@ -39,7 +45,10 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
         {
             Velocity.y=0f;
         }
-        Velocity.y+= Physics.gravity.y*Time.deltaTime*GravityMultiplier;
+        else
+        {
+            Velocity.y+= Physics.gravity.y*Time.deltaTime*GravityMultiplier;
+        }
     }
     private void Update()
     {
@@ -57,20 +66,12 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
 
     private void HandleIfCharacterIsStuckOnLedge()
     {
-        if (!_CheckGrounded.isGrounded)
+        bool stuckonledge = !_CheckGrounded.isGrounded && _CharacterController.velocity == Vector3.zero && Velocity.y != 0f
+        && (transform.position-ColliderHit.point).magnitude<=hitDistance+0.1f;
+        if (stuckonledge)
         {
-            //_CharacterController.radius =Mathf.Lerp(_CharacterController.radius,newRadius,Time.deltaTime*40);
-            //_CharacterController.skinWidth =Mathf.Lerp(_CharacterController.skinWidth,newRadius*0.1f,Time.deltaTime*40);
-            _CharacterController.radius =newRadius;
-            _CharacterController.skinWidth =_CharacterController.radius*0.15f;
-        }
-        else
-        {
-            
-            //_CharacterController.radius =Mathf.Lerp(_CharacterController.radius,initialradius,Time.deltaTime*40);
-            //_CharacterController.skinWidth =Mathf.Lerp(_CharacterController.skinWidth,initialradius*0.1f,Time.deltaTime*40);
-            _CharacterController.radius = initialradius;
-            _CharacterController.skinWidth =_CharacterController.radius*0.1f;
+            Vector3 moveby=ColliderHit.normal;
+            _CharacterController.Move(moveby*Time.deltaTime*SlipSpeed);
         }
     }
 
@@ -97,5 +98,11 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     public void SetVelocity(Vector3 vInput)
     {
         Velocity=vInput;
+    }
+
+    void OnControllerColliderHit (ControllerColliderHit hit)
+    {
+        ColliderHit= hit;
+        hitDistance=(transform.position-ColliderHit.point).magnitude;
     }
 }
