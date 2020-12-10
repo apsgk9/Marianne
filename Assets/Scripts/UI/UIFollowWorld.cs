@@ -18,7 +18,7 @@ public class UIFollowWorld : MonoBehaviour
     }
 
     
-    void Update()
+    void OnGUI()
     {
         Vector3 pos= PlayerCamera.WorldToScreenPoint(WorldTarget.position);
 

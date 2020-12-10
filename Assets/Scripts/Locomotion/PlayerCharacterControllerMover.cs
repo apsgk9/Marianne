@@ -13,26 +13,24 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     
     private Vector3 _totalDisplacement;
     public Vector3 TotalVector { get => _totalDisplacement; set => _totalDisplacement=value; }
+    public float GravityMultiplier=1f;
     public float SlipSpeed=2f;
 
-    public float GravityMultiplier=1f;
-
     public Vector3 Drag= new Vector3(1,1,1);
+    public float TerminalVelocity=10f;
 
     public Vector3 Velocity;
     private float initialradius;
     private float newRadius;
     private ControllerColliderHit ColliderHit;
-
     private float hitDistance;
-
     private void Awake()
     {
         _CharacterController= GetComponent<CharacterController>();
         _CheckGrounded= GetComponent<ICheckGrounded>();
         initialradius=_CharacterController.radius;
         UseGravity=true;
-        newRadius=initialradius*0.5f;        
+        newRadius=initialradius*0.8f;        
         _CharacterController.skinWidth =_CharacterController.radius*0.1f;
     }
     public void Move(Vector3 motion)
@@ -60,6 +58,7 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
         Velocity.x /= 1 + Drag.x * Time.deltaTime;
         Velocity.y /= 1 + Drag.y * Time.deltaTime;
         Velocity.z /= 1 + Drag.z * Time.deltaTime;
+        Velocity.y=Mathf.Clamp(Velocity.y,-TerminalVelocity,TerminalVelocity);
         _CharacterController.Move(Velocity * Time.deltaTime);
         HandleIfCharacterIsStuckOnLedge();
     }
@@ -71,7 +70,15 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
         if (stuckonledge)
         {
             Vector3 moveby=ColliderHit.normal;
-            _CharacterController.Move(moveby*Time.deltaTime*SlipSpeed);
+            moveby.y=0;
+            _CharacterController.Move(moveby.normalized*Time.deltaTime*SlipSpeed);
+            _CharacterController.radius=newRadius;
+            _CharacterController.skinWidth=newRadius*0.1f;
+        }
+        else
+        {
+            _CharacterController.radius=initialradius;
+            _CharacterController.skinWidth=initialradius*0.1f;
         }
     }
 
@@ -92,7 +99,7 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     
     public void Jump(float height)
     {
-        Velocity.y += Mathf.Sqrt(height * -2f * Physics.gravity.y);
+        Velocity.y += Mathf.Sqrt(height * -2f * Physics.gravity.y*GravityMultiplier);
     }
 
     public void SetVelocity(Vector3 vInput)

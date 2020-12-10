@@ -35,11 +35,12 @@ public class PlayerCharacterRigidbodyMover : MonoBehaviour,ICharacterMover
     {
         _Rigidbody.velocity=vInput;
     }
-    private void Update()
+    public void AddExtraMotion(Vector3 motion)
     {
+        throw new System.NotImplementedException();
     }
 
-    public void AddExtraMotion(Vector3 motion)
+    public void Jump(float height)
     {
         throw new System.NotImplementedException();
     }

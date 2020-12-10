@@ -22,17 +22,13 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
             CharacterMover=animator.GetComponentInParent<ICharacterMover>();
         }
         Speed=animator.GetFloat(SpeedParameterName);
-        //LastVector=animator.GetComponentInParent<CharacterState>().DesiredVelocity;
-        //LastVector.y=0f;
-        //LastVector.Normalize();
-        LastVector=animator.transform.forward.normalized;
-        float speedY=Mathf.Sqrt(Height * -2f * Physics.gravity.y);
-        
+
+        LastVector=animator.transform.forward.normalized;        
         Vector3 JumpForce=InitialSpeed;
         JumpForce+= LastVector*ForwardSpeedMultiplier*Speed;
-        JumpForce.y+=speedY;
         CharacterMover.AddVelocity(JumpForce);
-        //OriginalForward=animator.transform.forward.normalized;
+        CharacterMover.Jump(Height);
+        
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

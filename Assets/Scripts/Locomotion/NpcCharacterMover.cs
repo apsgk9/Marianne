@@ -20,6 +20,7 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
     public Vector3 _finalVector;
     
     public Vector3 TotalVector { get => _finalVector; set => _finalVector=value; }
+    public float GravityMultiplier { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
     private void Awake()
     {
@@ -81,6 +82,11 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
     }
 
     public void SetVelocity(Vector3 vInput)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Jump(float height)
     {
         throw new NotImplementedException();
     }
