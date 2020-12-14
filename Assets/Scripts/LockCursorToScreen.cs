@@ -13,9 +13,8 @@ public class LockCursorToScreen : MonoBehaviour
     [SerializeField]
     private KeyCode ConfineKey=KeyCode.Tab;
     private void Awake()
-    {
-        UpdateLock(); 
-        
+    {        
+        UpdateLock();         
     }
 
     // Update is called once per frame

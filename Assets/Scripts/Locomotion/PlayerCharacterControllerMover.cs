@@ -55,12 +55,13 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
             ProcessGravity();
         }
 
-        Velocity.x /= 1 + Drag.x * Time.deltaTime;
-        Velocity.y /= 1 + Drag.y * Time.deltaTime;
-        Velocity.z /= 1 + Drag.z * Time.deltaTime;
+        //Velocity.x /= 1 + Drag.x * Time.deltaTime;
+        //Velocity.y /= 1 + Drag.y * Time.deltaTime;
+        //Velocity.z /= 1 + Drag.z * Time.deltaTime;
         Velocity.y=Mathf.Clamp(Velocity.y,-TerminalVelocity,TerminalVelocity);
         _CharacterController.Move(Velocity * Time.deltaTime);
-        HandleIfCharacterIsStuckOnLedge();
+         HandleIfCharacterIsStuckOnLedge();
+
     }
 
     private void HandleIfCharacterIsStuckOnLedge()
@@ -72,13 +73,6 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
             Vector3 moveby=ColliderHit.normal;
             moveby.y=0;
             _CharacterController.Move(moveby.normalized*Time.deltaTime*SlipSpeed);
-            _CharacterController.radius=newRadius;
-            _CharacterController.skinWidth=newRadius*0.1f;
-        }
-        else
-        {
-            _CharacterController.radius=initialradius;
-            _CharacterController.skinWidth=initialradius*0.1f;
         }
     }
 

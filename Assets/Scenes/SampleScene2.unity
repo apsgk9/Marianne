@@ -339,7 +339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PositionMode: 0
   m_RotationMode: 1
-  m_UpdateMethod: 0
+  m_UpdateMethod: 2
   m_Targets:
   - target: {fileID: 1884107138}
     weight: 1
@@ -1212,7 +1212,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018225, y: 0.000000004252742, z: -6.901254e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: 0.0000000042527444, z: -6.9012557e-10, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -21.790234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1235,7 +1235,7 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 1
+  m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
@@ -2227,7 +2227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 90, y: 0.00018310547}
+  m_AnchoredPosition: {x: 89.99994, y: -0.000091552734}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724313556
@@ -2405,7 +2405,7 @@ PrefabInstance:
     - target: {fileID: 7083189469481763163, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
       propertyPath: m_SkinWidth
-      value: 0.035
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 7083189469481763163, guid: 67ce5fa1f7c2fdf4284f2ff5d93141cc,
         type: 3}
@@ -2976,7 +2976,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.16018224, y: 0.000000004252742, z: -6.9012535e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018222, y: -0.000000025470568, z: 0.0000000041333035, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
