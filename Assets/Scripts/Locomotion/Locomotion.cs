@@ -78,7 +78,10 @@ public partial class Locomotion : ILocomotion
         if(_CheckGrounded.isGrounded)
         {
             CalculateCharacterDesiredVector();
-            RotateTransform(DesiredCharacterVectorForward);
+            if(_RootMotionDelta.canRotate)
+            {
+                RotateTransform(DesiredCharacterVectorForward);
+            }            
 
             SendAnimatorLocomotionCommands(_characterInput.IsRunning());
 
