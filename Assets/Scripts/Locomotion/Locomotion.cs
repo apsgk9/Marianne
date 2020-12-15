@@ -63,7 +63,7 @@ public partial class Locomotion : ILocomotion
     private void HandleRootMotion(Vector3 DeltaVector, Quaternion NewRotation)
     {
         float angleDifference = Vector3.Angle(DeltaVector,DesiredCharacterVectorForward.normalized);
-        var multiplier=0f;        
+        var multiplier=0f;
         multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
         var baseMovementComposite= DeltaVector* (multiplier);
         
@@ -74,14 +74,12 @@ public partial class Locomotion : ILocomotion
 
     public void Tick()
     {
-        HandleJump();           
+        HandleJump();
         if(_CheckGrounded.isGrounded)
         {
             CalculateCharacterDesiredVector();
             RotateTransform(DesiredCharacterVectorForward);
 
-            var previousRotation=_characterGameObject.transform.rotation;
-            ApplyRotation(CompositeRotation);
             SendAnimatorLocomotionCommands(_characterInput.IsRunning());
 
         }
