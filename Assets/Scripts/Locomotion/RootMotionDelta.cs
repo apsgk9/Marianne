@@ -17,7 +17,12 @@ public class RootMotionDelta : MonoBehaviour
 
     private void Awake()
     {
-        CheckisHasRotateParameter();
+        
+        if (Animator == null)
+        {
+            Animator = gameObject.GetComponent<Animator>();
+        }
+        CanRotateParamater=AnimatorAddParameters.TryAddingBooleanParameter(Animator,CanRotateParamater,CanRotateParameter);
     }   
     void OnAnimatorMove()
     {
@@ -27,36 +32,36 @@ public class RootMotionDelta : MonoBehaviour
     }
 
 
-    private void CheckisHasRotateParameter()
-    {
-        if (Animator == null)
-        {
-            Animator = GetComponent<Animator>();
-        }
-        AnimatorController animatorController = (AnimatorController)Animator.runtimeAnimatorController;
-
-        if(CanRotateParamater==null)
-        {
-            for (int i = 0; i < Animator.parameterCount; i++)
-            {
-                AnimatorControllerParameter tempParemeter=Animator.GetParameter(i);
-                if (tempParemeter.name == CanRotateParameter)
-                {
-                    CanRotateParamater=tempParemeter;
-                    _rotateparamaterexists=true;
-                    break;
-                }
-            }
-        }
-        
-
-        if (_rotateparamaterexists==false)
-        {
-            AnimatorControllerParameter parameter = new AnimatorControllerParameter();
-            parameter.type = AnimatorControllerParameterType.Bool;
-            parameter.name = CanRotateParameter;
-            parameter.defaultBool = true;
-            animatorController.AddParameter(parameter);
-        }
-    }
+    //private void AddBooleanParameter()
+    //{
+    //    if (Animator == null)
+    //    {
+    //        Animator = GetComponent<Animator>();
+    //    }
+    //    AnimatorController animatorController = (AnimatorController)Animator.runtimeAnimatorController;
+//
+    //    if(CanRotateParamater==null)
+    //    {
+    //        for (int i = 0; i < Animator.parameterCount; i++)
+    //        {
+    //            AnimatorControllerParameter tempParemeter=Animator.GetParameter(i);
+    //            if (tempParemeter.name == CanRotateParameter)
+    //            {
+    //                CanRotateParamater=tempParemeter;
+    //                _rotateparamaterexists=true;
+    //                break;
+    //            }
+    //        }
+    //    }
+    //    
+//
+    //    if (_rotateparamaterexists==false)
+    //    {
+    //        AnimatorControllerParameter parameter = new AnimatorControllerParameter();
+    //        parameter.type = AnimatorControllerParameterType.Bool;
+    //        parameter.name = CanRotateParameter;
+    //        parameter.defaultBool = true;
+    //        animatorController.AddParameter(parameter);
+    //    }
+    //}
 }

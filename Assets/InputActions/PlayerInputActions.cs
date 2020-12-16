@@ -81,6 +81,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""A_Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""5539e683-8688-414d-bf7c-2c796df21534"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -259,6 +267,28 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e70debd-cb3a-46d3-a928-479aa3aafa5d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""A_Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db97f9c8-c4bd-44e7-a938-aa7e4b6e2bb1"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""A_Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -303,6 +333,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Recenter = m_Player.FindAction("Recenter", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
+        m_Player_A_Attack = m_Player.FindAction("A_Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -360,6 +391,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Recenter;
     private readonly InputAction m_Player_Run;
+    private readonly InputAction m_Player_A_Attack;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -372,6 +404,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Recenter => m_Wrapper.m_Player_Recenter;
         public InputAction @Run => m_Wrapper.m_Player_Run;
+        public InputAction @A_Attack => m_Wrapper.m_Player_A_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -405,6 +438,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Run.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
                 @Run.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
                 @Run.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
+                @A_Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnA_Attack;
+                @A_Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnA_Attack;
+                @A_Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnA_Attack;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -433,6 +469,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
+                @A_Attack.started += instance.OnA_Attack;
+                @A_Attack.performed += instance.OnA_Attack;
+                @A_Attack.canceled += instance.OnA_Attack;
             }
         }
     }
@@ -465,5 +504,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnRecenter(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+        void OnA_Attack(InputAction.CallbackContext context);
     }
 }

@@ -24,7 +24,6 @@ namespace CharacterInput
         {
             return UserInput.Instance.IsThereMovement();
         }
-
         public bool AttemptingToJump()
         {
              return UserInput.Instance.JumpPressed;
