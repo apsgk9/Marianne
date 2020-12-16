@@ -20,6 +20,7 @@ namespace CharacterProperties
         public string JumpTriggerParameterName ="Jump";
         public string IsJumpingParameterName ="IsJumping";
         public string isGroundedParameterName ="isGrounded";
+        public string InterruptableParameterName ="Interruptable";
         private static Vector2 _previousMovmementAxis;
         private ICharacterInput _characterInput;
 
@@ -118,7 +119,7 @@ namespace CharacterProperties
             if(!_dashbuttonIsLifted)
             {
                 //Prevent Dashing until button is lifted again
-                if(CharacterState.CanUseStamina==false)
+                if(CharacterState.CanUseStamina==false || Animator.GetBool(InterruptableParameterName))
                 {
                     canDash=false;
                 }

@@ -16,8 +16,7 @@ public class RootMotionDelta : MonoBehaviour
     public event Action<Vector3,Quaternion> OnRootMotionChange;
 
     private void Awake()
-    {
-        
+    {        
         if (Animator == null)
         {
             Animator = gameObject.GetComponent<Animator>();
@@ -30,6 +29,4 @@ public class RootMotionDelta : MonoBehaviour
         OnRootMotionChange?.Invoke(Animator.deltaPosition,Animator.rootRotation);
         Animator.transform.localPosition=Vector3.zero;
     }
-
-
 }
