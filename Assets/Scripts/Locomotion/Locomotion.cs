@@ -18,6 +18,7 @@ public partial class Locomotion : ILocomotion
     private Vector3 _movementInput;
     public Vector3 finalMovementComposite{get; private set;}
     public Quaternion CompositeRotation { get; private set; }
+    public bool UseMovementAngleDifference { get; set; }
 
     public event Action<Vector3> OnMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
@@ -50,7 +51,7 @@ public partial class Locomotion : ILocomotion
         {
             _RootMotionDelta.OnRootMotionChange+=HandleRootMotion;
         }
-
+        UseMovementAngleDifference=true;
     }
     private void OnDestroy()
     {
@@ -63,8 +64,12 @@ public partial class Locomotion : ILocomotion
     private void HandleRootMotion(Vector3 DeltaVector, Quaternion NewRotation)
     {
         float angleDifference = Vector3.Angle(DeltaVector,DesiredCharacterVectorForward.normalized);
-        var multiplier=0f;
-        multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
+        var multiplier=1f;
+        if(UseMovementAngleDifference)
+        {
+            multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
+        }
+        
         var baseMovementComposite= DeltaVector* (multiplier);
         
         _characterMover.Move(baseMovementComposite);
@@ -96,7 +101,7 @@ public partial class Locomotion : ILocomotion
         return TryingToJump;
     }
 
-    private void ApplyRotation(Quaternion FinalRotation)
+    public void ApplyRotation(Quaternion FinalRotation)
     {
         _characterGameObject.transform.rotation = FinalRotation;
     }
