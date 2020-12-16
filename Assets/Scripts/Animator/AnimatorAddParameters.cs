@@ -1,17 +1,14 @@
-﻿using UnityEditor.Animations;
+﻿using System;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public static class AnimatorAddParameters
 {
-    public static AnimatorControllerParameter TryAddingBooleanParameter(Animator animator,
-    AnimatorControllerParameter Parameter,string GivenParameterName,bool SetTo=true)
+    public static AnimatorControllerParameter TryAddingBooleanParameter(Animator animator,string GivenParameterName,bool SetTo=true)
     {
         AnimatorController animatorController = (AnimatorController)animator.runtimeAnimatorController;
-
-        if(Parameter==null)
-        {
-            Parameter = FindParameter(animator, GivenParameterName);
-        }
+        
+        AnimatorControllerParameter Parameter = FindParameter(animator, GivenParameterName);
 
         if (Parameter==null)
         {
@@ -20,6 +17,29 @@ public static class AnimatorAddParameters
             parameter.name = GivenParameterName;
             parameter.defaultBool = SetTo;
             animatorController.AddParameter(parameter);
+            return parameter;
+        }
+        return Parameter;
+    }
+
+    internal static void TryAddingBooleanParameter(Animator animator, object isGroundedParameterName)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static AnimatorControllerParameter TryAddingTriggerParameter(Animator animator,string GivenParameterName)
+    {
+        AnimatorController animatorController = (AnimatorController)animator.runtimeAnimatorController;
+
+        AnimatorControllerParameter Parameter = FindParameter(animator, GivenParameterName);
+
+        if (Parameter==null)
+        {
+            AnimatorControllerParameter parameter = new AnimatorControllerParameter();
+            parameter.type = AnimatorControllerParameterType.Trigger;
+            parameter.name = GivenParameterName;
+            animatorController.AddParameter(parameter);
+
             return parameter;
         }
         return Parameter;

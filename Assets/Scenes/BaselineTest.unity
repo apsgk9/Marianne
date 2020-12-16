@@ -1212,7 +1212,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018227, y: 0.000000023309845, z: -0.0000000037826675, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: -0.000000004252742, z: 6.901254e-10, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -21.790234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1664,7 +1664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce1f0e54de41d84485c037cdeda90b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanRotateParameter: CanRotate
+  CanRotateParameterName: CanRotate
   canRotate: 0
 --- !u!4 &1286150933 stripped
 Transform:
@@ -2333,7 +2333,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1724313554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.16228}
+  m_LocalPosition: {x: 0, y: 0, z: 3.162278}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 1219923809}
@@ -2342,7 +2342,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 89.99994, y: -0.000061035156}
+  m_AnchoredPosition: {x: 89.99994, y: 0.00015258789}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724313556
@@ -2835,7 +2835,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.16018225, y: 0.000000023309845, z: -0.000000003782667, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018224, y: -0.000000004252742, z: 6.9012535e-10, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3661,7 +3661,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7083189469405476379}
   - component: {fileID: 7083189469405476383}
-  - component: {fileID: 7083189469405476378}
   - component: {fileID: 7083189469405476377}
   m_Layer: 0
   m_Name: CharacterProperties
@@ -3682,74 +3681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99a03be54b040c94e8eac8eb3675cb0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 0}
---- !u!114 &7083189469405476378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7083189469405476376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: b2d752a9a2b7ec44f9f2121009c68f3b,
-    type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: dc041b8d-7752-40cb-b2cf-b4c563f6acb2
-    m_ActionName: Player/MovementAxis[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/DualShock4GamepadHID/leftStick]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 877d28e0-2120-446b-95f1-53c681e76e3a
-    m_ActionName: Player/Interact
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 55c35701-7188-46f0-adc5-220944249f99
-    m_ActionName: Player/AnalogAim[/DualShock4GamepadHID/rightStick]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 3c3fcbb5-1a08-4fb6-a277-8ea84a93200a
-    m_ActionName: Player/MouseAim[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: c310d3a3-ba23-4930-a33a-2608fcdab2e4
-    m_ActionName: Player/MouseDeltaAim[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b9cb2286-d039-4b0f-beba-58e2a980b5ca
-    m_ActionName: Player/Jump[/Keyboard/space,/DualShock4GamepadHID/buttonSouth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: de48e09b-17f5-46e8-9fec-38ac71a4dd4b
-    m_ActionName: Player/Recenter[/DualShock4GamepadHID/rightStickPress,/Keyboard/t]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: ad251588-8ab6-4cfa-aa95-7263183e954a
-    m_ActionName: Player/Run[/Keyboard/leftShift,/DualShock4GamepadHID/rightShoulder]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5539e683-8688-414d-bf7c-2c796df21534
-    m_ActionName: Player/A_Attack[/Mouse/leftButton,/DualShock4GamepadHID/buttonEast]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  Animator: {fileID: 1286150934}
 --- !u!4 &7083189469405476379
 Transform:
   m_ObjectHideFlags: 0

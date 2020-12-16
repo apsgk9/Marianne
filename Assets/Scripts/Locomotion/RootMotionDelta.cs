@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class RootMotionDelta : MonoBehaviour
 {
-    public string CanRotateParameter="CanRotate";
+    public string CanRotateParameterName="CanRotate";
     public bool canRotate;
     public AnimatorControllerParameter CanRotateParamater;
     private bool _rotateparamaterexists;
@@ -22,11 +22,11 @@ public class RootMotionDelta : MonoBehaviour
         {
             Animator = gameObject.GetComponent<Animator>();
         }
-        CanRotateParamater=AnimatorAddParameters.TryAddingBooleanParameter(Animator,CanRotateParamater,CanRotateParameter);
+        CanRotateParamater=AnimatorAddParameters.TryAddingBooleanParameter(Animator,CanRotateParameterName);
     }   
     void OnAnimatorMove()
     {
-        canRotate=Animator.GetBool(CanRotateParameter);
+        canRotate=Animator.GetBool(CanRotateParameterName);
         OnRootMotionChange?.Invoke(Animator.deltaPosition,Animator.rootRotation);
         Animator.transform.localPosition=Vector3.zero;
     }

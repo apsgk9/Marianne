@@ -270,8 +270,8 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6e70debd-cb3a-46d3-a928-479aa3aafa5d"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""9595f42c-6a84-48f7-a4b6-faccd6e82de5"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
@@ -281,7 +281,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""db97f9c8-c4bd-44e7-a938-aa7e4b6e2bb1"",
+                    ""id"": ""50c4b5f0-3584-4054-a456-79fa1239383b"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
