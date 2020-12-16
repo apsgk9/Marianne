@@ -10,6 +10,8 @@ public class SetRotationToMovementInputBehaviour : StateMachineBehaviour
 
     public SetAt SetAt;
 
+    public string MovementPressedParameter = "MovementPressed";
+
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -17,11 +19,11 @@ public class SetRotationToMovementInputBehaviour : StateMachineBehaviour
         {
             Character = animator.GetComponentInParent<Character>();
         }
-        if(SetAt==SetAt.Enter)
+        if(SetAt==SetAt.Enter && animator.GetBool(MovementPressedParameter))
         {
             Vector3 EulerRotation=Character._Locomotion.DesiredCharacterVectorForward.normalized;
-            Character._Locomotion.ApplyRotation(Quaternion.Euler(EulerRotation.x,EulerRotation.y,EulerRotation.z)); 
-        }                   
+            Character._Locomotion.ApplyRotation(Quaternion.LookRotation(EulerRotation));
+        }      
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -33,11 +35,11 @@ public class SetRotationToMovementInputBehaviour : StateMachineBehaviour
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(SetAt==SetAt.Exit)
+        if(SetAt==SetAt.Exit && animator.GetBool(MovementPressedParameter))
         {
-            Vector3 EulerRotation=Character._Locomotion.DesiredCharacterVectorForward.normalized;        
-            Character.transform.rotation= Quaternion.Euler(EulerRotation.z,EulerRotation.y,EulerRotation.z); 
-        }        
+            Vector3 EulerRotation=Character._Locomotion.DesiredCharacterVectorForward.normalized;
+            Character._Locomotion.ApplyRotation(Quaternion.LookRotation(EulerRotation));      
+        }      
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
