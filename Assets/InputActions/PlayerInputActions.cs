@@ -89,6 +89,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""2093134c-c094-4045-93f0-78326c4bfb3b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -289,6 +297,17 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""A_Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0deb77e-d20d-422c-aa08-c01abafa8b24"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -334,6 +353,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Player_Recenter = m_Player.FindAction("Recenter", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
         m_Player_A_Attack = m_Player.FindAction("A_Attack", throwIfNotFound: true);
+        m_Player_Scroll = m_Player.FindAction("Scroll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -392,6 +412,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Recenter;
     private readonly InputAction m_Player_Run;
     private readonly InputAction m_Player_A_Attack;
+    private readonly InputAction m_Player_Scroll;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -405,6 +426,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @Recenter => m_Wrapper.m_Player_Recenter;
         public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputAction @A_Attack => m_Wrapper.m_Player_A_Attack;
+        public InputAction @Scroll => m_Wrapper.m_Player_Scroll;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -441,6 +463,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @A_Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnA_Attack;
                 @A_Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnA_Attack;
                 @A_Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnA_Attack;
+                @Scroll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
+                @Scroll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
+                @Scroll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -472,6 +497,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @A_Attack.started += instance.OnA_Attack;
                 @A_Attack.performed += instance.OnA_Attack;
                 @A_Attack.canceled += instance.OnA_Attack;
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
             }
         }
     }
@@ -505,5 +533,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnRecenter(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnA_Attack(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
     }
 }

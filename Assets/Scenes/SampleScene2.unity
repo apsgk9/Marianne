@@ -1644,7 +1644,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018225, y: 0.0000000042527444, z: -6.9012557e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018227, y: 0.000000023309846, z: -0.000000003782668, w: 0.9870875}
   m_LocalPosition: {x: -0.03014493, y: 3.0113907, z: -21.790234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2872,7 +2872,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1724313554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.162278}
+  m_LocalPosition: {x: 0, y: 0, z: 3.16228}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 1219923809}
@@ -2881,7 +2881,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 89.99994, y: 0.00018310547}
+  m_AnchoredPosition: {x: 89.99994, y: -0.000091552734}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724313556
@@ -3611,7 +3611,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.16018222, y: -0.000000025470568, z: 0.0000000041333035, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: -0.000000023309845, z: 0.000000003782667, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3631,10 +3631,11 @@ GameObject:
   - component: {fileID: 2895267444548320168}
   - component: {fileID: 2895267444548320167}
   - component: {fileID: 1149526371348613096}
-  - component: {fileID: 2895267444548320169}
   - component: {fileID: 2895267444548320172}
   - component: {fileID: 2895267444548320170}
+  - component: {fileID: 2895267444548320169}
   - component: {fileID: 2895267444548320171}
+  - component: {fileID: 2895267444548320173}
   m_Layer: 0
   m_Name: CM FreeLookPlayer
   m_TagString: Untagged
@@ -3753,6 +3754,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: ad251588-8ab6-4cfa-aa95-7263183e954a
     m_ActionName: Player/Run[/Keyboard/leftShift,/DualShock4GamepadHID/leftStickPress,/XInputControllerWindows/leftStickPress]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5539e683-8688-414d-bf7c-2c796df21534
+    m_ActionName: Player/A_Attack[/Mouse/rightButton,/DualShock4GamepadHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2093134c-c094-4045-93f0-78326c4bfb3b
+    m_ActionName: Player/Zoom Scroll
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -3815,6 +3824,22 @@ MonoBehaviour:
   m_Offset: {x: 0, y: 0, z: 0}
   m_ApplyAfter: 3
   m_PreserveComposition: 0
+--- !u!114 &2895267444548320173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2895267444548320166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 308bd3e06fd8bfa4ea518a8561237436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minScale: 0.2
+  maxScale: 1.5
+  CurrentValue: 0.5
+  Multiplier: 0.5
 --- !u!4 &3642255909750820895
 Transform:
   m_ObjectHideFlags: 0
@@ -4488,7 +4513,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.16018224, y: 0.000000004252742, z: -6.9012535e-10, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018225, y: 0.000000023309845, z: -0.000000003782667, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

@@ -6,6 +6,7 @@ public interface IUserInput
     event Action<int> HotKeyPressed;
     float Vertical {get;}
     float Horizontal {get;}
+    float Scroll {get;}
     void Tick();
     bool PausePressed {get;}
     bool JumpPressed {get;}

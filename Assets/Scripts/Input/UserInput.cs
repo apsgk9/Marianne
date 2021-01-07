@@ -31,12 +31,16 @@ public class UserInput : MonoBehaviour, IUserInput
     private bool _runPressed;
     public bool JumpPressed =>_jumpPressed;
     private bool _jumpPressed;
+    private float _scroll;
+    public float Scroll => _scroll;
 
     //New actions    
     public PlayerInputActions _inputActions;
     private const int historyMaxLength=4;
     
     public string DeviceUsing=>_deviceUsing;
+
+
     private string _deviceUsing;
     private MovementHistory _verticalHistory;
     private MovementHistory _horizontalHistory;
@@ -71,11 +75,44 @@ public class UserInput : MonoBehaviour, IUserInput
         
         _inputActions.Player.Jump.started += HandleJumpStart;
         _inputActions.Player.Jump.canceled += HandleJumpEnd;
+
+        
+        _inputActions.Player.Scroll.started+= HandleStartScroll; 
+        _inputActions.Player.Scroll.canceled+= HandleEndScroll;
         
         InputUser.onChange+= OnDeviceChanged;
 
+    }
+    private void OnDisable()
+    {
+        _inputActions.Disable();
+        _inputActions.Player.MovementAxis.performed-= HandleMovement;
+        _inputActions.Player.MovementAxis.canceled-= ctx=>HandleMovementCancel();
+
+        _inputActions.Player.MouseAim.performed-= HandleMouseAim;
+        _inputActions.Player.MouseDeltaAim.performed-= HandleMouseDeltaAim;
+        _inputActions.Player.AnalogAim.performed-= HandleAnalogAim;
+        _inputActions.Player.MouseDeltaAim.canceled-= ctx=>_cursorDeltaPosition= Vector2.zero;
+        _inputActions.Player.Run.started+=HandleRunPressed;
+        _inputActions.Player.Run.canceled+=HandleRunReleased;
+
+        _inputActions.Player.Jump.started -= HandleJumpStart;
+        _inputActions.Player.Jump.canceled -= HandleJumpEnd;
+
+        _inputActions.Player.Scroll.started-= HandleStartScroll;
+        _inputActions.Player.Scroll.canceled-= HandleEndScroll;
 
     }
+    private void HandleStartScroll(InputAction.CallbackContext context)
+    {
+        var value= context.ReadValue<Vector2>();
+        _scroll=value.y/120; //Values from mouse output in 120 increments.
+    }
+    private void HandleEndScroll(InputAction.CallbackContext obj)
+    {
+        _scroll=0f;
+    }
+
     private void HandleJumpStart(InputAction.CallbackContext obj)
     {
         _jumpPressed=true;
@@ -94,23 +131,9 @@ public class UserInput : MonoBehaviour, IUserInput
         }
     }
 
-    private void OnDisable()
-    {
-        _inputActions.Disable();
-        _inputActions.Player.MovementAxis.performed-= HandleMovement;
-        _inputActions.Player.MovementAxis.canceled-= ctx=>HandleMovementCancel();
+    
 
-        _inputActions.Player.MouseAim.performed-= HandleMouseAim;
-        _inputActions.Player.MouseDeltaAim.performed-= HandleMouseDeltaAim;
-        _inputActions.Player.AnalogAim.performed-= HandleAnalogAim;
-        _inputActions.Player.MouseDeltaAim.canceled-= ctx=>_cursorDeltaPosition= Vector2.zero;
-        _inputActions.Player.Run.started+=HandleRunPressed;
-        _inputActions.Player.Run.canceled+=HandleRunReleased;
-
-        _inputActions.Player.Jump.started -= HandleJumpStart;
-        _inputActions.Player.Jump.canceled -= HandleJumpEnd;
-
-    }
+    
 
     private void HandleMovementCancel()
     {
