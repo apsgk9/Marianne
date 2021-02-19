@@ -4,9 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
-public class UserInput : MonoBehaviour, IUserInput
+public class UserInput : Singleton<UserInput>, IUserInput
 {
-    public static IUserInput Instance { get; set; }
     public Vector2 DirectionVector => new Vector2(Horizontal, Vertical);
     public Vector2 LastDirectionVector;
     public event Action<int> HotKeyPressed;
@@ -47,7 +46,7 @@ public class UserInput : MonoBehaviour, IUserInput
 
     private void Awake()
     {
-        Instance = this;
+        //Instance = this;
         MouseIdleTimer = new Timer(IdleThreshold);
         LastDirectionVector = DirectionVector;
 
