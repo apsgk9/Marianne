@@ -128,7 +128,10 @@ public class UserInput : MonoBehaviour, IUserInput
         if(change.ToString()=="DevicePaired" && device!=null)        
         {
             _deviceUsing=device.name;
+            Debug.Log("USING: "+_deviceUsing);
         }
+        //PS4 "DualShock4GamepadHID"
+        //PC: "Keyboard" or "Mouse"
     }
 
     
