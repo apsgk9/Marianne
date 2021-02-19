@@ -61,24 +61,24 @@ public class UserInput : MonoBehaviour, IUserInput
     private void OnEnable()
     {
         _inputActions.Enable();
-        _inputActions.Player.MovementAxis.performed += HandleMovement;
-        _inputActions.Player.MovementAxis.canceled += ctx => HandleMovementCancel();
+        _inputActions.PlayerControls.MovementAxis.performed += HandleMovement;
+        _inputActions.PlayerControls.MovementAxis.canceled += ctx => HandleMovementCancel();
 
-        _inputActions.Player.MouseAim.performed += HandleMouseAim;
-        _inputActions.Player.MouseDeltaAim.performed += HandleMouseDeltaAim;
-        _inputActions.Player.MouseDeltaAim.canceled += ctx => _cursorDeltaPosition = Vector2.zero;
+        _inputActions.PlayerControls.MouseAim.performed += HandleMouseAim;
+        _inputActions.PlayerControls.MouseDeltaAim.performed += HandleMouseDeltaAim;
+        _inputActions.PlayerControls.MouseDeltaAim.canceled += ctx => _cursorDeltaPosition = Vector2.zero;
 
-        _inputActions.Player.AnalogAim.performed += HandleAnalogAim;
-        _inputActions.Player.Run.started += HandleRunPressed;
-        _inputActions.Player.Run.canceled += HandleRunReleased;
-
-
-        _inputActions.Player.Jump.started += HandleJumpStart;
-        _inputActions.Player.Jump.canceled += HandleJumpEnd;
+        _inputActions.PlayerControls.AnalogAim.performed += HandleAnalogAim;
+        _inputActions.PlayerControls.Run.started += HandleRunPressed;
+        _inputActions.PlayerControls.Run.canceled += HandleRunReleased;
 
 
-        _inputActions.Player.Scroll.started += HandleStartScroll;
-        _inputActions.Player.Scroll.canceled += HandleEndScroll;
+        _inputActions.PlayerControls.Jump.started += HandleJumpStart;
+        _inputActions.PlayerControls.Jump.canceled += HandleJumpEnd;
+
+
+        _inputActions.PlayerControls.Scroll.started += HandleStartScroll;
+        _inputActions.PlayerControls.Scroll.canceled += HandleEndScroll;
 
         InputUser.onChange += OnDeviceChanged;
 
@@ -86,21 +86,21 @@ public class UserInput : MonoBehaviour, IUserInput
     private void OnDisable()
     {
         _inputActions.Disable();
-        _inputActions.Player.MovementAxis.performed -= HandleMovement;
-        _inputActions.Player.MovementAxis.canceled -= ctx => HandleMovementCancel();
+        _inputActions.PlayerControls.MovementAxis.performed -= HandleMovement;
+        _inputActions.PlayerControls.MovementAxis.canceled -= ctx => HandleMovementCancel();
 
-        _inputActions.Player.MouseAim.performed -= HandleMouseAim;
-        _inputActions.Player.MouseDeltaAim.performed -= HandleMouseDeltaAim;
-        _inputActions.Player.AnalogAim.performed -= HandleAnalogAim;
-        _inputActions.Player.MouseDeltaAim.canceled -= ctx => _cursorDeltaPosition = Vector2.zero;
-        _inputActions.Player.Run.started += HandleRunPressed;
-        _inputActions.Player.Run.canceled += HandleRunReleased;
+        _inputActions.PlayerControls.MouseAim.performed -= HandleMouseAim;
+        _inputActions.PlayerControls.MouseDeltaAim.performed -= HandleMouseDeltaAim;
+        _inputActions.PlayerControls.AnalogAim.performed -= HandleAnalogAim;
+        _inputActions.PlayerControls.MouseDeltaAim.canceled -= ctx => _cursorDeltaPosition = Vector2.zero;
+        _inputActions.PlayerControls.Run.started += HandleRunPressed;
+        _inputActions.PlayerControls.Run.canceled += HandleRunReleased;
 
-        _inputActions.Player.Jump.started -= HandleJumpStart;
-        _inputActions.Player.Jump.canceled -= HandleJumpEnd;
+        _inputActions.PlayerControls.Jump.started -= HandleJumpStart;
+        _inputActions.PlayerControls.Jump.canceled -= HandleJumpEnd;
 
-        _inputActions.Player.Scroll.started -= HandleStartScroll;
-        _inputActions.Player.Scroll.canceled -= HandleEndScroll;
+        _inputActions.PlayerControls.Scroll.started -= HandleStartScroll;
+        _inputActions.PlayerControls.Scroll.canceled -= HandleEndScroll;
 
     }
 
@@ -206,7 +206,6 @@ public class UserInput : MonoBehaviour, IUserInput
     {
         return _cursorDeltaPosition + _analogAimPosition;
     }    
-
 
     public bool IsThereMovement()
     {

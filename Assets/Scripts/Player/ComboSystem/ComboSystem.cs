@@ -20,7 +20,7 @@ public class ComboSystem : MonoBehaviour
     private void OnEnable()
     {
         _inputActions.Enable();
-        _inputActions.Player.A_Attack.started += HandlePressAttack_A;
+        _inputActions.PlayerControls.A_Attack.started += HandlePressAttack_A;
 
 
     }
@@ -36,7 +36,7 @@ public class ComboSystem : MonoBehaviour
     private void Deregister()
     {
         _inputActions.Disable();
-        _inputActions.Player.A_Attack.started -= HandlePressAttack_A;
+        _inputActions.PlayerControls.A_Attack.started -= HandlePressAttack_A;
     }
 
     private void HandlePressAttack_A(InputAction.CallbackContext obj)
