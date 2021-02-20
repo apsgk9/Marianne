@@ -84,6 +84,14 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "MenuKey",
+                    "type": "Button",
+                    "id": "f2ab9798-544d-4a7b-aaed-7556da1560b8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -295,6 +303,28 @@
                     "action": "Scroll",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bc1d99f4-78cb-4337-aaae-182f71ad7b53",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard And Mouse;Keyboard & Mouse",
+                    "action": "MenuKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e75577c3-8f4f-4f6c-bc7a-1ad78f92d104",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "MenuKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -381,6 +411,14 @@
                     "expectedControlType": "Quaternion",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "MenuKey",
+                    "type": "Button",
+                    "id": "253216f9-6a61-4432-b7df-6c17d6c91c49",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -799,6 +837,28 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e3710cf-649e-4c2a-86d6-6735f5ad09cf",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard And Mouse;Keyboard & Mouse",
+                    "action": "MenuKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b4e6d841-9d1e-4e34-81e7-f331e9f2adf3",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "MenuKey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

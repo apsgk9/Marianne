@@ -30,6 +30,8 @@ public class UserInput : Singleton<UserInput>, IUserInput
     private bool _runPressed;
     public bool JumpPressed => _jumpPressed;
     private bool _jumpPressed;
+
+    
     private float _scroll;
     public float Scroll => _scroll;
 
@@ -125,7 +127,15 @@ public class UserInput : Singleton<UserInput>, IUserInput
     }
     
     #endregion
-    
+    internal void EnablePauseMenuControls()
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void EnableGameplayControls()
+    {
+        throw new NotImplementedException();
+    }
     #region HandleEvents
 
     private void HandleMovement(InputAction.CallbackContext context)

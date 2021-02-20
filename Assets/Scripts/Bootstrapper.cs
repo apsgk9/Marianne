@@ -12,6 +12,12 @@ public class Bootstrapper
             inputGameObject.AddComponent<UserInput>();
             GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
         }
+        if(!GameObject.FindObjectOfType<GameManager>())
+        {
+            var gameManagerGameObject = new GameObject("GAME MANAGER");
+            gameManagerGameObject.AddComponent<GameManager>();
+            GameObject.DontDestroyOnLoad(gameManagerGameObject.gameObject);
+        }
         
     }
 }

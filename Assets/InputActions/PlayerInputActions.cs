@@ -97,6 +97,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""f2ab9798-544d-4a7b-aaed-7556da1560b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -308,6 +316,28 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc1d99f4-78cb-4337-aaae-182f71ad7b53"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard And Mouse;Keyboard & Mouse"",
+                    ""action"": ""MenuKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e75577c3-8f4f-4f6c-bc7a-1ad78f92d104"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MenuKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -394,6 +424,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Quaternion"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""253216f9-6a61-4432-b7df-6c17d6c91c49"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -814,6 +852,28 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e3710cf-649e-4c2a-86d6-6735f5ad09cf"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard And Mouse;Keyboard & Mouse"",
+                    ""action"": ""MenuKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4e6d841-9d1e-4e34-81e7-f331e9f2adf3"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MenuKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -860,6 +920,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_PlayerControls_Run = m_PlayerControls.FindAction("Run", throwIfNotFound: true);
         m_PlayerControls_A_Attack = m_PlayerControls.FindAction("A_Attack", throwIfNotFound: true);
         m_PlayerControls_Scroll = m_PlayerControls.FindAction("Scroll", throwIfNotFound: true);
+        m_PlayerControls_MenuKey = m_PlayerControls.FindAction("MenuKey", throwIfNotFound: true);
         // MenuControls
         m_MenuControls = asset.FindActionMap("MenuControls", throwIfNotFound: true);
         m_MenuControls_Navigate = m_MenuControls.FindAction("Navigate", throwIfNotFound: true);
@@ -872,6 +933,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_MenuControls_RightClick = m_MenuControls.FindAction("RightClick", throwIfNotFound: true);
         m_MenuControls_TrackedDevicePosition = m_MenuControls.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_MenuControls_TrackedDeviceOrientation = m_MenuControls.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_MenuControls_MenuKey = m_MenuControls.FindAction("MenuKey", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -931,6 +993,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_Run;
     private readonly InputAction m_PlayerControls_A_Attack;
     private readonly InputAction m_PlayerControls_Scroll;
+    private readonly InputAction m_PlayerControls_MenuKey;
     public struct PlayerControlsActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -945,6 +1008,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @Run => m_Wrapper.m_PlayerControls_Run;
         public InputAction @A_Attack => m_Wrapper.m_PlayerControls_A_Attack;
         public InputAction @Scroll => m_Wrapper.m_PlayerControls_Scroll;
+        public InputAction @MenuKey => m_Wrapper.m_PlayerControls_MenuKey;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -984,6 +1048,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Scroll.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnScroll;
                 @Scroll.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnScroll;
                 @Scroll.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnScroll;
+                @MenuKey.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMenuKey;
+                @MenuKey.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMenuKey;
+                @MenuKey.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMenuKey;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -1018,6 +1085,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Scroll.started += instance.OnScroll;
                 @Scroll.performed += instance.OnScroll;
                 @Scroll.canceled += instance.OnScroll;
+                @MenuKey.started += instance.OnMenuKey;
+                @MenuKey.performed += instance.OnMenuKey;
+                @MenuKey.canceled += instance.OnMenuKey;
             }
         }
     }
@@ -1036,6 +1106,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_MenuControls_RightClick;
     private readonly InputAction m_MenuControls_TrackedDevicePosition;
     private readonly InputAction m_MenuControls_TrackedDeviceOrientation;
+    private readonly InputAction m_MenuControls_MenuKey;
     public struct MenuControlsActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1050,6 +1121,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @RightClick => m_Wrapper.m_MenuControls_RightClick;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_MenuControls_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_MenuControls_TrackedDeviceOrientation;
+        public InputAction @MenuKey => m_Wrapper.m_MenuControls_MenuKey;
         public InputActionMap Get() { return m_Wrapper.m_MenuControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1089,6 +1161,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @TrackedDeviceOrientation.started -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnTrackedDeviceOrientation;
+                @MenuKey.started -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnMenuKey;
+                @MenuKey.performed -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnMenuKey;
+                @MenuKey.canceled -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnMenuKey;
             }
             m_Wrapper.m_MenuControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -1123,6 +1198,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+                @MenuKey.started += instance.OnMenuKey;
+                @MenuKey.performed += instance.OnMenuKey;
+                @MenuKey.canceled += instance.OnMenuKey;
             }
         }
     }
@@ -1157,6 +1235,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnA_Attack(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
+        void OnMenuKey(InputAction.CallbackContext context);
     }
     public interface IMenuControlsActions
     {
@@ -1170,5 +1249,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        void OnMenuKey(InputAction.CallbackContext context);
     }
 }

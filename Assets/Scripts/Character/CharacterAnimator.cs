@@ -52,7 +52,6 @@ namespace CharacterProperties
         {
             SpeedCalculations();
             SetParameters();
-
             HandleJump();
         }
 
