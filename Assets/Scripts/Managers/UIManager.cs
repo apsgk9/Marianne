@@ -3,17 +3,62 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
 public class UIManager : Singleton<UIManager>
 {
-    public UIPauseMenu PauseMenu;
+    private const string UISceneName = "UI";
 
-    [SerializeField][HideInInspector]
-    PlayerInputActions _inputActionToUse;
-    public InputSystemUIInputModule CurrentInputSystemUIInputModule;
+    public UIObjects UIObjects;
+    [HideInInspector]
+    public UIPauseMenu PauseMenuReference {get; private set;}
 
-    private void Awake()
+    //PlayerInputActions _inputActionToUse;
+    public InputSystemUIInputModule CurrentInputSystemUIInputModule {get; private set;}
+    public bool UIHasBeenBuilt { get; private set; }
+
+    //For some reason, it doesn't find UIObject reference when I play in Awake().
+    public void Setup()
     {
-        SetupInputModule();
+        if(!UIHasBeenBuilt)
+        {
+            SetupInputModule();
+            SetupUIScene();
+            UIHasBeenBuilt=true;
+        }
+        
+    }
+
+    private void SetupUIScene()
+    {
+        var UIScene=SceneManager.GetSceneByName(UISceneName);
+        if(!UIScene.IsValid())
+        {
+            SceneManager.CreateScene(UISceneName);
+        }
+
+        Addressables.InstantiateAsync(UIObjects.PauseMenuGameObject).Completed+=PauseMenuLoaded;
+        
+    }
+
+    private void PauseMenuLoaded(AsyncOperationHandle<GameObject> obj)
+    {
+        PauseMenuReference=obj.Result.GetComponent<UIPauseMenu>();
+        if(PauseMenuReference==null)
+        {
+            Debug.LogError("Pause Menu Reference is null.");
+        }
+        var notify =PauseMenuReference.gameObject.AddComponent<NotifyOnDestroy>();
+        notify.Destroyed +=Remove;
+        notify.AssetReference =UIObjects.PauseMenuGameObject;
+
+    }
+
+    private void Remove(AssetReference assetReference, NotifyOnDestroy obj)
+    {
+        Addressables.ReleaseInstance(obj.gameObject);
     }
 
     private void SetupInputModule()
@@ -22,6 +67,7 @@ public class UIManager : Singleton<UIManager>
         if (modulesFound.Length==0)
         {
             var inputGameObject = new GameObject("EventSystem");
+            
             inputGameObject.AddComponent<InputSystemUIInputModule>();
             GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
         }        

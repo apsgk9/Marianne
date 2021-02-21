@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,10 @@ public class GameManager : Singleton<GameManager>
     public GameMode currentGameMode=GameMode.FreeRoam;
     public GameObject inScenePlayer;
     public Transform spawnRingCenter;
+
     public bool isPaused;
+    private static UIManager _UIManager;
+
     private void Awake()
     {
         CreateUIMANAGER();
@@ -35,8 +39,10 @@ public class GameManager : Singleton<GameManager>
         if (!GameObject.FindObjectOfType<UIManager>())
         {
             var inputGameObject = new GameObject("UIMANAGER");
-            inputGameObject.AddComponent<UIManager>();
+            _UIManager =inputGameObject.AddComponent<UIManager>();
+            _UIManager.Setup();
             GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
+
         }
     }
 
@@ -53,9 +59,9 @@ public class GameManager : Singleton<GameManager>
 
         //UpdateActivePlayerInputs();
 
-        SwitchFocusedPlayerControlScheme();
-
-        UpdateUIMenu();
+        //SwitchFocusedPlayerControlScheme();
+        
+        //UpdateUIMenu();
 
     }
 

@@ -46,7 +46,7 @@ namespace CharacterProperties
             }
             _previousMovmementAxis=Vector2.zero;        
 
-            AnimatorAddParameters.TryAddingBooleanParameter(Animator,isGroundedParameterName);
+            //AnimatorAddParameters.TryAddingBooleanParameter(Animator,isGroundedParameterName);
         }
         public void Update()
         {

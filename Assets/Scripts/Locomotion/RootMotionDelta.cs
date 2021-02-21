@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -21,7 +18,8 @@ public class RootMotionDelta : MonoBehaviour
         {
             Animator = gameObject.GetComponent<Animator>();
         }
-        CanRotateParamater=AnimatorAddParameters.TryAddingBooleanParameter(Animator,CanRotateParameterName);
+
+        //CanRotateParamater=AnimatorAddParameters.TryAddingBooleanParameter(Animator,CanRotateParameterName);
     }   
     void OnAnimatorMove()
     {

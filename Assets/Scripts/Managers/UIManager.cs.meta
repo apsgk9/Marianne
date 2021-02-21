@@ -4,8 +4,9 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - PauseMenu: {fileID: 6893444208719261694, guid: f6db9ec52f1c21d4b80f135fb2bc4680,
-      type: 3}
+  - UIObjects: {fileID: 11400000, guid: dd51e4387be204c45a6e2a1d83dce733, type: 2}
+  - PauseMenuReference: {instanceID: 0}
+  - CurrentInputSystemUIInputModule: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

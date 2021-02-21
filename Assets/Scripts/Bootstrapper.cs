@@ -6,12 +6,6 @@ public class Bootstrapper
     public static void Initialize()
     {
         QualitySettings.vSyncCount = 2;
-        if(!GameObject.FindObjectOfType<UserInput>())
-        {
-            var inputGameObject = new GameObject("INPUT SYSTEM");
-            inputGameObject.AddComponent<UserInput>();
-            GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
-        }
         if(!GameObject.FindObjectOfType<GameManager>())
         {
             var gameManagerGameObject = new GameObject("GAME MANAGER");

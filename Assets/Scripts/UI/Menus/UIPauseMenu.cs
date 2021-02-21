@@ -5,21 +5,14 @@ using UnityEngine;
 public class UIPauseMenu : Singleton<UIPauseMenu>
 {
     public GameObject PauseMenu;
-    public bool isPaused;
     private void Awake()
     {
         PauseMenu.SetActive(false);
     }
 
-    public void Pause()
+    public void TogglePause()
     {
-        PauseMenu.SetActive(true);
+        GameManager.Instance.TogglePauseState();
+        PauseMenu.SetActive(GameManager.Instance.isPaused);
     }
-
-    public void UnPause()
-    {
-        
-        PauseMenu.SetActive(false);
-    }
-    
 }

@@ -13,7 +13,7 @@ public class ComboSystem : MonoBehaviour
     private void Awake()
     {
         
-        AnimatorAddParameters.TryAddingTriggerParameter(Animator,Attack_A);
+        //AnimatorAddParameters.TryAddingTriggerParameter(Animator,Attack_A);
         _inputActions = new PlayerInputActions();
 
     }
