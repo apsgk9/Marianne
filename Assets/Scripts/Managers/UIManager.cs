@@ -20,6 +20,13 @@ public class UIManager : Singleton<UIManager>
     public bool UIHasBeenBuilt { get; private set; }
 
     //For some reason, it doesn't find UIObject reference when I play in Awake().
+    private void Start()
+    {
+        if(!UIHasBeenBuilt)
+        {
+            Setup();
+        }
+    }
     public void Setup()
     {
         if(!UIHasBeenBuilt)
@@ -38,14 +45,19 @@ public class UIManager : Singleton<UIManager>
         {
             SceneManager.CreateScene(UISceneName);
         }
-
-        Addressables.InstantiateAsync(UIObjects.PauseMenuGameObject).Completed+=PauseMenuLoaded;
+        
+        if (!GameObject.FindObjectOfType<UIPauseMenu>())
+        {            
+            Addressables.InstantiateAsync(UIObjects.PauseMenuGameObject).Completed+=PauseMenuLoaded;
+        }
         
     }
 
     private void PauseMenuLoaded(AsyncOperationHandle<GameObject> obj)
     {
         PauseMenuReference=obj.Result.GetComponent<UIPauseMenu>();
+        PauseMenuReference.gameObject.name = PauseMenuReference.gameObject.name.Replace("(Clone)", "");
+        SceneManager.MoveGameObjectToScene(PauseMenuReference.gameObject,SceneManager.GetSceneByName(UISceneName));
         if(PauseMenuReference==null)
         {
             Debug.LogError("Pause Menu Reference is null.");
@@ -59,6 +71,7 @@ public class UIManager : Singleton<UIManager>
     private void Remove(AssetReference assetReference, NotifyOnDestroy obj)
     {
         Addressables.ReleaseInstance(obj.gameObject);
+        Debug.Log("RELEASING");
     }
 
     private void SetupInputModule()
@@ -83,12 +96,6 @@ public class UIManager : Singleton<UIManager>
             CurrentInputSystemUIInputModule = modulesFound[0].GetComponent<InputSystemUIInputModule>();
         }
     }
-
-    internal void SetupManager()
-    {
-        throw new NotImplementedException();
-    }
-
     internal void UpdateUIMenuState(bool isPaused)
     {
 
