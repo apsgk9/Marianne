@@ -29,8 +29,7 @@ public class RecenterToPlayerForward : MonoBehaviour
         if(UserInput.Instance)
         {
             UserInput.Instance.PlayerInputActions.PlayerControls.Recenter.started -= TryRecenter;            
-        }
-                
+        }                
     }
     public void TryRecenter(InputAction.CallbackContext obj)
     {

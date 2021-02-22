@@ -19,6 +19,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
+        _SpawnIfNull=true;
         CreateInputSystem();
         CreateUIMANAGER();
     }

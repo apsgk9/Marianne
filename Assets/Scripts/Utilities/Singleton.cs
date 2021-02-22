@@ -8,6 +8,7 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
+    protected static bool _SpawnIfNull=false;
 
     private static object _lock = new object();
 
@@ -37,7 +38,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                         return _instance;
                     }
 
-                    if (_instance == null)
+                    if (_instance == null && _SpawnIfNull)
                     {
                         GameObject singleton = new GameObject();
                         _instance = singleton.AddComponent<T>();
@@ -87,5 +88,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             applicationIsQuitting = true;
         }
+        Debug.Log("DESTROY:"+gameObject.name);
     }
 }
