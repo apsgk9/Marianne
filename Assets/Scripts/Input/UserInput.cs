@@ -17,7 +17,6 @@ public class UserInput : Singleton<UserInput>, IUserInput
     private Timer MouseIdleTimer;
     public float Vertical => _vertical;
     public float Horizontal => _horizontal;
-    public bool PausePressed { get; }
     private bool _isPlayerTryingToMove;
 
     public Vector2 _cursorDeltaPosition;
@@ -25,7 +24,6 @@ public class UserInput : Singleton<UserInput>, IUserInput
     private Vector2 _analogAimPosition;
     private float _vertical;
     private float _horizontal;
-    public float AnalogAimSensitivity = 15f;
     public bool RunPressed => _runPressed;
     private bool _runPressed;
     public bool JumpPressed => _jumpPressed;
@@ -36,7 +34,7 @@ public class UserInput : Singleton<UserInput>, IUserInput
     public float Scroll => _scroll;
 
     //New actions    
-    public PlayerInputActions _inputActions;
+    public PlayerInputActions PlayerInputActions;
     private const int historyMaxLength = 4;
 
     public string DeviceUsing => _deviceUsing;
@@ -52,7 +50,7 @@ public class UserInput : Singleton<UserInput>, IUserInput
         MouseIdleTimer = new Timer(IdleThreshold);
         LastDirectionVector = DirectionVector;
 
-        _inputActions = new PlayerInputActions();
+        PlayerInputActions = new PlayerInputActions();
         _deviceUsing = "Keyboard"; //default to keyboard
 
         //MovementAxisHistory
@@ -61,54 +59,58 @@ public class UserInput : Singleton<UserInput>, IUserInput
     }
     private void OnEnable()
     {
-        _inputActions.Enable();
-        _inputActions.PlayerControls.MovementAxis.performed += HandleMovement;
-        _inputActions.PlayerControls.MovementAxis.canceled += ctx => HandleMovementCancel();
+        PlayerInputActions.Enable();
+        PlayerInputActions.PlayerControls.MovementAxis.performed += HandleMovement;
+        PlayerInputActions.PlayerControls.MovementAxis.canceled += ctx => HandleMovementCancel();
 
-        _inputActions.PlayerControls.MouseAim.performed += HandleMouseAim;
-        _inputActions.PlayerControls.MouseDeltaAim.performed += HandleMouseDeltaAim;
-        _inputActions.PlayerControls.MouseDeltaAim.canceled += ctx => _cursorDeltaPosition = Vector2.zero;
+        PlayerInputActions.PlayerControls.MouseAim.performed += HandleMouseAim;
+        PlayerInputActions.PlayerControls.MouseDeltaAim.performed += HandleMouseDeltaAim;
+        PlayerInputActions.PlayerControls.MouseDeltaAim.canceled += ctx => _cursorDeltaPosition = Vector2.zero;
 
-        _inputActions.PlayerControls.AnalogAim.performed += HandleAnalogAim;
-        _inputActions.PlayerControls.Run.started += HandleRunPressed;
-        _inputActions.PlayerControls.Run.canceled += HandleRunReleased;
-
-
-        _inputActions.PlayerControls.Jump.started += HandleJumpStart;
-        _inputActions.PlayerControls.Jump.canceled += HandleJumpEnd;
+        PlayerInputActions.PlayerControls.AnalogAim.performed += HandleAnalogAim;
+        PlayerInputActions.PlayerControls.Run.started += HandleRunPressed;
+        PlayerInputActions.PlayerControls.Run.canceled += HandleRunReleased;
 
 
-        _inputActions.PlayerControls.Scroll.started += HandleStartScroll;
-        _inputActions.PlayerControls.Scroll.canceled += HandleEndScroll;
+        PlayerInputActions.PlayerControls.Jump.started += HandleJumpStart;
+        PlayerInputActions.PlayerControls.Jump.canceled += HandleJumpEnd;
+
+
+        PlayerInputActions.PlayerControls.Scroll.started += HandleStartScroll;
+        PlayerInputActions.PlayerControls.Scroll.canceled += HandleEndScroll;
 
         InputUser.onChange += OnDeviceChanged;
 
     }
     private void OnDisable()
     {
-        _inputActions.Disable();
-        _inputActions.PlayerControls.MovementAxis.performed -= HandleMovement;
-        _inputActions.PlayerControls.MovementAxis.canceled -= ctx => HandleMovementCancel();
+        PlayerInputActions.Disable();
+        PlayerInputActions.PlayerControls.MovementAxis.performed -= HandleMovement;
+        PlayerInputActions.PlayerControls.MovementAxis.canceled -= ctx => HandleMovementCancel();
 
-        _inputActions.PlayerControls.MouseAim.performed -= HandleMouseAim;
-        _inputActions.PlayerControls.MouseDeltaAim.performed -= HandleMouseDeltaAim;
-        _inputActions.PlayerControls.AnalogAim.performed -= HandleAnalogAim;
-        _inputActions.PlayerControls.MouseDeltaAim.canceled -= ctx => _cursorDeltaPosition = Vector2.zero;
-        _inputActions.PlayerControls.Run.started += HandleRunPressed;
-        _inputActions.PlayerControls.Run.canceled += HandleRunReleased;
+        PlayerInputActions.PlayerControls.MouseAim.performed -= HandleMouseAim;
+        PlayerInputActions.PlayerControls.MouseDeltaAim.performed -= HandleMouseDeltaAim;
+        PlayerInputActions.PlayerControls.AnalogAim.performed -= HandleAnalogAim;
+        PlayerInputActions.PlayerControls.MouseDeltaAim.canceled -= ctx => _cursorDeltaPosition = Vector2.zero;
+        PlayerInputActions.PlayerControls.Run.started += HandleRunPressed;
+        PlayerInputActions.PlayerControls.Run.canceled += HandleRunReleased;
 
-        _inputActions.PlayerControls.Jump.started -= HandleJumpStart;
-        _inputActions.PlayerControls.Jump.canceled -= HandleJumpEnd;
+        PlayerInputActions.PlayerControls.Jump.started -= HandleJumpStart;
+        PlayerInputActions.PlayerControls.Jump.canceled -= HandleJumpEnd;
 
-        _inputActions.PlayerControls.Scroll.started -= HandleStartScroll;
-        _inputActions.PlayerControls.Scroll.canceled -= HandleEndScroll;
+        PlayerInputActions.PlayerControls.Scroll.started -= HandleStartScroll;
+        PlayerInputActions.PlayerControls.Scroll.canceled -= HandleEndScroll;
 
     }
+
 
     #region Tick
     private void Update()
     {
-        Tick();
+        if(GameManager.Instance.isPaused==false)
+        {            
+            Tick();
+        }
     }
 
     public void Tick()
@@ -127,14 +129,16 @@ public class UserInput : Singleton<UserInput>, IUserInput
     }
     
     #endregion
-    internal void EnablePauseMenuControls()
-    {
-        throw new NotImplementedException();
+    public void EnableMenuControls()
+    {        
+        PlayerInputActions.MenuControls.Enable();
+        PlayerInputActions.PlayerControls.Disable();
     }
 
-    internal void EnableGameplayControls()
+    public void EnableGameplayControls()
     {
-        throw new NotImplementedException();
+        PlayerInputActions.MenuControls.Disable();
+        PlayerInputActions.PlayerControls.Enable();
     }
     #region HandleEvents
 
@@ -188,7 +192,15 @@ public class UserInput : Singleton<UserInput>, IUserInput
 
     private void HandleAnalogAim(InputAction.CallbackContext context)
     {
-        _analogAimPosition = context.ReadValue<Vector2>() * AnalogAimSensitivity;
+        
+        //_analogAimPosition = context.ReadValue<Vector2>() * 15f;
+        
+        Vector2 RawAnalogAim= context.ReadValue<Vector2>();
+        
+        _analogAimPosition = 
+         new Vector2(GameManager.Instance.UserSettings.ControllerXAxisSensitivity*RawAnalogAim.x*5,
+                    GameManager.Instance.UserSettings.ControllerYAxisSensitivity*RawAnalogAim.y*5);
+                    
 
     }
     private void HandleRunReleased(InputAction.CallbackContext obj)

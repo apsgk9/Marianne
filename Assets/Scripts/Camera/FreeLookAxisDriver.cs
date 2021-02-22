@@ -60,9 +60,9 @@ public class FreeLookAxisDriver : MonoBehaviour
 
     private void Update()
     {
-        //bool changed = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);
-        //if (yAxis.Update(Time.deltaTime, ref freeLook.m_YAxis))
-        //    changed = true;
+        if(GameManager.Instance.isPaused)
+            return;
+            
         if (isCursorLocked())
         {
             float xAxisInput = xAxis.Update(Time.deltaTime, ref freeLook.m_XAxis);

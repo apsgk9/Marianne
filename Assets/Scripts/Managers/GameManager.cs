@@ -12,19 +12,18 @@ public enum GameMode
 public class GameManager : Singleton<GameManager>
 {   
     public GameMode currentGameMode=GameMode.FreeRoam;
-    public GameObject inScenePlayer;
-    public Transform spawnRingCenter;
-
     public bool isPaused;
-    private static UIManager _UIManager;
+    private UIManager _UIManager;
+    [HideInInspector]
+    public UserSettings UserSettings;
 
     private void Awake()
     {
-        CreateUIMANAGER();
         CreateInputSystem();
+        CreateUIMANAGER();
     }
 
-    private static void CreateInputSystem()
+    private void CreateInputSystem()
     {
         if (!GameObject.FindObjectOfType<UserInput>())
         {
@@ -34,7 +33,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private static void CreateUIMANAGER()
+    private void CreateUIMANAGER()
     {
         if (!GameObject.FindObjectOfType<UIManager>())
         {
@@ -59,30 +58,18 @@ public class GameManager : Singleton<GameManager>
 
         //UpdateActivePlayerInputs();
 
-        //SwitchFocusedPlayerControlScheme();
+        SwitchFocusedPlayerControlScheme();
         
         //UpdateUIMenu();
 
     }
-
-    //void UpdateActivePlayerInputs()
-    //{
-    //    for(int i = 0; i < activePlayerControllers.Count; i++)
-    //    {
-    //        if(activePlayerControllers[i] != focusedPlayerController)
-    //        {
-    //             activePlayerControllers[i].SetInputActiveState(isPaused);
-    //        }
-//
-    //    }
-    //}
 
     void SwitchFocusedPlayerControlScheme()
     {
         switch(isPaused)
         {
             case true:
-                UserInput.Instance.EnablePauseMenuControls();
+                UserInput.Instance.EnableMenuControls();
                 break;
 
             case false:

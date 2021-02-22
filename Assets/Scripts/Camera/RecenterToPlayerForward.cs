@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class RecenterToPlayerForward : MonoBehaviour
 {
@@ -18,7 +19,16 @@ public class RecenterToPlayerForward : MonoBehaviour
         isRecentering=false;
     }
 
-    public void TryRecenter()
+    private void OnEnable()
+    {
+        UserInput.Instance.PlayerInputActions.PlayerControls.Recenter.started += TryRecenter;        
+    }
+
+    private void OnDisable()
+    {
+        UserInput.Instance.PlayerInputActions.PlayerControls.Recenter.started -= TryRecenter;        
+    }
+    public void TryRecenter(InputAction.CallbackContext obj)
     {
         if (isRecentering == false)
         {

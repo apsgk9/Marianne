@@ -18,15 +18,27 @@ public class UIManager : Singleton<UIManager>
     //PlayerInputActions _inputActionToUse;
     public InputSystemUIInputModule CurrentInputSystemUIInputModule {get; private set;}
     public bool UIHasBeenBuilt { get; private set; }
+    public bool isInMenu=false;
 
     //For some reason, it doesn't find UIObject reference when I play in Awake().
     private void Start()
     {
-        if(!UIHasBeenBuilt)
+        Setup();
+    }
+
+    private void UpdateActionMap()
+    {
+        if (isInMenu)
         {
-            Setup();
+            UserInput.Instance.EnableMenuControls();
+        }
+        else
+        {
+            
+            UserInput.Instance.EnableGameplayControls();
         }
     }
+
     public void Setup()
     {
         if(!UIHasBeenBuilt)
@@ -34,6 +46,7 @@ public class UIManager : Singleton<UIManager>
             SetupInputModule();
             SetupUIScene();
             UIHasBeenBuilt=true;
+            UpdateActionMap();
         }
         
     }

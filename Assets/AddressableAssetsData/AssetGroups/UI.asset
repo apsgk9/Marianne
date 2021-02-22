@@ -21,10 +21,14 @@ MonoBehaviour:
     m_Address: UI/PauseScreen
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 38760931271906586, guid: e0477f7adf708c142b0953a11057ac40,
-      type: 3}
-    m_TargetAsset: {fileID: 38760931271906586, guid: e0477f7adf708c142b0953a11057ac40,
-      type: 3}
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 842174542e66696458651794babb8601
+    m_Address: Assets/InputActions/UserSettings/UserSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 50dbd1c4bea1e254f811ab1e985e8f06, type: 2}
   m_SchemaSet:

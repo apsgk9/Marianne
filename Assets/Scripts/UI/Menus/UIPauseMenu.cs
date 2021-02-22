@@ -7,28 +7,20 @@ using UnityEngine.InputSystem;
 public class UIPauseMenu : Singleton<UIPauseMenu>
 {
     public GameObject PauseMenu;
-    private PlayerInputActions _inputActions;
-
-    public InputAction HandleMenuPress { get; private set; }
 
     private void Awake()
     {
-        _inputActions = new PlayerInputActions();
         PauseMenu.SetActive(false);        
-        _inputActions.MenuControls.Disable();
-        _inputActions.PlayerControls.Enable();
     }
     private void OnEnable()
     {
-        _inputActions.Enable();
-        _inputActions.PlayerControls.MenuKey.performed += HandleMenuPressed;
-        _inputActions.MenuControls.MenuKey.performed += HandleMenuPressed;
+        UserInput.Instance.PlayerInputActions.PlayerControls.MenuKey.performed += HandleMenuPressed;
+        UserInput.Instance.PlayerInputActions.MenuControls.MenuKey.performed += HandleMenuPressed;
     }
     private void OnDisable()
     {
-        _inputActions.Disable();
-        _inputActions.PlayerControls.MenuKey.performed -= HandleMenuPressed;
-        _inputActions.MenuControls.MenuKey.performed -= HandleMenuPressed;
+        UserInput.Instance.PlayerInputActions.PlayerControls.MenuKey.performed -= HandleMenuPressed;
+        UserInput.Instance.PlayerInputActions.MenuControls.MenuKey.performed -= HandleMenuPressed;
     }
     private void HandleMenuPressed(InputAction.CallbackContext obj)
     {
@@ -36,20 +28,9 @@ public class UIPauseMenu : Singleton<UIPauseMenu>
     }
     public void TogglePause()
     {
-        Debug.Log("PAUSING");
         GameManager.Instance.TogglePauseState();
         bool isPaused = GameManager.Instance.isPaused;
         PauseMenu.SetActive(isPaused);
-        if(isPaused)
-        {            
-            _inputActions.MenuControls.Enable();
-            _inputActions.PlayerControls.Disable();
-        }
-        else
-        {
-            _inputActions.MenuControls.Disable();
-            _inputActions.PlayerControls.Enable();
-        }
     }
 
     private static string GetActionName(string ActionName)

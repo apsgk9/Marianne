@@ -16,7 +16,7 @@ public class CinemachineFreeLookZoomController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
+    {
         freelookZoom.Value=0f;
         UpdateDesktopValues();
     }
