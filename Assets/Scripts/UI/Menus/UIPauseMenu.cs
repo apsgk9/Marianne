@@ -19,8 +19,20 @@ public class UIPauseMenu : Singleton<UIPauseMenu>
     }
     private void OnDisable()
     {
-        UserInput.Instance.PlayerInputActions.PlayerControls.MenuKey.performed -= HandleMenuPressed;
-        UserInput.Instance.PlayerInputActions.MenuControls.MenuKey.performed -= HandleMenuPressed;
+        if(UserInput.Instance)
+        {
+            UserInput.Instance.PlayerInputActions.PlayerControls.MenuKey.performed -= HandleMenuPressed;
+            UserInput.Instance.PlayerInputActions.MenuControls.MenuKey.performed -= HandleMenuPressed;
+        }        
+    }
+    private new void OnDestroy()
+    {
+        if(UserInput.Instance)
+        {
+            UserInput.Instance.PlayerInputActions.PlayerControls.MenuKey.performed -= HandleMenuPressed;
+            UserInput.Instance.PlayerInputActions.MenuControls.MenuKey.performed -= HandleMenuPressed;
+        } 
+        base.OnDestroy();      
     }
     private void HandleMenuPressed(InputAction.CallbackContext obj)
     {
