@@ -27,12 +27,12 @@ public class UIPauseMenu : Singleton<UIPauseMenu>
     }
     private new void OnDestroy()
     {
+        base.OnDestroy();   
         if(UserInput.Instance)
         {
             UserInput.Instance.PlayerInputActions.PlayerControls.MenuKey.performed -= HandleMenuPressed;
             UserInput.Instance.PlayerInputActions.MenuControls.MenuKey.performed -= HandleMenuPressed;
-        } 
-        base.OnDestroy();      
+        }    
     }
     private void HandleMenuPressed(InputAction.CallbackContext obj)
     {
