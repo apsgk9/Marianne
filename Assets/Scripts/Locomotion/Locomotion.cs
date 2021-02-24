@@ -65,6 +65,8 @@ public partial class Locomotion : ILocomotion
 
     private void HandleRootMotion(Vector3 DeltaVector, Quaternion NewRotation)
     {
+        if(GameManager.Instance.isPaused ||Time.deltaTime==0f) //there is a bug that sets infinity to 
+            return;
         float angleDifference = Vector3.Angle(DeltaVector,DesiredCharacterVectorForward.normalized);
         var multiplier=1f;
         if(UseMovementAngleDifference)
@@ -74,7 +76,7 @@ public partial class Locomotion : ILocomotion
         if(_CheckGrounded.isGrounded && !_characterInput.AttemptingToJump())
         {           
             Debug.Log(_locomotionMode);    
-               
+
             var onGroundMovement= (DeltaVector/Time.deltaTime)*multiplier;
             _characterMover.SetGroundVelocity(onGroundMovement.x,onGroundMovement.z); 
         }
@@ -92,8 +94,8 @@ public partial class Locomotion : ILocomotion
 
     public void Tick()
     {
-        HandleJump();
-        if(_CheckGrounded.isGrounded)
+        var Jumping = HandleJump();
+        if(!Jumping &&_CheckGrounded.isGrounded)
         {
             if(_RootMotionDelta.canRotate)
             {
