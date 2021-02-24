@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 7d800f2bf8260d246bf078a0c57397ae
 ModelImporter:
-  serializedVersion: 19301
+  serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -1223545279107561327
@@ -38,14 +38,24 @@ ModelImporter:
       to improve retargeting quality.\n\t'Chest' has scale animation that will be
       discarded.\n\t'Neck' has scale animation that will be discarded.\n\t'Right
       shoulder' has scale animation that will be discarded.\n\t'Left shoulder' has
-      scale animation that will be discarded.\n\nClip 'Armature|Jump1_start' has
-      import animation warnings that might lower retargeting quality:\nNote: Activate
-      translation DOF on avatar to improve retargeting quality.\n\t'Right knee' has
-      scale animation that will be discarded.\n\t'Right ankle' has scale animation
-      that will be discarded.\n\t'Left knee' has scale animation that will be discarded.\n\t'Left
-      ankle' has scale animation that will be discarded.\n\nClip 'Armature|Jump2_end_idle'
+      scale animation that will be discarded.\n\nClip 'Armature|Jump1_end' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'finger_thumb_0_r' has translation
+      animation that will be discarded.\n\t'finger_thumb_0_l' has translation animation
+      that will be discarded.\n\t'finger_index_0_l' has translation animation that
+      will be discarded.\n\t'finger_middle_0_l' has translation animation that will
+      be discarded.\n\t'finger_ring_0_l' has translation animation that will be discarded.\n\t'finger_pinky_0_l'
+      has translation animation that will be discarded.\n\t'Right knee' has scale
+      animation that will be discarded.\n\t'Right ankle' has scale animation that
+      will be discarded.\n\t'Left knee' has scale animation that will be discarded.\n\t'Left
+      ankle' has scale animation that will be discarded.\n\nClip 'Armature|Jump1_start'
       has import animation warnings that might lower retargeting quality:\nNote:
-      Activate translation DOF on avatar to improve retargeting quality.\n\t'Neck'
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Right
+      knee' has scale animation that will be discarded.\n\t'Right ankle' has scale
+      animation that will be discarded.\n\t'Left knee' has scale animation that will
+      be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n\nClip
+      'Armature|Jump2_end_idle' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Neck'
       has scale animation that will be discarded.\n\t'Right knee' has scale animation
       that will be discarded.\n\t'Right ankle' has scale animation that will be discarded.\n\t'Right
       toe' has scale animation that will be discarded.\n\t'Left knee' has scale animation
@@ -54,9 +64,8 @@ ModelImporter:
       quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Neck'
       has scale animation that will be discarded.\n\t'Left shoulder' has scale animation
       that will be discarded.\n\t'Right knee' has scale animation that will be discarded.\n\t'Right
-      ankle' has scale animation that will be discarded.\n\t'Right toe' has scale
-      animation that will be discarded.\n\t'Left knee' has scale animation that will
-      be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n\t'Left
+      toe' has scale animation that will be discarded.\n\t'Left knee' has scale animation
+      that will be discarded.\n\t'Left ankle' has scale animation that will be discarded.\n\t'Left
       toe' has scale animation that will be discarded.\n\nClip 'Armature|Jump2_full'
       has import animation warnings that might lower retargeting quality:\nNote:
       Activate translation DOF on avatar to improve retargeting quality.\n\t'Neck'
@@ -245,6 +254,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
@@ -254,6 +264,9 @@ ModelImporter:
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
@@ -1625,6 +1638,7 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

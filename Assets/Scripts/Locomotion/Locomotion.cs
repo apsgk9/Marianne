@@ -20,13 +20,15 @@ public partial class Locomotion : ILocomotion
     public Quaternion CompositeRotation { get; private set; }
     public bool UseMovementAngleDifference { get; set; }
 
+
     public event Action<Vector3> OnMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
     public event Action<bool> OnJump;
 
     public float runThreshold=0.5f;
     public float sprintThreshold=2.01f;
-    private LocomotionMode locomotionMode;
+    private LocomotionMode _locomotionMode;
+    public LocomotionMode LocomotionMode{get {return _locomotionMode;}}
     public AnimationCurve _MovementVectorBlend;
     public AnimationCurve _RotationBlend;
     [SerializeReference]
@@ -46,7 +48,7 @@ public partial class Locomotion : ILocomotion
 
         _RootMotionDelta = _characterGameObject.GetComponentInChildren<RootMotionDelta>();
         _CheckGrounded = _characterGameObject.GetComponentInChildren<ICheckGrounded>();
-        locomotionMode= LocomotionMode.Idle;
+        _locomotionMode= LocomotionMode.Idle;
         if(_RootMotionDelta!=null)
         {
             _RootMotionDelta.OnRootMotionChange+=HandleRootMotion;
@@ -69,11 +71,22 @@ public partial class Locomotion : ILocomotion
         {
             multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
         }
+        if(_CheckGrounded.isGrounded && !_characterInput.AttemptingToJump())
+        {           
+            Debug.Log(_locomotionMode);    
+               
+            var onGroundMovement= (DeltaVector/Time.deltaTime)*multiplier;
+            _characterMover.SetGroundVelocity(onGroundMovement.x,onGroundMovement.z); 
+        }
+        //else
+        //{
+        //    Debug.Log("OnUpdateAnimatorMove");
+        //    var baseMovementComposite= DeltaVector* (multiplier);        
+        //    _characterMover.OnUpdateAnimatorMove(baseMovementComposite);
+        //}
+        //var baseMovementComposite= DeltaVector* (multiplier);
+        //_characterMover.OnUpdateAnimatorMove(baseMovementComposite);
         
-        var baseMovementComposite= DeltaVector* (multiplier);
-        
-        _characterMover.Move(baseMovementComposite);
-
         OnMoveChange?.Invoke(DeltaVector);
     }
 
@@ -82,14 +95,12 @@ public partial class Locomotion : ILocomotion
         HandleJump();
         if(_CheckGrounded.isGrounded)
         {
-            CalculateCharacterDesiredVector();
             if(_RootMotionDelta.canRotate)
             {
+                CalculateCharacterDesiredVector(); //TO DO check if I should put inside
                 RotateTransform(DesiredCharacterVectorForward);
-            }            
-
+            }
             SendAnimatorLocomotionCommands(_characterInput.IsRunning());
-
         }
         
     }
@@ -140,12 +151,12 @@ public partial class Locomotion : ILocomotion
         finalMovementComposite = runcomposite + baseMovementComposite;
         var runGap=0.00f;
         var walkGap=0.00f;
-        if(locomotionMode==LocomotionMode.Run)
+        if(_locomotionMode==LocomotionMode.Run)
         {
             walkGap=-0.1f;
             runGap=-0.1f;    
         }
-        else if(locomotionMode==LocomotionMode.Walk)
+        else if(_locomotionMode==LocomotionMode.Walk)
         {       
             walkGap=0.1f;
             runGap=-0.1f;             
@@ -155,21 +166,21 @@ public partial class Locomotion : ILocomotion
 
         if (finalMovementCompositeMagnitude >= runThreshold+runGap && finalMovementCompositeMagnitude <= sprintThreshold) //run
         {
-            locomotionMode = LocomotionMode.Run;
+            _locomotionMode = LocomotionMode.Run;
         }
         else if (finalMovementCompositeMagnitude > sprintThreshold+ Mathf.Epsilon) //sprint
         {
-            locomotionMode = LocomotionMode.Sprint;
+            _locomotionMode = LocomotionMode.Sprint;
         }
         else if (finalMovementCompositeMagnitude < runThreshold+walkGap && finalMovementCompositeMagnitude > 0.01f) //walk
         {         
-            locomotionMode = LocomotionMode.Walk;
+            _locomotionMode = LocomotionMode.Walk;
         }
         else
         {
-            locomotionMode= LocomotionMode.Idle;
+            _locomotionMode= LocomotionMode.Idle;
         }
-        OnMoveAnimatorSpeedChange?.Invoke((float)locomotionMode);
+        OnMoveAnimatorSpeedChange?.Invoke((float)_locomotionMode);
         
     }
 

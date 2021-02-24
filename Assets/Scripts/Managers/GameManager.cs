@@ -22,6 +22,7 @@ public class GameManager : Singleton<GameManager>
         _SpawnIfNull=true;
         CreateInputSystem();
         CreateUIMANAGER();
+        QualitySettings.vSyncCount = 1;
     }
 
     private void CreateInputSystem()

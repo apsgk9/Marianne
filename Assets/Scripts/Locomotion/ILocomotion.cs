@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static LocomotionEnmus;
 
 public interface ILocomotion
 {
@@ -8,6 +9,7 @@ public interface ILocomotion
     event Action<float> OnMoveAnimatorSpeedChange;
     event Action<bool> OnJump;
 
+    LocomotionMode LocomotionMode {get;}
     Vector3 DesiredCharacterVectorForward{get;}
 
     void ApplyRotation(Quaternion FinalRotation);

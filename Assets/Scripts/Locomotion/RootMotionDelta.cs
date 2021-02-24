@@ -19,7 +19,7 @@ public class RootMotionDelta : MonoBehaviour
             Animator = gameObject.GetComponent<Animator>();
         }
 
-        //CanRotateParamater=AnimatorAddParameters.TryAddingBooleanParameter(Animator,CanRotateParameterName);
+      
     }   
     void OnAnimatorMove()
     {

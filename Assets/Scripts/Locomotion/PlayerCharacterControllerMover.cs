@@ -33,19 +33,22 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
         newRadius=initialradius*0.8f;        
         _CharacterController.skinWidth =_CharacterController.radius*0.1f;
     }
-    public void Move(Vector3 motion)
+    public void OnUpdateAnimatorMove(Vector3 motion)
     {
         _totalDisplacement+=motion;
     }
     private void ProcessGravity()
     {
-        if (_CheckGrounded.isGrounded && Velocity.y<0)
+        //https://answers.unity.com/questions/1358491/character-controller-slide-down-slope.html check this later
+        //bool isGravityOn=_CheckGrounded.isGrounded && Velocity.y<0;
+        bool isGravityOn=!_CharacterController.isGrounded && Velocity.y<0;
+        if (isGravityOn)
         {
             Velocity.y=0f;
         }
         else
         {
-            Velocity.y+= Physics.gravity.y*Time.deltaTime*GravityMultiplier;
+          Velocity.y+= Physics.gravity.y*Time.deltaTime*GravityMultiplier;
         }
     }
     private void Update()
@@ -61,7 +64,6 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
         Velocity.y=Mathf.Clamp(Velocity.y,-TerminalVelocity,TerminalVelocity);
         _CharacterController.Move(Velocity * Time.deltaTime);
          HandleIfCharacterIsStuckOnLedge();
-
     }
 
     private void HandleIfCharacterIsStuckOnLedge()
@@ -105,5 +107,31 @@ public class PlayerCharacterControllerMover: MonoBehaviour, ICharacterMover
     {
         ColliderHit= hit;
         hitDistance=(transform.position-ColliderHit.point).magnitude;
+        //if(!_CheckGrounded.isGrounded)
+        //{
+        //    Debug.Log("hit");
+        //    var normal=(transform.position-ColliderHit.point).normalized;
+        //    Velocity= Quaternion.Euler(0,normal.y,0)*Velocity;
+        //}
+    }
+
+    public void SetConstantMoveUpdate(Vector3 motion)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetGroundVelocity(float x, float y, float z)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetGroundVelocity(Vector2 vInput)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetGroundVelocity(float x, float z)
+    {
+        throw new NotImplementedException();
     }
 }

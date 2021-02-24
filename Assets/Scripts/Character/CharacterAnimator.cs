@@ -44,7 +44,7 @@ namespace CharacterProperties
             {
                 _characterInput = GetComponentInParent<ICharacterInput>();
             }
-            _previousMovmementAxis=Vector2.zero;        
+            _previousMovmementAxis=Vector2.zero;
 
             //AnimatorAddParameters.TryAddingBooleanParameter(Animator,isGroundedParameterName);
         }

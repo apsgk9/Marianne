@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using CharacterInput;
 using UnityEngine;
 using UnityEngine.AI;
@@ -41,7 +39,7 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
         _agent.speed = 0f;
     }
 
-    public void Move(Vector3 motion)
+    public void OnUpdateAnimatorMove(Vector3 motion)
     {
         if(_useGravity)
         {
@@ -87,6 +85,26 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
     }
 
     public void Jump(float height)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetConstantMoveUpdate(Vector3 motion)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetGroundVelocity(float x, float y, float z)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetGroundVelocity(Vector2 vInput)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetGroundVelocity(float x, float z)
     {
         throw new NotImplementedException();
     }
