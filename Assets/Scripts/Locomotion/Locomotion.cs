@@ -74,12 +74,13 @@ public partial class Locomotion : ILocomotion
             multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
         }
         if(_CheckGrounded.isGrounded && !_characterInput.AttemptingToJump())
-        {           
+        {
             Debug.Log(_locomotionMode);    
 
             var onGroundMovement= (DeltaVector/Time.deltaTime)*multiplier;
             _characterMover.SetGroundVelocity(onGroundMovement.x,onGroundMovement.z); 
         }
+
         //else
         //{
         //    Debug.Log("OnUpdateAnimatorMove");

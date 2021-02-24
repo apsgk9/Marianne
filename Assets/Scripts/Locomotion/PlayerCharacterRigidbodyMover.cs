@@ -156,7 +156,8 @@ public class PlayerCharacterRigidbodyMover : MonoBehaviour,ICharacterMover
     public void SetGroundVelocity(float x, float z)
     {
         var v=new Vector3(x,_Rigidbody.velocity.y,z);
-        _Rigidbody.velocity=v;
+        var GroundAdjustmentVelocity=-transform.up * (_CheckGrounded.DistancetoGround/Time.fixedDeltaTime);
+        _Rigidbody.velocity=v+GroundAdjustmentVelocity;
     }
     public void AddExtraMotion(Vector3 motion)
     {

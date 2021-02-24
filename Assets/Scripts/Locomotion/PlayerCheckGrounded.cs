@@ -18,6 +18,7 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
 
     public bool isGrounded{get{return _isGrounded;}set{value=_isGrounded;}}
     public bool _isGrounded;
+    public float DistancetoGround{get;private set;}
 
     //public Vector3 Scale = new Vector3(1f, 1f, 1f);
     //public float radius = 0.1f;
@@ -27,7 +28,6 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
     public RaycastHit m_Hit;
     private bool m_HitDetect;
     public LayerMask Ground;
-
     private void Start()
     {
         //_CharacterController = GetComponent<CharacterController>();
@@ -41,12 +41,15 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
     private void CheckGround()
     {
         bool groundedResults=false;
-
+        float tempDistanceResults=0f;
+        DistancetoGround=0f;
         if(_isGrounded)
         {
             foreach(var origin in OnGroundOrigins)
             {
-                groundedResults=(groundedResults||Physics.Raycast(origin.position + Offset, Vector3.down, out m_Hit, DistanceToGround));
+                bool result=(groundedResults||Physics.Raycast(origin.position + Offset, Vector3.down, out m_Hit, DistanceToGround));               
+                groundedResults=groundedResults||result;
+                tempDistanceResults += (origin.position.y - m_Hit.point.y);
             }
         }
         else
@@ -58,8 +61,6 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
                 ||(groundedResults||Physics.Raycast(origin.position + Offset-origin.forward*AirScale, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension))
                 ||(groundedResults||Physics.Raycast(origin.position + Offset+origin.right*AirScale, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension))
                 ||(groundedResults||Physics.Raycast(origin.position + Offset-origin.right*AirScale, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension));
-                
-                
             }            
         }
         
@@ -70,6 +71,12 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
             OnGroundedChange?.Invoke(groundedResults);
         }
         _isGrounded=groundedResults;
+        if(_isGrounded)
+        {            
+            DistancetoGround=(tempDistanceResults/OnGroundOrigins.Count);
+            if(DistancetoGround<0)
+                DistancetoGround=0f;
+        }
     }
     
     void OnDrawGizmos()
@@ -95,18 +102,19 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
         else
         {
             //Draw a Ray forward from GameObject toward the maximum distance
-            //Gizmos.DrawRay(transform.position + Offset, Vector3.down * DistanceToGround);
+            
+            //foreach(var origin in OnGroundOrigins)
+            //{
+            //    Gizmos.DrawRay(origin.position + Offset, Vector3.down * DistanceToGround);
+            //}
             foreach(var origin in InAirOrigins)
             {
-                Gizmos.DrawRay(origin.position + Offset+origin.forward* AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
-                Gizmos.DrawRay(origin.position + Offset-origin.forward*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
-                Gizmos.DrawRay(origin.position + Offset+origin.right*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
-                Gizmos.DrawRay(origin.position + Offset-origin.right*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
+              Gizmos.DrawRay(origin.position + Offset+origin.forward* AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
+              Gizmos.DrawRay(origin.position + Offset-origin.forward*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
+              Gizmos.DrawRay(origin.position + Offset+origin.right*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
+              Gizmos.DrawRay(origin.position + Offset-origin.right*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
             }
             
-            //Draw a cube at the maximum distance
-            //Gizmos.DrawSphere(transform.position + Offset + Vector3.down * DistanceToGround, radius);
-            //Gizmos.DrawWireCube(transform.position + Offset + Vector3.down * m_Hit.distance, Scale);
         }
     }
 }
