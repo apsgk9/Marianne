@@ -8,7 +8,10 @@ using UnityEngine;
 public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
 {
     public float DistanceToGround = 0.1f;
-    public List<Transform> ListOfOrigins=new List<Transform>();
+    [Range(0,1f)]
+    public float InAirDistanceExtension = 0.3f;
+    public List<Transform> OnGroundOrigins=new List<Transform>();
+    public List<Transform> InAirOrigins=new List<Transform>();
 
     //private CharacterController _CharacterController;
 
@@ -23,7 +26,6 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
     public RaycastHit m_Hit;
     private bool m_HitDetect;
     public LayerMask Ground;
-    private float stretchifGrounded;
 
     private void Start()
     {
@@ -32,20 +34,28 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
     }
     private void Update()
     {
-        stretchifGrounded= (isGrounded)?2:1f;
         CheckGround();        
     }
 
     private void CheckGround()
     {
-        //Debug.DrawLine(Origin.position,Origin.position+(-Vector3.up*DistanceToGround),Color.red);
-        //bool tempisGrounded = Physics.Raycast(Origin.position, -Vector3.up, DistanceToGround);
-        //bool tempisGrounded = Physics.BoxCast(transform.position + Offset, Scale, Vector3.down, out m_Hit, transform.rotation, DistanceToGround);
         bool groundedResults=false;
-        foreach(var origin in ListOfOrigins)
+
+        if(_isGrounded)
         {
-            groundedResults=(groundedResults||Physics.Raycast(origin.position + Offset, Vector3.down, out m_Hit, DistanceToGround*stretchifGrounded));
+            foreach(var origin in OnGroundOrigins)
+            {
+                groundedResults=(groundedResults||Physics.Raycast(origin.position + Offset, Vector3.down, out m_Hit, DistanceToGround));
+            }
         }
+        else
+        {
+            foreach(var origin in InAirOrigins)
+            {
+                groundedResults=(groundedResults||Physics.Raycast(origin.position + Offset, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension));
+            }            
+        }
+        
 
         //float Angle=Vector3.Angle(m_Hit.normal,transform.forward)-90;
         if (isGrounded != groundedResults)
@@ -65,10 +75,11 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
         {
             //Draw a Ray forward from GameObject toward the hit
             //Gizmos.DrawRay(transform.position + Offset, Vector3.down * m_Hit.distance);
-            foreach(var origin in ListOfOrigins)
+            foreach(var origin in OnGroundOrigins)
             {
-                Gizmos.DrawRay(origin.position + Offset, Vector3.down * m_Hit.distance*stretchifGrounded);
+                Gizmos.DrawRay(origin.position + Offset, Vector3.down * m_Hit.distance);
             }
+            
             
             //Draw a cube that extends to where the hit exists
             //Gizmos.DrawSphere(transform.position + Offset + Vector3.down * m_Hit.distance, radius);
@@ -79,9 +90,9 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
         {
             //Draw a Ray forward from GameObject toward the maximum distance
             //Gizmos.DrawRay(transform.position + Offset, Vector3.down * DistanceToGround);
-            foreach(var origin in ListOfOrigins)
+            foreach(var origin in InAirOrigins)
             {
-                Gizmos.DrawRay(origin.position + Offset, Vector3.down * DistanceToGround*stretchifGrounded);
+                Gizmos.DrawRay(origin.position + Offset, Vector3.down * (DistanceToGround+InAirDistanceExtension));
             }
             
             //Draw a cube at the maximum distance
