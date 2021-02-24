@@ -10,6 +10,7 @@ public class RootMotionDelta : MonoBehaviour
     private bool _rotateparamaterexists;
 
     public Animator Animator { get; private set; }
+
     public event Action<Vector3,Quaternion> OnRootMotionChange;
 
     private void Awake()
@@ -18,6 +19,11 @@ public class RootMotionDelta : MonoBehaviour
         {
             Animator = gameObject.GetComponent<Animator>();
         }
+        //var Rigidbodies=GetComponentsInChildren<Rigidbody>();
+        //foreach(var rb in Rigidbodies)
+        //{
+        //    rb.isKinematic=true;
+        //}
 
       
     }   

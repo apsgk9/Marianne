@@ -4397,7 +4397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InitialSpeed: {x: 0, y: 0, z: 0}
-  ForwardSpeedMultiplier: 2
+  ForwardSpeedMultiplier: 1.5
   LastVector: {x: 0, y: 0, z: 0}
   SpeedParameterName: Speed
   Speed: 0

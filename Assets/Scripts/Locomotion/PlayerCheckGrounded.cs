@@ -7,6 +7,7 @@ using UnityEngine;
 //[RequireComponent(typeof(CharacterController))]
 public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
 {
+    private const float AirScale = 0.05f;
     public float DistanceToGround = 0.1f;
     [Range(0,1f)]
     public float InAirDistanceExtension = 0.3f;
@@ -52,7 +53,13 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
         {
             foreach(var origin in InAirOrigins)
             {
-                groundedResults=(groundedResults||Physics.Raycast(origin.position + Offset, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension));
+                groundedResults=
+                (groundedResults||Physics.Raycast(origin.position + Offset+origin.forward*AirScale, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension))
+                ||(groundedResults||Physics.Raycast(origin.position + Offset-origin.forward*AirScale, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension))
+                ||(groundedResults||Physics.Raycast(origin.position + Offset+origin.right*AirScale, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension))
+                ||(groundedResults||Physics.Raycast(origin.position + Offset-origin.right*AirScale, Vector3.down, out m_Hit, DistanceToGround+ InAirDistanceExtension));
+                
+                
             }            
         }
         
@@ -60,7 +67,6 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
         //float Angle=Vector3.Angle(m_Hit.normal,transform.forward)-90;
         if (isGrounded != groundedResults)
         {
-            Debug.Log("groundedResults: "+groundedResults);
             OnGroundedChange?.Invoke(groundedResults);
         }
         _isGrounded=groundedResults;
@@ -92,7 +98,10 @@ public class PlayerCheckGrounded : MonoBehaviour, ICheckGrounded
             //Gizmos.DrawRay(transform.position + Offset, Vector3.down * DistanceToGround);
             foreach(var origin in InAirOrigins)
             {
-                Gizmos.DrawRay(origin.position + Offset, Vector3.down * (DistanceToGround+InAirDistanceExtension));
+                Gizmos.DrawRay(origin.position + Offset+origin.forward* AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
+                Gizmos.DrawRay(origin.position + Offset-origin.forward*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
+                Gizmos.DrawRay(origin.position + Offset+origin.right*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
+                Gizmos.DrawRay(origin.position + Offset-origin.right*AirScale, Vector3.down * (DistanceToGround+InAirDistanceExtension));
             }
             
             //Draw a cube at the maximum distance
