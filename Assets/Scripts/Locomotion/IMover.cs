@@ -13,4 +13,5 @@ public interface IMover
     void SetExtendSensorRange(bool _isExtended);
     void SetStepHeightRatio(float _newStepHeightRatio);
     void SetVelocity(Vector3 _velocity);
+    Vector3 GetCurrentGroundAdjustmentVelocity();
 }

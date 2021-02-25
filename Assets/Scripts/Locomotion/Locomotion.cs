@@ -17,7 +17,6 @@ public partial class Locomotion : ILocomotion
     public Quaternion CompositeRotation { get; private set; }
     public bool UseMovementAngleDifference { get; set; }
 
-
     public event Action<Vector3> OnMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
     public event Action<bool> OnJump;
@@ -30,6 +29,8 @@ public partial class Locomotion : ILocomotion
     public AnimationCurve _RotationBlend;
     [SerializeReference]
     public ICharacterInput _characterInput;
+    private Vector3 _previousVelocity;
+
     public Locomotion(GameObject character,float rotationSpeed,
     Transform viewTransform,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend,
     ICharacterInput characterInput,IMover characterMover)
@@ -88,7 +89,15 @@ public partial class Locomotion : ILocomotion
         if(_characterMover.IsGrounded() && !_characterInput.AttemptingToJump())
         {
             var onGroundMovement= (DeltaVector/Time.deltaTime)*multiplier;
+            onGroundMovement.y=0f;
+            _previousVelocity=onGroundMovement;
             _characterMover.SetVelocity(onGroundMovement); 
+        }
+        else
+        {
+            var Movement= (DeltaVector/Time.deltaTime);
+            Movement=Movement+GetFallingVelocity();
+            _characterMover.SetVelocity(Movement);             
         }
         
         OnMoveChange?.Invoke(DeltaVector);
@@ -101,20 +110,34 @@ public partial class Locomotion : ILocomotion
         //mover.CheckForGround();
         _characterMover.CheckForGround();
 
-
-        
-        
-        var Jumping = HandleJump();
-        if(!Jumping && _characterMover.IsGrounded())
-        {
-            if(_RootMotionDelta.canRotate)
+        if(_characterMover.IsGrounded())
+        {            
+            _characterMover.SetVelocity(_previousVelocity+_characterMover.GetCurrentGroundAdjustmentVelocity());
+            var Jumping = HandleJump();
+            if(!Jumping && _characterMover.IsGrounded())
             {
-                CalculateCharacterDesiredVector(); //TO DO check if I should put inside
-                RotateTransform(DesiredCharacterVectorForward);
-            }
-            SendAnimatorLocomotionCommands(_characterInput.IsRunning());
+
+                if(_RootMotionDelta.canRotate)
+                {
+                    CalculateCharacterDesiredVector(); //TO DO check if I should put inside
+                    RotateTransform(DesiredCharacterVectorForward);
+                }
+                SendAnimatorLocomotionCommands(_characterInput.IsRunning());
+            }   
         }
-        
+        else
+        {
+            Vector3 fallingvelocity = GetFallingVelocity();
+            _characterMover.SetVelocity(fallingvelocity);
+            _previousVelocity = fallingvelocity;
+        }
+
+
+    }
+
+    private Vector3 GetFallingVelocity()
+    {
+        return _previousVelocity + Physics.gravity * Time.deltaTime;
     }
 
     private bool HandleJump()
@@ -195,7 +218,7 @@ public partial class Locomotion : ILocomotion
         OnMoveAnimatorSpeedChange?.Invoke((float)_locomotionMode);
         
     }
-
+    
     
     
 }

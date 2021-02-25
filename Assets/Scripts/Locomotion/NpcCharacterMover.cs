@@ -155,4 +155,9 @@ public class NpcCharacterMover : MonoBehaviour, IMover
     {
         throw new NotImplementedException();
     }
+
+    public Vector3 GetCurrentGroundAdjustmentVelocity()
+    {
+        throw new NotImplementedException();
+    }
 }

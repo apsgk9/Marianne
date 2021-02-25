@@ -1,5 +1,4 @@
-﻿using System;
-using CharacterInput;
+﻿using CharacterInput;
 using UnityEngine;
 public class Character : MonoBehaviour
 {

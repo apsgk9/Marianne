@@ -24,11 +24,12 @@ namespace CharacterProperties
         public Vector3 DesiredVelocity { get; private set; }
         public Vector3 DesiredDeltaVelocity { get; private set; }
         public Vector3 ActualCurrentVelocity { get; private set; }
+        public Vector3 _ActualCurrentVelocity;
         public float DesiredMagnitudeSpeed { get; private set; }
         public float CharacterAnimatorSpeed { get; private set; }
         public Character _player;
         public ICharacterStamina _staminaHandler;
-        public IGroundSensors CheckGroundedScript;
+        public IGroundSensors _GroundSensor;
 
         public bool CanUseStamina { get { return _staminaHandler.CanUse(); }}
 
@@ -44,7 +45,11 @@ namespace CharacterProperties
             DesiredVelocity = Vector3.zero;
             _player = GetComponent<Character>();
             _staminaHandler = GetComponentInChildren<ICharacterStamina>();
-            CheckGroundedScript=GetComponent<IGroundSensors>();
+            _GroundSensor=GetComponent<IGroundSensors>();
+        }
+        private void FixedUpdate()
+        {
+            _ActualCurrentVelocity=ActualCurrentVelocity;
         }
         private void OnEnable()
         {
@@ -53,7 +58,7 @@ namespace CharacterProperties
                 _player._Locomotion.OnMoveChange += UpdateVector;
                 _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateCharacterSpeed;
                 _player._Locomotion.OnJump += UpdateJump;
-                CheckGroundedScript.OnGroundedChange+=UpdateGrounded;
+                _GroundSensor.OnGroundedChange+=UpdateGrounded;
             }
 
         }
@@ -75,8 +80,8 @@ namespace CharacterProperties
                 _player._Locomotion.OnJump += UpdateJump;
 
                 
-                CheckGroundedScript.OnGroundedChange-=UpdateGrounded;
-                CheckGroundedScript.OnGroundedChange+=UpdateGrounded;
+                _GroundSensor.OnGroundedChange-=UpdateGrounded;
+                _GroundSensor.OnGroundedChange+=UpdateGrounded;
             }
         }
         private void OnDisable()
@@ -86,7 +91,7 @@ namespace CharacterProperties
                 _player._Locomotion.OnMoveChange -= UpdateVector;
                 _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateCharacterSpeed;
                 _player._Locomotion.OnJump -= UpdateJump;
-                CheckGroundedScript.OnGroundedChange-=UpdateGrounded;
+                _GroundSensor.OnGroundedChange-=UpdateGrounded;
             }
 
         }
