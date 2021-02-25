@@ -3,10 +3,12 @@ using CharacterInput;
 using UnityEngine;
 using UnityEngine.AI;
 
+//Haven't been tested.
+
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(NPCCharacterInput))]
-public class NpcCharacterMover : MonoBehaviour, ICharacterMover
+public class NpcCharacterMover : MonoBehaviour, IMover
 {
     private NavMeshAgent _agent;
     private CharacterController _CharacterController;
@@ -105,6 +107,51 @@ public class NpcCharacterMover : MonoBehaviour, ICharacterMover
     }
 
     public void SetGroundVelocity(float x, float z)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void CheckForGround()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Collider GetGroundCollider()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Vector3 GetGroundNormal()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Vector3 GetGroundPoint()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsGrounded()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RecalculateColliderDimensions()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetColliderHeight(float _newColliderHeight)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetExtendSensorRange(bool _isExtended)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetStepHeightRatio(float _newStepHeightRatio)
     {
         throw new NotImplementedException();
     }

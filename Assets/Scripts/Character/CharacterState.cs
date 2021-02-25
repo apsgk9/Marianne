@@ -10,6 +10,7 @@ namespace CharacterProperties
     {
         Vector3 DesiredVelocity { get; }
         Vector3 DesiredDeltaVelocity { get; }
+        Vector3 ActualCurrentVelocity { get; }
         float DesiredMagnitudeSpeed { get; }
         float CharacterAnimatorSpeed { get; }
         bool CanUseStamina { get; }
@@ -22,11 +23,12 @@ namespace CharacterProperties
     {
         public Vector3 DesiredVelocity { get; private set; }
         public Vector3 DesiredDeltaVelocity { get; private set; }
+        public Vector3 ActualCurrentVelocity { get; private set; }
         public float DesiredMagnitudeSpeed { get; private set; }
         public float CharacterAnimatorSpeed { get; private set; }
         public Character _player;
         public ICharacterStamina _staminaHandler;
-        public ICheckGrounded CheckGroundedScript;
+        public IGroundSensors CheckGroundedScript;
 
         public bool CanUseStamina { get { return _staminaHandler.CanUse(); }}
 
@@ -42,7 +44,7 @@ namespace CharacterProperties
             DesiredVelocity = Vector3.zero;
             _player = GetComponent<Character>();
             _staminaHandler = GetComponentInChildren<ICharacterStamina>();
-            CheckGroundedScript=GetComponent<ICheckGrounded>();
+            CheckGroundedScript=GetComponent<IGroundSensors>();
         }
         private void OnEnable()
         {
@@ -55,7 +57,6 @@ namespace CharacterProperties
             }
 
         }
-
         
 
         private void Start()

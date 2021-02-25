@@ -7,12 +7,12 @@ public class CancelVelocityBehaviour : StateMachineBehaviour
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     public SetAt SetAt;
-    ICharacterMover CharacterMover;
+    IMover CharacterMover;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if(CharacterMover==null)
         {
-            CharacterMover=animator.GetComponentInParent<ICharacterMover>();
+            CharacterMover=animator.GetComponentInParent<IMover>();
         }
         if(SetAt.Enter==SetAt)
         {            

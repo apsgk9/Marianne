@@ -8,7 +8,7 @@ public class Character : MonoBehaviour
     [SerializeField] private AnimationCurve MovementVectorBlend= AnimationCurve.Linear(0,0,1,1);
     [SerializeField] private AnimationCurve TurnRotationBlend= AnimationCurve.Linear(0,0,1,1);
     [SerializeField] public ICharacterInput _characterInput;
-    [SerializeField] public ICharacterMover _characterMover;
+    [SerializeField] public IMover _characterMover;
     
 
     public ILocomotion _Locomotion;
@@ -21,7 +21,7 @@ public class Character : MonoBehaviour
         }
         if(_characterMover==null)
         {
-            _characterMover = GetComponent<ICharacterMover>();
+            _characterMover = GetComponent<IMover>();
         }
         if(PlayerCamera==null)
         {

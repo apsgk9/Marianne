@@ -1,18 +1,15 @@
 using System;
 using CharacterInput;
-using CharacterProperties;
 using UnityEngine;
-using UnityEngine.AI;
 using static LocomotionEnmus;
 
 public partial class Locomotion : ILocomotion
 {
     private readonly GameObject _characterGameObject;
-    private readonly ICharacterMover _characterMover;
+    private readonly IMover _characterMover;
     private Transform _viewTransform;
     private float _RotationSpeed { get;}
     private RootMotionDelta _RootMotionDelta;
-    private ICheckGrounded _CheckGrounded;
 
     public Vector3 DesiredCharacterVectorForward { get; private set; }
     private Vector3 _movementInput;
@@ -35,7 +32,7 @@ public partial class Locomotion : ILocomotion
     public ICharacterInput _characterInput;
     public Locomotion(GameObject character,float rotationSpeed,
     Transform viewTransform,AnimationCurve movementVectorBlend,AnimationCurve rotationBlend,
-    ICharacterInput characterInput,ICharacterMover characterMover)
+    ICharacterInput characterInput,IMover characterMover)
     {
         _characterGameObject = character;
         _characterMover = characterMover;
@@ -47,7 +44,6 @@ public partial class Locomotion : ILocomotion
 
 
         _RootMotionDelta = _characterGameObject.GetComponentInChildren<RootMotionDelta>();
-        _CheckGrounded = _characterGameObject.GetComponentInChildren<ICheckGrounded>();
         _locomotionMode= LocomotionMode.Idle;
         if(_RootMotionDelta!=null)
         {
@@ -65,38 +61,51 @@ public partial class Locomotion : ILocomotion
 
     private void HandleRootMotion(Vector3 DeltaVector, Quaternion NewRotation)
     {
-        if(GameManager.Instance.isPaused ||Time.deltaTime==0f) //there is a bug that sets infinity to 
+        if(GameManager.Instance.isPaused || Time.deltaTime==0f) //there is a bug that sets Time.deltaTime infinity to, this fixes it
             return;
+
+
+        Vector3 _velocity = Vector3.zero;
+
+        ////Calculate the final velocity for this frame;
+        //[...]
         float angleDifference = Vector3.Angle(DeltaVector,DesiredCharacterVectorForward.normalized);
         var multiplier=1f;
-        if(UseMovementAngleDifference)
+
+        if(_characterMover.IsGrounded() && UseMovementAngleDifference)
         {
             multiplier=_MovementVectorBlend.Evaluate((180f-angleDifference)/180f);
         }
-        if(_CheckGrounded.isGrounded && !_characterInput.AttemptingToJump())
+
+        ////If the character is grounded, extend ground detection sensor range;
+        _characterMover.SetExtendSensorRange(_characterMover.IsGrounded());
+        
+        ////Set mover velocity;
+        //mover.SetVelocity(_velocity);
+
+        
+        
+        if(_characterMover.IsGrounded() && !_characterInput.AttemptingToJump())
         {
-            Debug.Log(_locomotionMode);    
-
             var onGroundMovement= (DeltaVector/Time.deltaTime)*multiplier;
-            _characterMover.SetGroundVelocity(onGroundMovement.x,onGroundMovement.z); 
+            _characterMover.SetVelocity(onGroundMovement); 
         }
-
-        //else
-        //{
-        //    Debug.Log("OnUpdateAnimatorMove");
-        //    var baseMovementComposite= DeltaVector* (multiplier);        
-        //    _characterMover.OnUpdateAnimatorMove(baseMovementComposite);
-        //}
-        //var baseMovementComposite= DeltaVector* (multiplier);
-        //_characterMover.OnUpdateAnimatorMove(baseMovementComposite);
         
         OnMoveChange?.Invoke(DeltaVector);
     }
 
     public void Tick()
     {
+        
+        ////Run initial mover ground check;
+        //mover.CheckForGround();
+        _characterMover.CheckForGround();
+
+
+        
+        
         var Jumping = HandleJump();
-        if(!Jumping &&_CheckGrounded.isGrounded)
+        if(!Jumping && _characterMover.IsGrounded())
         {
             if(_RootMotionDelta.canRotate)
             {

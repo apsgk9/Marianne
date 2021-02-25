@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AddJumpToCharacterBehaviour : StateMachineBehaviour
 {
-    private ICharacterMover CharacterMover;
+    private IMover CharacterMover;
     public Vector3 InitialSpeed;
     public float ForwardSpeedMultiplier=1f;
 
@@ -19,30 +19,23 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
     {
         if(CharacterMover==null)
         {
-            CharacterMover=animator.GetComponentInParent<ICharacterMover>();
+            CharacterMover=animator.GetComponentInParent<IMover>();
         }
         Speed=animator.GetFloat(SpeedParameterName);
 
         LastVector=animator.transform.forward.normalized;        
         Vector3 JumpForce=InitialSpeed;
         JumpForce+= LastVector*ForwardSpeedMultiplier*Speed;
-        CharacterMover.AddVelocity(JumpForce);
-        CharacterMover.Jump(Height);
+
+        //TODO FIXTHIS
+        //CharacterMover.AddVelocity(JumpForce);
+        //CharacterMover.Jump(Height);
         
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    //Do not change transition offset or fix later
-    //    if(stateInfo.normalizedTime<1f)
-    //    {
-    //        float percentage=Mathf.Clamp((1-stateInfo.normalizedTime),0,1);
-    //        Vector3 JumpForce=InitialSpeed*Time.deltaTime*percentage;
-    //        JumpForce+= LastVector*Time.deltaTime*ForwardSpeedMultiplier*Speed;
-    //        
-    //        CharacterMover.AddExtraMotion(JumpForce);
-    //    }        
+    //{ 
     //    
     //}
 
