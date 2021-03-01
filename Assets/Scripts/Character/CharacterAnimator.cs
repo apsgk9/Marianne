@@ -26,7 +26,7 @@ namespace CharacterProperties
 
         #region SwitchStatuses
         private bool _currentJumpButtonStatus;
-        private bool _jumpbuttonIsLifted;
+        private bool _canJump;
 
 
         private LocomotionMode LocomotionMode;
@@ -39,7 +39,7 @@ namespace CharacterProperties
 
         private void Awake()
         {
-            _jumpbuttonIsLifted=true;
+            _canJump=true;
             if(_characterInput==null)
             {
                 _characterInput = GetComponentInParent<ICharacterInput>();
@@ -71,15 +71,9 @@ namespace CharacterProperties
 
         private void HandleJump()
         {
-            _currentJumpButtonStatus = CharacterState.TryingToJump;
-            if(_currentJumpButtonStatus==false) //released/up
-            {
-                _jumpbuttonIsLifted=true;                
-            }
-            else if(_jumpbuttonIsLifted)
+            if(CharacterState.TryingToJump && CharacterState.CanJump)
             {
                 Animator.SetTrigger(JumpTriggerParameterName);
-                _jumpbuttonIsLifted=false;
             }
         }
 

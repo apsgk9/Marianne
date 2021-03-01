@@ -5,31 +5,18 @@ using UnityEngine;
 
 public class AddJumpToCharacterBehaviour : StateMachineBehaviour
 {
-    private IMover CharacterMover;
-    public Vector3 InitialSpeed;
+    private ILocomotion Locomotion;
     public float ForwardSpeedMultiplier=1f;
-
-    public Vector3 LastVector;
-    public string SpeedParameterName="Speed";
-    public float Speed;
     public float Height;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(CharacterMover==null)
+        if(Locomotion==null)
         {
-            CharacterMover=animator.GetComponentInParent<IMover>();
+            Locomotion=animator.GetComponentInParent<Character>()._Locomotion;
         }
-        Speed=animator.GetFloat(SpeedParameterName);
-
-        LastVector=animator.transform.forward.normalized;        
-        Vector3 JumpForce=InitialSpeed;
-        JumpForce+= LastVector*ForwardSpeedMultiplier*Speed;
-
-        //TODO FIXTHIS
-        //CharacterMover.AddVelocity(JumpForce);
-        //CharacterMover.Jump(Height);
+        Locomotion.Jump(Height,ForwardSpeedMultiplier);
         
     }
 
