@@ -235,6 +235,25 @@ AnimatorStateTransition:
   m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-8632158198411365736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c332fe9f525c14e4a869cb62624a823d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 0
+    SetAt: 0
+  - ParameterName: CanRotate
+    SetTo: 1
+    SetAt: 0
 --- !u!1101 &-8512160939288546052
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -723,6 +742,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-6790116574357841592
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList: []
 --- !u!1101 &-6788662227315550164
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1165,6 +1197,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-5393706987747083093
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList: []
 --- !u!1101 &-5168050804840393377
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1299,9 +1344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParameterName: IsJumping
-  SetTo: 1
-  Set: 0
+  BooleanList: []
 --- !u!1101 &-4950480121255768203
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1412,9 +1455,9 @@ AnimatorState:
   m_Transitions:
   - {fileID: 821298074158344628}
   m_StateMachineBehaviours:
-  - {fileID: 1224405466754324144}
   - {fileID: 9015752260511368456}
   - {fileID: -8827165533980187381}
+  - {fileID: -1696596857129969937}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1430,6 +1473,25 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-4632529213777533736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c332fe9f525c14e4a869cb62624a823d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 0
+    SetAt: 0
+  - ParameterName: CanRotate
+    SetTo: 1
+    SetAt: 0
 --- !u!1101 &-4500464051852494941
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1865,9 +1927,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParameterName: IsJumping
-  SetTo: 1
-  Set: 0
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 1
+    SetAt: 0
 --- !u!114 &-3060073928161189687
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1881,6 +1944,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SetAt: 0
+--- !u!114 &-2989685363024744531
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList: []
 --- !u!1101 &-2809779182356518611
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1934,6 +2010,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-2632136592908105590
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList: []
 --- !u!1101 &-2626848544768884494
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1993,10 +2082,10 @@ AnimatorState:
   - {fileID: 1208028771590646358}
   - {fileID: -8821493554348971797}
   m_StateMachineBehaviours:
-  - {fileID: -3082363831286632112}
   - {fileID: -6290268913551287212}
   - {fileID: 4142706454312502180}
   - {fileID: -346712397257827761}
+  - {fileID: 7082951040006346872}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -2235,8 +2324,8 @@ AnimatorState:
   m_Transitions:
   - {fileID: -8042720576342944884}
   m_StateMachineBehaviours:
-  - {fileID: 2685282223377172228}
   - {fileID: -3060073928161189687}
+  - {fileID: 4060560359642401891}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -2252,6 +2341,25 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-1696596857129969937
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c332fe9f525c14e4a869cb62624a823d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 1
+    SetAt: 0
+  - ParameterName: CanRotate
+    SetTo: 0
+    SetAt: 0
 --- !u!1101 &-1630292264979743165
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -2305,6 +2413,22 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-1566457284949810602
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040d528ab5661d949882c461cbc48c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList:
+  - ParameterName: 
+    SetTo: 0
+    SetAt: 0
 --- !u!1101 &-1536771913808436682
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -3455,9 +3579,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParameterName: IsJumping
-  SetTo: 1
-  Set: 0
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 1
+    SetAt: 0
 --- !u!1101 &1283812685080088308
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -3753,7 +3878,6 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -4976022074798666891}
   - {fileID: -6521416978146778104}
   - {fileID: -6743374985147156513}
   m_Position: {x: 50, y: 50, z: 0}
@@ -3922,9 +4046,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParameterName: IsJumping
-  SetTo: 0
-  Set: 0
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 0
+    SetAt: 0
 --- !u!1101 &2769747991059747039
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -4318,8 +4443,8 @@ AnimatorState:
   - {fileID: -6420886938899628656}
   - {fileID: 1197608487720715378}
   m_StateMachineBehaviours:
-  - {fileID: 4661082355351712038}
   - {fileID: 4932315011793449213}
+  - {fileID: -4632529213777533736}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -4376,6 +4501,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NormalizedTimeParameterName: NormalizedTime
+--- !u!114 &4060560359642401891
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c332fe9f525c14e4a869cb62624a823d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 0
+    SetAt: 0
+  - ParameterName: CanRotate
+    SetTo: 1
+    SetAt: 0
 --- !u!114 &4142706454312502180
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -4522,9 +4666,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParameterName: IsJumping
-  SetTo: 0
-  Set: 0
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 0
+    SetAt: 0
 --- !u!114 &4718947297720412971
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4738,9 +4883,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParameterName: IsJumping
-  SetTo: 0
-  Set: 0
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 0
+    SetAt: 0
+--- !u!114 &6414360435350211113
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040d528ab5661d949882c461cbc48c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 1
+    SetAt: 0
 --- !u!1101 &6431860211303686841
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -4872,6 +5034,25 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &7082951040006346872
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c332fe9f525c14e4a869cb62624a823d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList:
+  - ParameterName: IsJumping
+    SetTo: 1
+    SetAt: 0
+  - ParameterName: CanRotate
+    SetTo: 0
+    SetAt: 0
 --- !u!1102 &7189399920872180109
 AnimatorState:
   serializedVersion: 6
@@ -4888,8 +5069,8 @@ AnimatorState:
   - {fileID: -8703248475657981882}
   - {fileID: -2305786772199440897}
   m_StateMachineBehaviours:
-  - {fileID: 6190108696827676935}
   - {fileID: 1214052760909551872}
+  - {fileID: -8632158198411365736}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -5207,6 +5388,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &8805916479214185738
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e52e90d4a935b64880a2466a48f2c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BooleanList: []
 --- !u!1102 &8840182662738417646
 AnimatorState:
   serializedVersion: 6

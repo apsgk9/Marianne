@@ -19,12 +19,6 @@ public class RootMotionDelta : MonoBehaviour
         {
             Animator = gameObject.GetComponent<Animator>();
         }
-        //var Rigidbodies=GetComponentsInChildren<Rigidbody>();
-        //foreach(var rb in Rigidbodies)
-        //{
-        //    rb.isKinematic=true;
-        //}
-
       
     }   
     void OnAnimatorMove()
