@@ -6,7 +6,6 @@ using UnityEngine;
 public class AddJumpToCharacterBehaviour : StateMachineBehaviour
 {
     private ILocomotion Locomotion;
-    public float ForwardSpeedMultiplier=1f;
     public float Height;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -16,7 +15,7 @@ public class AddJumpToCharacterBehaviour : StateMachineBehaviour
         {
             Locomotion=animator.GetComponentInParent<Character>()._Locomotion;
         }
-        Locomotion.Jump(Height,ForwardSpeedMultiplier);
+        Locomotion.Jump(Height);
         
     }
 

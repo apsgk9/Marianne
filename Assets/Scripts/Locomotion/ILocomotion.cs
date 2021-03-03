@@ -12,7 +12,7 @@ public interface ILocomotion
     event Action<bool> OnCanJump;
 	event Action<Vector3> OnLand;
     event Action<State> OnStateChange;
-    void Jump(float Height,float FowawrdSpeed);
+    void Jump(float Height);
     LocomotionMode LocomotionMode {get;}
     Vector3 DesiredCharacterVectorForward{get;}
     void ApplyRotation(Quaternion FinalRotation);    

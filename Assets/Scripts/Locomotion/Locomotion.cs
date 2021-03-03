@@ -129,10 +129,7 @@ public partial class Locomotion : ILocomotion
 
         ////If the character is grounded, extend ground detection sensor range;
         _characterMover.SetExtendSensorRange(IsGrounded());
-        //if(_state== State.Jumping)
-        //{
-		//    _velocity += JumpVelocity;
-        //}
+
         ////Set mover velocity;
         //mover.SetVelocity(_velocity);
         var Movement = (DeltaVector / Time.deltaTime);
@@ -331,14 +328,14 @@ public partial class Locomotion : ILocomotion
 
     }
 
-    public void Jump(float Height, float ForwardSpeed)
+    public void Jump(float Height)
     { 
         float initialVelocity = (float)Math.Sqrt((-2*Physics.gravity.y)); //(Height+(0.5f*Physics.gravity.y*jumpDuration*jumpDuration))/jumpDuration;
         Vector3 UpwardVelocity = _characterGameObject.transform.up * initialVelocity;
         Vector3 GroundVelocity = _previousVelocity;
         GroundVelocity.y = 0f;
 
-        Vector3 FowardVelocity = ForwardSpeed * GroundVelocity;
+        Vector3 FowardVelocity = GroundVelocity;
         JumpVelocity = UpwardVelocity + FowardVelocity;        
 
         _canJump = false;
@@ -558,8 +555,14 @@ public partial class Locomotion : ILocomotion
         {
             //momentum = VectorMath.RemoveDotVector(momentum, _characterGameObject.transform.up);
             //momentum += _characterGameObject.transform.up * jumpSpeed;
-            momentum += JumpVelocity;
-            JumpVelocity=Vector3.zero;
+            if(JumpVelocity!=Vector3.zero)
+            {
+                momentum.x=0f;
+                momentum.z=0f;
+                momentum += JumpVelocity;
+                JumpVelocity=Vector3.zero;
+            }
+            
         }
 
         if (useLocalMomentum)
