@@ -91,6 +91,8 @@ namespace CharacterProperties
             return delta;
         }
 
+        //Notused
+
         private bool ChangeInVelocity()
         {
             return !(CharacterState.DesiredDeltaVelocity.magnitude<Mathf.Epsilon);

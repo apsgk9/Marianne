@@ -8,6 +8,7 @@ public class Character : MonoBehaviour
     [SerializeField] private AnimationCurve TurnRotationBlend= AnimationCurve.Linear(0,0,1,1);
     [SerializeField] public ICharacterInput _characterInput;
     [SerializeField] public IMover _characterMover;
+    [SerializeField] public Collider Collider;
     
 
     public ILocomotion _Locomotion;
@@ -40,6 +41,11 @@ public class Character : MonoBehaviour
             _Locomotion.Tick();
         }
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        _Locomotion.CollidedWith(other);
+    }
     private void OnValidate()
     {
         //if(_characterInput==null && GetComponent<ICharacterInput>()==null)
@@ -55,4 +61,6 @@ public class Character : MonoBehaviour
         //    Debug.LogError("Camera requires a Character Input.");
         //}
     }
+
+
 }

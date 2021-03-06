@@ -54,7 +54,7 @@ namespace CharacterProperties
         {
             if (_player._Locomotion != null)
             {
-                _player._Locomotion.OnMoveChange += UpdateVector;
+                _player._Locomotion.OnDesiredMoveChange += UpdateDesiredVector;
                 _player._Locomotion.OnMoveAnimatorSpeedChange += UpdateCharacterSpeed;
                 _player._Locomotion.OnTryingToJump += UpdateTryingToJump;
                 _player._Locomotion.OnCanJump += UpdateCanJump;
@@ -91,8 +91,8 @@ private void CalculateCanJump()
         {
             if (_player._Locomotion != null)
             {
-                _player._Locomotion.OnMoveChange -= UpdateVector;
-                _player._Locomotion.OnMoveChange += UpdateVector;
+                _player._Locomotion.OnDesiredMoveChange -= UpdateDesiredVector;
+                _player._Locomotion.OnDesiredMoveChange += UpdateDesiredVector;
 
 
                 _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateCharacterSpeed;
@@ -122,7 +122,7 @@ private void CalculateCanJump()
         {
             if (_player._Locomotion != null)
             {
-                _player._Locomotion.OnMoveChange -= UpdateVector;
+                _player._Locomotion.OnDesiredMoveChange -= UpdateDesiredVector;
                 _player._Locomotion.OnMoveAnimatorSpeedChange -= UpdateCharacterSpeed;
                 _player._Locomotion.OnTryingToJump -= UpdateTryingToJump;
                 _GroundSensor.OnGroundedChange -= UpdateGrounded;
@@ -149,7 +149,7 @@ private void CalculateCanJump()
         //}
 
         #region Handlers
-        private void UpdateVector(Vector3 MoveVector)
+        private void UpdateDesiredVector(Vector3 MoveVector)
         {
             DesiredDeltaVelocity = MoveVector - DesiredVelocity;
             DesiredVelocity = MoveVector;

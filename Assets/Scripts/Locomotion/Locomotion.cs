@@ -19,7 +19,7 @@ public partial class Locomotion : ILocomotion
     public Quaternion CompositeRotation { get; private set; }
     public bool UseMovementAngleDifference { get; set; }
 
-    public event Action<Vector3> OnMoveChange;
+    public event Action<Vector3> OnDesiredMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
     public event Action<bool> OnTryingToJump;
     public event Action<State> OnStateChange;
@@ -47,7 +47,7 @@ public partial class Locomotion : ILocomotion
     Vector3 savedVelocity = Vector3.zero;
     //Saved horizontal movement velocity from last frame;
     Vector3 savedMovementVelocity = Vector3.zero;
-    private float slopeLimit = 60f;
+    private float slopeLimit = 45f;
 
     [Tooltip("Whether to calculate and apply momentum relative to the controller's transform.")]
     public bool useLocalMomentum = false;
@@ -62,7 +62,8 @@ public partial class Locomotion : ILocomotion
 
     private bool _canJump;
     private float gravity=Physics.gravity.y;
-    private float slideGravity=5f;
+    private float slideGravity=0.1f;
+    private float slidingMaxVelocity=5f;
 	public float airFriction = 0.5f;
 	public float groundFriction = 100f;
 
@@ -132,21 +133,22 @@ public partial class Locomotion : ILocomotion
 
         ////Set mover velocity;
         //mover.SetVelocity(_velocity);
-        var Movement = (DeltaVector / Time.deltaTime);
+        Vector3 Movement;
+        
+        if(_state== State.Sliding)
+        {
+            Movement=Vector3.zero;
+        }
+        else
+        {
+            Movement= (DeltaVector / Time.deltaTime);
+        }
 
-        //if (IsGrounded())
-        //{
-        //    Movement*= multiplier;
-        //}
-        //if(_state==State.Falling)
-        //{
-        //    Movement = GetFallingVelocity();
-        //}
         Movement+=_velocity;
         
         _characterMover.SetVelocity(Movement);            
         _previousVelocity=Movement;
-        OnMoveChange?.Invoke(DeltaVector);    
+        OnDesiredMoveChange?.Invoke(DeltaVector);    
 
         //Store velocity for next frame;
 		savedVelocity = _velocity;
@@ -184,6 +186,7 @@ public partial class Locomotion : ILocomotion
 		//If player is grounded or sliding on a slope, extend mover's sensor range;
 		//This enables the player to walk up/down stairs and slopes without losing ground contact;
 		_characterMover.SetExtendSensorRange(IsGrounded());
+        
 
         //Set Velocity
         if (IsGrounded())
@@ -197,17 +200,8 @@ public partial class Locomotion : ILocomotion
             SendAnimatorLocomotionCommands(_characterInput.IsRunning());
             
         }
-        else
-        {
-            //Vector3 fallingvelocity = GetFallingVelocity();
-            //_characterMover.SetVelocity(fallingvelocity);
-            //_previousVelocity = fallingvelocity;
-        }
-        //Store velocity for next frame;
-		////savedVelocity = _velocity;
-		////savedMovementVelocity = _velocity - _worldMomentum;
     }
-    
+
 
     private Vector3 GetFallingVelocity()
     {
@@ -225,16 +219,12 @@ public partial class Locomotion : ILocomotion
         bool TryingToJump = _characterInput.AttemptingToJump();
         OnTryingToJump?.Invoke(TryingToJump);
         CalculateCanJump(TryingToJump);
-
-        
-
+     
         return TryingToJump;
     }
 
     private void CalculateCanJump(bool TryingToJump)
     {
-        
-
         if (TryingToJump == false) //released/up
         {
             if (_canJump == false)
@@ -323,6 +313,7 @@ public partial class Locomotion : ILocomotion
         {
             _locomotionMode = LocomotionMode.Idle;
         }
+        
         OnMoveAnimatorSpeedChange?.Invoke((float)_locomotionMode);
         movementSpeed = (int)_locomotionMode;
 
@@ -339,17 +330,17 @@ public partial class Locomotion : ILocomotion
         JumpVelocity = UpwardVelocity + FowardVelocity;        
 
         _canJump = false;
-        OnCanJump?.Invoke(false);
-        
-         
+        OnCanJump?.Invoke(false);         
     }
 
-
-
-
-
-
-
+    public void CollidedWith(Collision hit)
+    {
+        if(_state==State.Rising||_state==State.Falling)
+        {
+            momentum.x=0;            
+            momentum.z=0;
+        }
+    }
 
     private State DetermineControllerState()
     {
@@ -357,10 +348,6 @@ public partial class Locomotion : ILocomotion
         bool _isRising = IsRisingOrFalling() && (VectorMath.GetDotProduct(GetMomentum(), _characterGameObject.transform.up) > 0f);
         //Check if controller is sliding;
         bool _isSliding = _characterMover.IsGrounded() && IsGroundTooSteep();
-
-        //Debug.Log("_isRising: "+_isRising);
-        //Debug.Log("sRisingOrFalling(): "+IsRisingOrFalling());
-        //Debug.Log("ENTER State: "+_state.ToString());
 
         //Grounded;
         if (_state == State.Grounded)
@@ -548,6 +535,7 @@ public partial class Locomotion : ILocomotion
         {
             Vector3 _slideDirection = Vector3.ProjectOnPlane(-_characterGameObject.transform.up, _characterMover.GetGroundNormal()).normalized;
             momentum += _slideDirection * slideGravity * Time.deltaTime;
+            momentum=Vector3.ClampMagnitude(momentum,slidingMaxVelocity);
         }
 
         //If controller is jumping, override vertical velocity with jumpSpeed;
@@ -641,5 +629,5 @@ public partial class Locomotion : ILocomotion
 		return(_state == State.Grounded || _state == State.Sliding);
 	}
 
-
+    
 }
