@@ -18,13 +18,19 @@ MonoBehaviour:
   m_GUID: 32e15f123110d4f4b9467735a9a9aabf
   m_SerializeEntries:
   - m_GUID: e0477f7adf708c142b0953a11057ac40
-    m_Address: UI/PauseScreen
+    m_Address: UI/PauseMenu
     m_ReadOnly: 0
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
   - m_GUID: 842174542e66696458651794babb8601
     m_Address: Assets/InputActions/UserSettings/UserSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: b4774938bfe23284c8de3e58b8f63c44
+    m_Address: UI/QuickMenu
     m_ReadOnly: 0
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +9,7 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
-    protected static bool _SpawnIfNull=false;
+    //protected static bool _SpawnIfNull=false;
 
     private static object _lock = new object();
 
@@ -18,9 +19,9 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (applicationIsQuitting)
             {
-                Debug.LogWarning("[Singleton] Instance '" + typeof(T) +
-                    "' already destroyed on application quit." +
-                    " Won't create again - returning null.");
+                //Debug.LogWarning("[Singleton] Instance '" + typeof(T) +
+                //    "' already destroyed on application quit." +
+                //    " Won't create again - returning null.");
                 return null;
             }
 
@@ -38,7 +39,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                         return _instance;
                     }
 
-                    if (_instance == null && _SpawnIfNull)
+                    if (_instance == null)
                     {
                         GameObject singleton = new GameObject();
                         _instance = singleton.AddComponent<T>();
@@ -72,7 +73,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
         return false;
     }
-
     private static bool applicationIsQuitting = false;
     /// <summary>
     /// When Unity quits, it destroys objects in a random order.
@@ -89,5 +89,10 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             applicationIsQuitting = true;
         }
         Debug.Log("DESTROY:"+gameObject.name);
+    }
+
+    private void OnApplicationQuit()
+    {
+        applicationIsQuitting=true;
     }
 }

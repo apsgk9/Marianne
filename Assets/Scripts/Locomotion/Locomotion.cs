@@ -90,6 +90,7 @@ public partial class Locomotion : ILocomotion
         
         OnStateChange?.Invoke(_state);
     }
+    
     private void OnDestroy()
     {
         if (_RootMotionDelta != null)
@@ -132,7 +133,6 @@ public partial class Locomotion : ILocomotion
         _characterMover.SetExtendSensorRange(IsGrounded());
 
         ////Set mover velocity;
-        //mover.SetVelocity(_velocity);
         Vector3 Movement;
         
         if(_state== State.Sliding)
@@ -174,15 +174,6 @@ public partial class Locomotion : ILocomotion
 
         Vector3 _velocity = Vector3.zero;
 
-
-		//If local momentum is used, transform momentum into world space first;
-		////Vector3 _worldMomentum = momentum;
-		////if(useLocalMomentum)
-		////	_worldMomentum = _characterGameObject.transform.localToWorldMatrix * momentum;
-
-		////Add current momentum to velocity;
-		////_velocity += _worldMomentum;
-		
 		//If player is grounded or sliding on a slope, extend mover's sensor range;
 		//This enables the player to walk up/down stairs and slopes without losing ground contact;
 		_characterMover.SetExtendSensorRange(IsGrounded());

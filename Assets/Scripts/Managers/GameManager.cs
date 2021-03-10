@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Service;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,7 +20,9 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        _SpawnIfNull=true;
+        //_SpawnIfNull=true;
+        
+        ServiceLocator.Initialize();        
         CreateInputSystem();
         CreateUIMANAGER();
         QualitySettings.vSyncCount = 1;
@@ -33,18 +36,26 @@ public class GameManager : Singleton<GameManager>
             inputGameObject.AddComponent<UserInput>();
             GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
         }
+        //ServiceLocator.Current.Register<UIManager>(new UIManager());
+        //_UIManager =ServiceLocator.Current.Get<UIManager>();
+        //_UIManager.Setup();
     }
 
     private void CreateUIMANAGER()
     {
         if (!GameObject.FindObjectOfType<UIManager>())
         {
-            var inputGameObject = new GameObject("UIMANAGER");
-            _UIManager =inputGameObject.AddComponent<UIManager>();
-            _UIManager.Setup();
-            GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
+
+          var inputGameObject = new GameObject("UIMANAGER");
+          _UIManager =inputGameObject.AddComponent<UIManager>();
+          _UIManager.Setup();
+          GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
 
         }
+        
+        //ServiceLocator.Current.Register<UIManager>(new UIManager());
+        //_UIManager =ServiceLocator.Current.Get<UIManager>();
+        //_UIManager.Setup();
     }
 
     void Start()
@@ -82,7 +93,8 @@ public class GameManager : Singleton<GameManager>
 
     void UpdateUIMenu()
     {
-        UIManager.Instance.UpdateUIMenuState(isPaused);
+        //UIManager.Instance.UpdateUIMenuState(isPaused);
+        //UIManager.Instance.UpdateUIMenuState(isPaused);
     }
 
     public int NumberOfConnectedDevices()

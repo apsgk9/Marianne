@@ -16,3 +16,7 @@ MonoBehaviour:
     m_AssetGUID: e0477f7adf708c142b0953a11057ac40
     m_SubObjectName: 
     m_SubObjectType: 
+  QuickMenuGameObject:
+    m_AssetGUID: b4774938bfe23284c8de3e58b8f63c44
+    m_SubObjectName: 
+    m_SubObjectType: 

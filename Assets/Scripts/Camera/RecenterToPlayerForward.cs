@@ -26,11 +26,20 @@ public class RecenterToPlayerForward : MonoBehaviour
 
     private void OnDisable()
     {
-        if(UserInput.Instance)
+        if(UserInput.Instance) //Cause new userinptu to spawn
         {
             UserInput.Instance.PlayerInputActions.PlayerControls.Recenter.started -= TryRecenter;            
         }                
     }
+
+    private void OnDestroy()
+    {
+        if(UserInput.Instance) //Cause new userinptu to spawn
+        {
+            UserInput.Instance.PlayerInputActions.PlayerControls.Recenter.started -= TryRecenter;            
+        }
+    }
+    
     public void TryRecenter(InputAction.CallbackContext obj)
     {
         if (isRecentering == false)

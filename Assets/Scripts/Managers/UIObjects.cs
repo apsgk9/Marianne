@@ -5,4 +5,5 @@ using UnityEngine.AddressableAssets;
 public class UIObjects : ScriptableObject
 {
     public AssetReferenceGameObject PauseMenuGameObject;
+    public AssetReferenceGameObject QuickMenuGameObject;
 }

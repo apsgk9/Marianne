@@ -6,18 +6,21 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Service;
 
-public class UIManager : Singleton<UIManager>
+public class UIManager : Singleton<UIManager> //IGameService
 {
     private const string UISceneName = "UI";
 
     public UIObjects UIObjects;
     [HideInInspector]
     public UIPauseMenu PauseMenuReference {get; private set;}
+    public UIQuickMenu QuickMenuReference { get; private set; }
 
     //PlayerInputActions _inputActionToUse;
     public InputSystemUIInputModule CurrentInputSystemUIInputModule {get; private set;}
     public bool UIHasBeenBuilt { get; private set; }
+
     public bool isInMenu=false;
 
     //For some reason, it doesn't find UIObject reference when I play in Awake().
@@ -25,7 +28,6 @@ public class UIManager : Singleton<UIManager>
     {
         Setup();
     }
-
     private void UpdateActionMap()
     {
         if (isInMenu)
@@ -63,22 +65,44 @@ public class UIManager : Singleton<UIManager>
         {            
             Addressables.InstantiateAsync(UIObjects.PauseMenuGameObject).Completed+=PauseMenuLoaded;
         }
+
         
+        if (!GameObject.FindObjectOfType<UIQuickMenu>())
+        {            
+            Addressables.InstantiateAsync(UIObjects.QuickMenuGameObject).Completed+=QuickMenuLoaded;
+        }
+    }
+
+    private void QuickMenuLoaded(AsyncOperationHandle<GameObject> obj)
+    {
+        QuickMenuReference = obj.Result.GetComponent<UIQuickMenu>();
+        if (QuickMenuReference == null)
+        {
+            Debug.LogError("Quick Menu Reference is null.");
+        }
+        RenameAndMovetoUIScene(QuickMenuReference.gameObject);
+        var notify = QuickMenuReference.gameObject.AddComponent<NotifyOnDestroy>();
+        notify.Destroyed += Remove;
+        notify.AssetReference = UIObjects.PauseMenuGameObject;
     }
 
     private void PauseMenuLoaded(AsyncOperationHandle<GameObject> obj)
     {
-        PauseMenuReference=obj.Result.GetComponent<UIPauseMenu>();
-        PauseMenuReference.gameObject.name = PauseMenuReference.gameObject.name.Replace("(Clone)", "");
-        SceneManager.MoveGameObjectToScene(PauseMenuReference.gameObject,SceneManager.GetSceneByName(UISceneName));
-        if(PauseMenuReference==null)
+        PauseMenuReference = obj.Result.GetComponent<UIPauseMenu>();
+        if (PauseMenuReference == null)
         {
             Debug.LogError("Pause Menu Reference is null.");
         }
-        var notify =PauseMenuReference.gameObject.AddComponent<NotifyOnDestroy>();
-        notify.Destroyed +=Remove;
-        notify.AssetReference =UIObjects.PauseMenuGameObject;
+        RenameAndMovetoUIScene(PauseMenuReference.gameObject);
+        var notify = PauseMenuReference.gameObject.AddComponent<NotifyOnDestroy>();
+        notify.Destroyed += Remove;
+        notify.AssetReference = UIObjects.PauseMenuGameObject;
+    }
 
+    private void RenameAndMovetoUIScene(GameObject obj)
+    {
+        obj.name = obj.name.Replace("(Clone)", "");
+        SceneManager.MoveGameObjectToScene(obj, SceneManager.GetSceneByName(UISceneName));
     }
 
     private void Remove(AssetReference assetReference, NotifyOnDestroy obj)
@@ -108,9 +132,5 @@ public class UIManager : Singleton<UIManager>
         {
             CurrentInputSystemUIInputModule = modulesFound[0].GetComponent<InputSystemUIInputModule>();
         }
-    }
-    internal void UpdateUIMenuState(bool isPaused)
-    {
-
     }
 }

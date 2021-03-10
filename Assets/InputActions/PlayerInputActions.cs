@@ -105,6 +105,30 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""QuickMenuKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""ec2cfea6-b659-41f8-81e4-813e40de550d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""GamePadZoomIn"",
+                    ""type"": ""Value"",
+                    ""id"": ""f3c05ed6-71d4-4ed5-8c5d-b348c3385910"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""GamePadZoomOut"",
+                    ""type"": ""Value"",
+                    ""id"": ""acf2be15-bcaa-4da2-96ca-a1e6f08a440b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -358,6 +382,50 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MenuKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9c75e8f-38b3-4419-af7e-59edde312559"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GamePadZoomIn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad4a37c9-8cf5-406b-913f-20d57947c6d7"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GamePadZoomOut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5550550b-8e7c-468a-b6e4-2cfca38084d3"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""QuickMenuKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1da1ae0-39e1-4f8b-9ff1-ee6e89035f26"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""QuickMenuKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -965,6 +1033,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_PlayerControls_A_Attack = m_PlayerControls.FindAction("A_Attack", throwIfNotFound: true);
         m_PlayerControls_Scroll = m_PlayerControls.FindAction("Scroll", throwIfNotFound: true);
         m_PlayerControls_MenuKey = m_PlayerControls.FindAction("MenuKey", throwIfNotFound: true);
+        m_PlayerControls_QuickMenuKey = m_PlayerControls.FindAction("QuickMenuKey", throwIfNotFound: true);
+        m_PlayerControls_GamePadZoomIn = m_PlayerControls.FindAction("GamePadZoomIn", throwIfNotFound: true);
+        m_PlayerControls_GamePadZoomOut = m_PlayerControls.FindAction("GamePadZoomOut", throwIfNotFound: true);
         // MenuControls
         m_MenuControls = asset.FindActionMap("MenuControls", throwIfNotFound: true);
         m_MenuControls_Navigate = m_MenuControls.FindAction("Navigate", throwIfNotFound: true);
@@ -1038,6 +1109,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_A_Attack;
     private readonly InputAction m_PlayerControls_Scroll;
     private readonly InputAction m_PlayerControls_MenuKey;
+    private readonly InputAction m_PlayerControls_QuickMenuKey;
+    private readonly InputAction m_PlayerControls_GamePadZoomIn;
+    private readonly InputAction m_PlayerControls_GamePadZoomOut;
     public struct PlayerControlsActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1053,6 +1127,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @A_Attack => m_Wrapper.m_PlayerControls_A_Attack;
         public InputAction @Scroll => m_Wrapper.m_PlayerControls_Scroll;
         public InputAction @MenuKey => m_Wrapper.m_PlayerControls_MenuKey;
+        public InputAction @QuickMenuKey => m_Wrapper.m_PlayerControls_QuickMenuKey;
+        public InputAction @GamePadZoomIn => m_Wrapper.m_PlayerControls_GamePadZoomIn;
+        public InputAction @GamePadZoomOut => m_Wrapper.m_PlayerControls_GamePadZoomOut;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1095,6 +1172,15 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @MenuKey.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMenuKey;
                 @MenuKey.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMenuKey;
                 @MenuKey.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMenuKey;
+                @QuickMenuKey.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnQuickMenuKey;
+                @QuickMenuKey.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnQuickMenuKey;
+                @QuickMenuKey.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnQuickMenuKey;
+                @GamePadZoomIn.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnGamePadZoomIn;
+                @GamePadZoomIn.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnGamePadZoomIn;
+                @GamePadZoomIn.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnGamePadZoomIn;
+                @GamePadZoomOut.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnGamePadZoomOut;
+                @GamePadZoomOut.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnGamePadZoomOut;
+                @GamePadZoomOut.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnGamePadZoomOut;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -1132,6 +1218,15 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @MenuKey.started += instance.OnMenuKey;
                 @MenuKey.performed += instance.OnMenuKey;
                 @MenuKey.canceled += instance.OnMenuKey;
+                @QuickMenuKey.started += instance.OnQuickMenuKey;
+                @QuickMenuKey.performed += instance.OnQuickMenuKey;
+                @QuickMenuKey.canceled += instance.OnQuickMenuKey;
+                @GamePadZoomIn.started += instance.OnGamePadZoomIn;
+                @GamePadZoomIn.performed += instance.OnGamePadZoomIn;
+                @GamePadZoomIn.canceled += instance.OnGamePadZoomIn;
+                @GamePadZoomOut.started += instance.OnGamePadZoomOut;
+                @GamePadZoomOut.performed += instance.OnGamePadZoomOut;
+                @GamePadZoomOut.canceled += instance.OnGamePadZoomOut;
             }
         }
     }
@@ -1280,6 +1375,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnA_Attack(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
         void OnMenuKey(InputAction.CallbackContext context);
+        void OnQuickMenuKey(InputAction.CallbackContext context);
+        void OnGamePadZoomIn(InputAction.CallbackContext context);
+        void OnGamePadZoomOut(InputAction.CallbackContext context);
     }
     public interface IMenuControlsActions
     {
