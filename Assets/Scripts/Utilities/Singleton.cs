@@ -88,7 +88,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             applicationIsQuitting = true;
         }
-        Debug.Log("DESTROY:"+gameObject.name);
     }
 
     private void OnApplicationQuit()

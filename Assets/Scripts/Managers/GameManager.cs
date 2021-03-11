@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Service;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public enum GameMode
 {
@@ -15,18 +17,35 @@ public class GameManager : Singleton<GameManager>
     public GameMode currentGameMode=GameMode.FreeRoam;
     public bool isPaused;
     private UIManager _UIManager;
-    [HideInInspector]
-    public UserSettings UserSettings;
 
     private void Awake()
-    {
-        //_SpawnIfNull=true;
-        
-        ServiceLocator.Initialize();        
+    {        
+        ServiceLocator.Initialize();
+        CreateUserSettings();
         CreateInputSystem();
         CreateUIMANAGER();
         QualitySettings.vSyncCount = 1;
     }
+
+    private void CreateUserSettings()
+    {
+
+        if (!GameObject.FindObjectOfType<SettingsManager>())
+        {
+            var obj = new GameObject("SETTINGSMANAGER");
+            var sManager=obj.AddComponent<SettingsManager>();
+            GameObject.DontDestroyOnLoad(obj.gameObject);
+            ServiceLocator.Current.Register<SettingsManager>(sManager);
+        }
+        else
+        {
+            var user =GameObject.FindObjectOfType<SettingsManager>();
+            GameObject.DontDestroyOnLoad(user.gameObject);
+            ServiceLocator.Current.Register<SettingsManager>(user);
+        }
+
+    }
+
 
     private void CreateInputSystem()
     {
@@ -36,9 +55,6 @@ public class GameManager : Singleton<GameManager>
             inputGameObject.AddComponent<UserInput>();
             GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
         }
-        //ServiceLocator.Current.Register<UIManager>(new UIManager());
-        //_UIManager =ServiceLocator.Current.Get<UIManager>();
-        //_UIManager.Setup();
     }
 
     private void CreateUIMANAGER()
@@ -52,12 +68,7 @@ public class GameManager : Singleton<GameManager>
           GameObject.DontDestroyOnLoad(inputGameObject.gameObject);
 
         }
-        
-        //ServiceLocator.Current.Register<UIManager>(new UIManager());
-        //_UIManager =ServiceLocator.Current.Get<UIManager>();
-        //_UIManager.Setup();
     }
-
     void Start()
     {
         isPaused = false;

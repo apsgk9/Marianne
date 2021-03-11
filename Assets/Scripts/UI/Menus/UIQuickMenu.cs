@@ -32,8 +32,8 @@ public class UIQuickMenu : Singleton<UIQuickMenu>
         {
             UserInput.Instance.PlayerInputActions.PlayerControls.QuickMenuKey.performed -= HandleQuickMenuPressed;
             UserInput.Instance.PlayerInputActions.PlayerControls.QuickMenuKey.canceled -= HandleQuickMenuReleased;
-        }    
-    }   
+        }
+    } 
 
     private void HandleQuickMenuReleased(InputAction.CallbackContext obj)
     {

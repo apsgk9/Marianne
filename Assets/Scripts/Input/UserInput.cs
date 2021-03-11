@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -44,6 +45,23 @@ public class UserInput : Singleton<UserInput>, IUserInput
     private MovementHistory _verticalHistory;
     private MovementHistory _horizontalHistory;
 
+    #region  InputSettings
+    private InputSettings _InputSettings 
+    {
+        get {
+            if(_InputSettingsInstance==null)
+        {
+            var sManager =Service.ServiceLocator.Current.Get<SettingsManager>();
+            _InputSettingsInstance= sManager.GetInputSettings();
+        }
+        return _InputSettingsInstance;
+        }
+    }
+    private InputSettings _InputSettingsInstance;
+
+
+    #endregion
+    //---------------------------
     private void Awake()
     {
         //Instance = this;
@@ -194,12 +212,10 @@ public class UserInput : Singleton<UserInput>, IUserInput
     {
         
         //_analogAimPosition = context.ReadValue<Vector2>() * 15f;
-        
         Vector2 RawAnalogAim= context.ReadValue<Vector2>();
-        
         _analogAimPosition = 
-         new Vector2(GameManager.Instance.UserSettings.ControllerXAxisSensitivity*RawAnalogAim.x*5,
-                    GameManager.Instance.UserSettings.ControllerYAxisSensitivity*RawAnalogAim.y*5);
+        new Vector2(_InputSettings.ControllerXAxisSensitivity*RawAnalogAim.x*5,
+                  _InputSettings.ControllerYAxisSensitivity*RawAnalogAim.y*5);
                     
 
     }

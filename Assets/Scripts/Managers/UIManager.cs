@@ -15,6 +15,7 @@ public class UIManager : Singleton<UIManager> //IGameService
     public UIObjects UIObjects;
     [HideInInspector]
     public UIPauseMenu PauseMenuReference {get; private set;}
+    [HideInInspector]
     public UIQuickMenu QuickMenuReference { get; private set; }
 
     //PlayerInputActions _inputActionToUse;
@@ -108,7 +109,7 @@ public class UIManager : Singleton<UIManager> //IGameService
     private void Remove(AssetReference assetReference, NotifyOnDestroy obj)
     {
         Addressables.ReleaseInstance(obj.gameObject);
-        Debug.Log("RELEASING");
+        //Debug.Log("RELEASING");
     }
 
     private void SetupInputModule()
