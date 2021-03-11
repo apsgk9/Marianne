@@ -1,4 +1,5 @@
-﻿using System;
+  
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -8,13 +9,12 @@ using UnityEngine;
 public class CinemachineFreeLookZoomController : MonoBehaviour
 {
     private CinemachineFreeLookZoom freelookZoom;
-
-    private UIManager UIManager;
+    private InputSettings _InputSettings;
 
     private void Awake()
     {
         freelookZoom = GetComponentInChildren<CinemachineFreeLookZoom>();
-       // UIManager= Service.ServiceLocator.Current.Get<UIManager>();
+        _InputSettings= Service.ServiceLocator.Current.Get<SettingsManager>().GetInputSettings();
     }
 
     // Update is called once per frame
@@ -34,5 +34,10 @@ public class CinemachineFreeLookZoomController : MonoBehaviour
     public void SetZoomValue(float value)
     {
         freelookZoom.Value+=value;
+    }
+
+    public void SetZoomValueWithControllerSensititivity(float value)
+    {
+        freelookZoom.Value+=value*_InputSettings.ControllerZoomSensitivity;
     }
 }

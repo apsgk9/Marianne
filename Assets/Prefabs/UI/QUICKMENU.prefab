@@ -317,6 +317,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   QuickMenu: {fileID: 1063045033498694774}
+  ZoomIn: {fileID: 11400000, guid: cfd43ead6472b7747a8208fa615ec599, type: 2}
+  ZoomOut: {fileID: 11400000, guid: 94849a4dbe8cd584b9371b1844226d81, type: 2}
 --- !u!1 &6720814726860814136
 GameObject:
   m_ObjectHideFlags: 0

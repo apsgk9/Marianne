@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad87d7063c03acb4eb5f43880fbff46c, type: 3}
-  m_Name: DefaultInputSettings
+  m_Script: {fileID: 11500000, guid: afde042156902ab4b9521d2a74eb2466, type: 3}
+  m_Name: ZoomOut
   m_EditorClassIdentifier: 
-  ControllerYAxisSensitivity: 1
-  ControllerXAxisSensitivity: 1
-  ControllerZoomSensitivity: 0.1

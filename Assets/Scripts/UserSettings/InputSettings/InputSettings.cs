@@ -9,4 +9,5 @@ public class InputSettings : ScriptableObject, Service.IGameService
     public float ControllerYAxisSensitivity= 1f;
     public float ControllerXAxisSensitivity= 1f;
 
+    public float ControllerZoomSensitivity = 1f;
 }

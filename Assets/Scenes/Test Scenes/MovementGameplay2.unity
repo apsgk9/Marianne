@@ -654,9 +654,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247597997}
-  m_LocalRotation: {x: -0.16018228, y: 0.000000021535106, z: -0.0000000034946674,
+  m_LocalRotation: {x: -0.16018227, y: 0.000000021535113, z: -0.0000000034946686,
     w: 0.9870875}
-  m_LocalPosition: {x: 0.0000001309009, y: 0.00000023841858, z: 3.1622777}
+  m_LocalPosition: {x: 0.00000013090094, y: 0.00000023841858, z: 3.1622777}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 963194228}
@@ -1251,6 +1251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 759177441}
   - component: {fileID: 759177442}
+  - component: {fileID: 759177443}
   m_Layer: 0
   m_Name: Listener
   m_TagString: Untagged
@@ -1290,13 +1291,41 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2895267444548320174}
         m_TargetAssemblyTypeName: CinemachineFreeLookZoomController, Assembly-CSharp
-        m_MethodName: SetZoomValue
+        m_MethodName: SetZoomValueWithControllerSensititivity
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &759177443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759177440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e839e4c12473014b9b3d3faccc0f61d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 94849a4dbe8cd584b9371b1844226d81, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2895267444548320174}
+        m_TargetAssemblyTypeName: CinemachineFreeLookZoomController, Assembly-CSharp
+        m_MethodName: SetZoomValueWithControllerSensititivity
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: -1
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -1725,7 +1754,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.16018227, y: 0.000000021535115, z: -0.000000003494668, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018227, y: 0.00000002153511, z: -0.0000000034946674, w: 0.9870875}
   m_LocalPosition: {x: 0.14285511, y: 3.0113907, z: -22.841234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4353,7 +4382,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209984897316783203}
-  m_LocalRotation: {x: 0.1601822, y: 0.000000017588178, z: -0.0000000028541665, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018221, y: 0.000000017588189, z: -0.0000000028541698, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4377,6 +4406,7 @@ GameObject:
   - component: {fileID: 2895267444548320171}
   - component: {fileID: 2895267444548320173}
   - component: {fileID: 2895267444548320174}
+  - component: {fileID: 2895267444548320169}
   m_Layer: 0
   m_Name: CM FreeLookPlayer
   m_TagString: Untagged
@@ -4427,6 +4457,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RecenterTime: 0.35
+--- !u!114 &2895267444548320169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2895267444548320166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b7f78d4bdc571458d135b98c9a4cfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZoomController: {fileID: 0}
 --- !u!114 &2895267444548320170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4646,7 +4689,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8660784859111640137}
-  m_LocalRotation: {x: 0.16018222, y: 0.000000047005678, z: -0.000000007627971, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018224, y: 0.000000047005685, z: -0.000000007627973, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5172,7 +5215,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8866982315517978670}
-  m_LocalRotation: {x: 0.16018222, y: 0.000000068540785, z: -0.00000001112264, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018224, y: 0.00000006854079, z: -0.000000011122642, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
