@@ -22,7 +22,7 @@ public partial class Locomotion : ILocomotion
     public event Action<Vector3> OnDesiredMoveChange;
     public event Action<float> OnMoveAnimatorSpeedChange;
     public event Action<bool> OnTryingToJump;
-    public event Action<State> OnStateChange;
+    public event Action<LocomotionState> OnStateChange;
     public event Action<Vector3> OnLand;
     public event Action<bool> OnCanJump;
 
@@ -38,7 +38,7 @@ public partial class Locomotion : ILocomotion
 
     //--------------------------
     private Vector3 _previousVelocity;
-    private State _state= State.Falling;
+    private LocomotionState _state= LocomotionState.Falling;
 
 
     //Current momentum;
@@ -135,7 +135,7 @@ public partial class Locomotion : ILocomotion
         ////Set mover velocity;
         Vector3 Movement;
         
-        if(_state== State.Sliding)
+        if(_state== LocomotionState.Sliding)
         {
             Movement=Vector3.zero;
         }
@@ -229,7 +229,7 @@ public partial class Locomotion : ILocomotion
             if (_canJump == true)
             {                
                 OnGroundContactLost();
-                _state=State.Jumping;
+                _state=LocomotionState.Jumping;
                 OnStateChange?.Invoke(_state);
                 currentJumpStartTime = Time.time;
             }
@@ -326,14 +326,14 @@ public partial class Locomotion : ILocomotion
 
     public void CollidedWith(Collision hit)
     {
-        if(_state==State.Rising||_state==State.Falling)
+        if(_state==LocomotionState.Rising||_state==LocomotionState.Falling)
         {
             momentum.x=0;            
             momentum.z=0;
         }
     }
 
-    private State DetermineControllerState()
+    private LocomotionState DetermineControllerState()
     {
         //Check if vertical momentum is pointing upwards;
         bool _isRising = IsRisingOrFalling() && (VectorMath.GetDotProduct(GetMomentum(), _characterGameObject.transform.up) > 0f);
@@ -341,91 +341,91 @@ public partial class Locomotion : ILocomotion
         bool _isSliding = _characterMover.IsGrounded() && IsGroundTooSteep();
 
         //Grounded;
-        if (_state == State.Grounded)
+        if (_state == LocomotionState.Grounded)
         {
             if (_isRising)
             {
                 //Debug.Log("Rising");
                 OnGroundContactLost();
-                return State.Rising;
+                return LocomotionState.Rising;
             }
             if (!_characterMover.IsGrounded())
             {
                 //Debug.Log("Falling");
                 OnGroundContactLost();
-                return State.Falling;
+                return LocomotionState.Falling;
             }
             if (_isSliding)
             {
                 //Debug.Log("Sliding");
-                return State.Sliding;
+                return LocomotionState.Sliding;
             }
             //Debug.Log("Grounded");
-            return State.Grounded;
+            return LocomotionState.Grounded;
         }
 
         //Falling;
-        if (_state == State.Falling)
+        if (_state == LocomotionState.Falling)
         {
             if (_isRising)
             {
                 //Debug.Log("Rising");
-                return State.Rising;
+                return LocomotionState.Rising;
             }
             if (_characterMover.IsGrounded() && !_isSliding)
             {
                 //Debug.Log("Grounded");
                 OnGroundContactRegained(momentum);
-                return State.Grounded;
+                return LocomotionState.Grounded;
             }
             if (_isSliding)
             {
                 //Debug.Log("Sliding");
                 OnGroundContactRegained(momentum);
-                return State.Sliding;
+                return LocomotionState.Sliding;
             }
 
             //Debug.Log("Falling");
-            return State.Falling;
+            return LocomotionState.Falling;
         }
 
         //Sliding;
-        if (_state == State.Sliding)
+        if (_state == LocomotionState.Sliding)
         {
             if (_isRising)
             {
                 OnGroundContactLost();
-                return State.Rising;
+                return LocomotionState.Rising;
             }
             if (!_characterMover.IsGrounded())
             {
-                return State.Falling;
+                return LocomotionState.Falling;
             }
             if (_characterMover.IsGrounded() && !_isSliding)
             {
                 OnGroundContactRegained(momentum);
-                return State.Grounded;
+                return LocomotionState.Grounded;
             }
-            return State.Sliding;
+            return LocomotionState.Sliding;
         }
 
         //Rising;
-        if (_state == State.Rising)
+        if (_state == LocomotionState.Rising)
         {
             if (!_isRising)
             {
                 if (_characterMover.IsGrounded() && !_isSliding)
                 {
                     OnGroundContactRegained(momentum);
-                    return State.Grounded;
+                    return LocomotionState.Grounded;
                 }
                 if (_isSliding)
                 {
-                    return State.Sliding;
+                    return LocomotionState.Sliding;
                 }
                 if (!_characterMover.IsGrounded())
                 {
-                    return State.Falling;
+                    return LocomotionState.Falling;
                 }
             }
 
@@ -438,15 +438,15 @@ public partial class Locomotion : ILocomotion
             //		return State.Falling;
             //	}
             //}
-            return State.Rising;
+            return LocomotionState.Rising;
         }
 
         //Jumping;
-        if (_state == State.Jumping)
+        if (_state == LocomotionState.Jumping)
         {
             //Check for jump timeout;
             if ((Time.time - currentJumpStartTime) > jumpDuration)
-                return State.Rising;
+                return LocomotionState.Rising;
 
             //Check if jump key was let go;
             //if(jumpKeyWasLetGo)
@@ -466,9 +466,9 @@ public partial class Locomotion : ILocomotion
             //		return State.Falling;
             //	}
             //}
-            return State.Jumping;
+            return LocomotionState.Jumping;
         }
-        return State.Falling;
+        return LocomotionState.Falling;
     }
 
     public Vector3 GetMomentum()
@@ -502,11 +502,11 @@ public partial class Locomotion : ILocomotion
         _verticalMomentum += _characterGameObject.transform.up * gravity * Time.deltaTime;
 
         //Remove any downward force if the controller is grounded;
-        if (_state == State.Grounded)
+        if (_state == LocomotionState.Grounded)
             _verticalMomentum = Vector3.zero;
 
         //Apply friction to horizontal momentum based on whether the controller is grounded;
-        if (_state == State.Grounded)
+        if (_state == LocomotionState.Grounded)
             _horizontalMomentum = VectorMath.IncrementVectorTowardTargetVector(_horizontalMomentum, groundFriction, Time.deltaTime, Vector3.zero);
         else
             _horizontalMomentum = VectorMath.IncrementVectorTowardTargetVector(_horizontalMomentum, airFriction, Time.deltaTime, Vector3.zero);
@@ -516,13 +516,13 @@ public partial class Locomotion : ILocomotion
         
 
         //Project the current momentum onto the current ground normal if the controller is sliding down a slope;
-        if (_state == State.Sliding)
+        if (_state == LocomotionState.Sliding)
         {
             momentum = Vector3.ProjectOnPlane(momentum, _characterMover.GetGroundNormal());
         }
 
         //Apply slide gravity along ground normal, if controller is sliding;
-        if (_state == State.Sliding)
+        if (_state == LocomotionState.Sliding)
         {
             Vector3 _slideDirection = Vector3.ProjectOnPlane(-_characterGameObject.transform.up, _characterMover.GetGroundNormal()).normalized;
             momentum += _slideDirection * slideGravity * Time.deltaTime;
@@ -530,7 +530,7 @@ public partial class Locomotion : ILocomotion
         }
 
         //If controller is jumping, override vertical velocity with jumpSpeed;
-        if (_state == State.Jumping)
+        if (_state == LocomotionState.Jumping)
         {
             //momentum = VectorMath.RemoveDotVector(momentum, _characterGameObject.transform.up);
             //momentum += _characterGameObject.transform.up * jumpSpeed;
@@ -617,7 +617,7 @@ public partial class Locomotion : ILocomotion
     //Returns 'true' if controller is grounded (or sliding down a slope);
 	public bool IsGrounded()
 	{
-		return(_state == State.Grounded || _state == State.Sliding);
+		return(_state == LocomotionState.Grounded || _state == LocomotionState.Sliding);
 	}
 
     

@@ -11,7 +11,7 @@ public interface ILocomotion
     event Action<bool> OnTryingToJump;
     event Action<bool> OnCanJump;
 	event Action<Vector3> OnLand;
-    event Action<State> OnStateChange;
+    event Action<LocomotionState> OnStateChange;
     void Jump(float Height);
     LocomotionMode LocomotionMode {get;}
     Vector3 DesiredCharacterVectorForward{get;}

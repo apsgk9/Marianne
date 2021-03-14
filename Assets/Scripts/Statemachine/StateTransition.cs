@@ -1,15 +1,21 @@
 using System;
+using UnityEngine;
 
-public class StateTransition
+namespace StateMachinePattern
 {
-    public readonly IState From;
-    public readonly IState To;
-    public readonly Func<bool> Condition;
-
-    public StateTransition(IState from,IState to, Func<bool> condition)
+    [CreateAssetMenu(fileName = "StateMachinePattern", menuName = "StateMachinePattern/StateTransition", order = 1)]
+    public class StateTransition : ScriptableObject
     {
-        From = from;
-        To = to;
-        Condition = condition;
+        public State From;
+        public State To;
+        public StateTransitionCondition Condition;
+
+        public StateTransition(State from, State to, StateTransitionCondition condition)
+        {
+            From = from;
+            To = to;
+            Condition = condition;
+        }
     }
+
 }

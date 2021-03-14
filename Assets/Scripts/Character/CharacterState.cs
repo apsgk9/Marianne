@@ -30,8 +30,8 @@ namespace CharacterProperties
 
         public bool isGrounded { get; private set; }
 
-        public State State { get { return _state; } }
-        private State _state=State.Falling;
+        public LocomotionState State { get { return _state; } }
+        private LocomotionState _state=LocomotionState.Falling;
 
         private void Awake()
         {
@@ -174,7 +174,7 @@ private void CalculateCanJump()
             CanJump = CanJumpGiven;
         }
 
-        private void UpdateState(State inputState)
+        private void UpdateState(LocomotionState inputState)
         {
             _state= inputState;
             Debug.Log("STATE: "+inputState.ToString());

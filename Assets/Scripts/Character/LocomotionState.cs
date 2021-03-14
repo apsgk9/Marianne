@@ -1,6 +1,6 @@
 namespace CharacterProperties
 {
-    public enum State
+    public enum LocomotionState
 	{
 		Grounded,
 		Sliding,
