@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PauseMenu: {fileID: 38760932340365569}
-  GamePausedCondition: {fileID: 11400000, guid: af4112b12ec711947b116dda1a028721,
+  GamePausedCondition: {fileID: 11400000, guid: b96076fd9fc87cc49855fb8865636b37,
     type: 2}
 --- !u!1 &38760931360313415
 GameObject:

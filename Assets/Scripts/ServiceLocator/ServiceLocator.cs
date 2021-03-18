@@ -78,5 +78,22 @@ namespace Service
 
             services.Remove(key);
         }
+
+
+        /// <summary>
+        /// Checks if Service of Given Type Exists
+        /// </summary>
+        /// <typeparam name="T">The type of the service to lookup.</typeparam>
+        /// <returns>The service instance.</returns>
+        public bool Exists<T>() where T : IGameService
+        {
+            string key = typeof(T).Name;
+            if (!services.ContainsKey(key))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

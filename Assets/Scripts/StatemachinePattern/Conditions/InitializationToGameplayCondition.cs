@@ -5,12 +5,10 @@ public class InitializationToGameplayCondition : StateMachinePattern.StateTransi
 {
     [SerializeField]
     private InitializerState InitState;
-    public override bool Condition => HasInitialized();
+    public override bool Check => HasInitialized();
 
     private bool HasInitialized()
     {
-        //Debug.Log(GameInitializer.hasInitialized);
-        //return GameInitializer.hasInitialized;
         return InitState.Initialized;
     }
 }

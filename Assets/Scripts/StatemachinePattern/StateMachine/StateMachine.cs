@@ -36,9 +36,9 @@ namespace StateMachinePattern
                 return;
             }
             _currentState?.OnExit();
-            //Debug.Log($"Exiting {_currentState}");
+            Debug.Log($"Exiting {_currentState}");
             _currentState = state;
-            //Debug.Log($"Change to state{state}");
+            Debug.Log($"Change to state{_currentState}");
             _currentState.OnEnter();
 
             OnStateChanged?.Invoke(_currentState);
@@ -59,7 +59,7 @@ namespace StateMachinePattern
         {
             foreach (var transition in _anyStateTransitions)
             {
-                if (transition.Condition)
+                if (transition.Condition.Check)
                 {
                     return transition;
                 }
@@ -67,7 +67,7 @@ namespace StateMachinePattern
 
             foreach (var transition in _stateTransitions)
             {
-                if (transition.From == _currentState && transition.Condition)
+                if (transition.From == _currentState && transition.Condition.Check)
                 {
                     return transition;
                 }

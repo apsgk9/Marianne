@@ -1,8 +1,10 @@
 
+using UnityEngine;
+
 public class GamePausingCondition : StateMachinePattern.StateTransitionCondition
 {
-    public override bool Condition => TogglePause();
-    private bool _pauseTriggered;
+    public override bool Check => TogglePause();
+    public bool _pauseTriggered=false;
 
     private bool TogglePause()
     {

@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f7ba04170bfd54287391c3a4764534, type: 3}
   m_Name: TestStateMachine
   m_EditorClassIdentifier: 
-  _currentState: {fileID: 11400000, guid: a15037b120e1f3f46817a259cd4a56ef, type: 2}
+  _currentState: {fileID: 11400000, guid: 1740399689713a347adc1103d4a180cf, type: 2}
   _stateTransitions:
   - {fileID: 11400000, guid: dc5a699e7736787469bc8a6d39881cef, type: 2}
+  - {fileID: 11400000, guid: 7cc72df9e2648c1458b0e24e1da416e0, type: 2}
+  - {fileID: 11400000, guid: 3412c6f55fe5b064cad6fb3e05f9959e, type: 2}
   _anyStateTransitions: []

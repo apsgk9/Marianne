@@ -21,7 +21,6 @@ public class InitializerState : StateMachinePattern.State
     }
 
     public override void Tick()
-    {
-        
+    {        
     }
 }

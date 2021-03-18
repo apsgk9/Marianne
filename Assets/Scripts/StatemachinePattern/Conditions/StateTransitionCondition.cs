@@ -6,6 +6,6 @@ namespace StateMachinePattern
 {
     public abstract class StateTransitionCondition : ScriptableObject
     {
-        public abstract bool Condition{get;}
+        public abstract bool Check{get;}
     }
 }

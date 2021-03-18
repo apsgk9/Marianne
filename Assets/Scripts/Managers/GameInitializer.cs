@@ -16,11 +16,14 @@ namespace GameInit
         [SerializeField]
         private AssetReferenceGameObject UserInputSystemReference;
         [SerializeField]
-        private AssetReferenceGameObject UserSettingsReference;
+        private AssetReferenceGameObject SettingsManagerReference;
+        private GameObject _managerParent;
 
         //initialize checks
         public override bool HasInitialized { get { return _hasInitialized; } }
-        private bool _hasInitialized;
+        
+
+        private bool _hasInitialized=false;
         private bool _UIManagerInitialized;
         private bool _inputSystemInitialized;
         private bool _userSettingsInitialized;
@@ -30,9 +33,20 @@ namespace GameInit
 
             if (ServiceLocator.Current == null)
                 ServiceLocator.Initialize();
-            CreateUserSettings();
-            CreateInputSystem();
-            CreateUIManager();
+            CreateManagerParent();
+
+            Create<SettingsManager>();
+            Create<UserInput>();
+            Create<UIManager>();
+        }
+
+        private void CreateManagerParent()
+        {
+            if (!GameObject.Find("--MANAGERS--"))
+            {
+                _managerParent = new GameObject("--MANAGERS--");
+                GameObject.DontDestroyOnLoad(_managerParent);
+            }
         }
 
         private void ResetInitializationToFalse()
@@ -42,77 +56,112 @@ namespace GameInit
             _inputSystemInitialized = false;
             _userSettingsInitialized = false;
         }
-
-        private void CreateUserSettings()
+        private void Create<T>() where T: MonoBehaviour
         {
-            if (!GameObject.FindObjectOfType<SettingsManager>())
+            var gameObject = GameObject.FindObjectOfType<T>();
+            if (gameObject==null)
             {
-                Addressables.InstantiateAsync(UserSettingsReference).Completed += SettingsManagerLoaded<SettingsManager>;
+                Addressables.InstantiateAsync(GetAssetReference<T>()).Completed += AssetReferenceLoaded<T>;
             }
             else
             {
-                _userSettingsInitialized = true;
-                Debug.LogWarning("SettingsManager already exists.");
+                WrapUpObject(gameObject.GetComponent<T>());
+
+                Debug.LogWarning($"{typeof(T)} already exists.");
             }
         }
 
-        private void CreateInputSystem()
-        {
-            if (!GameObject.FindObjectOfType<UserInput>())
-            {
-                Addressables.InstantiateAsync(UserInputSystemReference).Completed += SettingsManagerLoaded<UserInput>;
-            }
-            else
-            {
-                _inputSystemInitialized = true;
-                Debug.LogWarning("UserInput already exists.");
-            }
-        }
+        
 
-        private void CreateUIManager()
-        {
-            if (!GameObject.FindObjectOfType<UIManager>())
-            {
-                Addressables.InstantiateAsync(UIManagerReference).Completed += SettingsManagerLoaded<UIManager>;
-            }
-            else
-            {
-                _UIManagerInitialized = true;
-                Debug.LogWarning("UIManager already exists.");
-            }
-        }
-
-
-        private void SettingsManagerLoaded<T>(AsyncOperationHandle<GameObject> obj) where T : MonoBehaviour
+        private void AssetReferenceLoaded<T>(AsyncOperationHandle<GameObject> obj) where T : MonoBehaviour
         {
             var ComponentReference = obj.Result.GetComponent<T>();
             Type type = typeof(T);
+            Debug.Log("Loaded " + typeof(T));
             if (ComponentReference == null)
             {
                 Debug.LogError($"{typeof(T).Name} component not found.");
+                return;
             }
 
-            ComponentReference.gameObject.name = ComponentReference.gameObject.name.Replace("(Clone)", "");
+            AddNotifyOnDestroy(ComponentReference);
 
+            GameObject.DontDestroyOnLoad(ComponentReference.gameObject);
+
+            WrapUpObject(ComponentReference);
+
+            //Debug.Log($"{typeof(T).Name} has initialized.");
+        }
+
+        private void AddNotifyOnDestroy<T>(T ComponentReference) where T : MonoBehaviour
+        {
             var notify = ComponentReference.gameObject.AddComponent<NotifyOnDestroy>();
             notify.Destroyed += Remove;
-            notify.AssetReference = GetAssetReference(ComponentReference);
+            notify.AssetReference = GetAssetReference<T>();
+
             if (notify.AssetReference == null)
             {
                 Debug.LogWarning("AssetReference is null on notify");
             }
-            UpdateInitializationCheck(ComponentReference);
-            Debug.Log($"{typeof(T).Name} has initialized.");
         }
 
-        private AssetReference GetAssetReference<T>(T componentReference) where T : MonoBehaviour
+        public void WrapUpObject<T>(T Component) where T : MonoBehaviour
         {
-            if (componentReference is SettingsManager)
-                return UserSettingsReference;
-            if (componentReference is InputSettings)
+            UpdateInitializationCheck(Component);
+            ParentToManagers(Component.gameObject);
+            UpdateGameService(Component);
+            CheckifHasBeenInitialized(Component);
+            Rename(Component);
+        }
+
+        private void Rename<T>(T component) where T : MonoBehaviour
+        {
+            component.name= typeof(T).ToString();
+        }
+
+        private static void UpdateGameService<T>(T ComponentReference) where T : MonoBehaviour
+        {
+            
+            Debug.Log("CHECKING GAMESERVICE: "+ComponentReference.name);
+            if (ComponentReference is IGameService)
+            {
+                if(ComponentReference is SettingsManager)
+                {
+                    ServiceLocator.Current.Register<SettingsManager>(ComponentReference as SettingsManager);
+                }
+                
+            }
+        }
+
+        private void ParentToManagers(GameObject gameObject)
+        {
+            gameObject.transform.SetParent(_managerParent.transform);
+        }
+
+        private void CheckifHasBeenInitialized<T>(T componentReference) where T : MonoBehaviour
+        {
+            if(_userSettingsInitialized && _inputSystemInitialized && _userSettingsInitialized)
+            {
+                _hasInitialized=true;
+            }
+        }
+
+        private AssetReference GetAssetReference<T>() where T : MonoBehaviour
+        {
+            if (typeof(T).Name == typeof(SettingsManager).Name)
+            {
+                return SettingsManagerReference;
+            }
+            if (typeof(T).Name == typeof(UserInput).Name)
+            {
                 return UserInputSystemReference;
-            if (componentReference is UIManager)
+            }
+                
+            if (typeof(T).Name == typeof(UIManager).Name)
+            {
                 return UIManagerReference;
+            }
+                
             return null;
         }
 
@@ -120,10 +169,10 @@ namespace GameInit
         {
             if (componentReference is SettingsManager)
                 _userSettingsInitialized = true;
-            if (componentReference is InputSettings)
+            if (componentReference is UserInput)
                 _inputSystemInitialized = true;
             if (componentReference is UIManager)
-                _userSettingsInitialized = true;
+                _UIManagerInitialized = true;
         }
 
         private void Remove(AssetReference assetReference, NotifyOnDestroy obj)

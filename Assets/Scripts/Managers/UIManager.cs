@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
@@ -8,7 +5,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Service;
 
-public class UIManager : Singleton<UIManager> //IGameService
+public class UIManager : MonoBehaviour, IGameService
 {
     private const string UISceneName = "UI";
     public UIObjects UIObjects;
@@ -69,7 +66,6 @@ public class UIManager : Singleton<UIManager> //IGameService
         
         if (!GameObject.FindObjectOfType<UIQuickMenu>())
         {            
-            Debug.Log(UIObjects.QuickMenuGameObject==null);
             Addressables.InstantiateAsync(UIObjects.QuickMenuGameObject).Completed+=QuickMenuLoaded;
         }
     }

@@ -13,7 +13,9 @@ public class GameStateMachine : Singleton<GameStateMachine>
 
     public static event Action<State> OnGameStateChanged;
     [SerializeField]
-    public State _StartState;
+    private State _StartState;
+    [SerializeField]
+    private State _NullState;
 
     private void Start()
     {
@@ -31,8 +33,13 @@ public class GameStateMachine : Singleton<GameStateMachine>
     {
         return _StateMachine.CurrentState is PauseMenuState;
     }
+    public bool isGameplay()
+    {
+        return _StateMachine.CurrentState is GameplayState;
+    }
     private void OnApplicationQuit()
     {
+        _StateMachine.SetState(_NullState);
     }
 }
 

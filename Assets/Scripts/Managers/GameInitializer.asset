@@ -20,7 +20,7 @@ MonoBehaviour:
     m_AssetGUID: af38464629664504e84b26d20ca02304
     m_SubObjectName: 
     m_SubObjectType: 
-  UserSettingsReference:
+  SettingsManagerReference:
     m_AssetGUID: 819e143f31864e34bacef8933b6165fd
     m_SubObjectName: 
     m_SubObjectType: 
