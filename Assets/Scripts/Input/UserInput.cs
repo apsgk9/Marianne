@@ -125,7 +125,7 @@ public class UserInput : Singleton<UserInput>, IUserInput
     #region Tick
     private void Update()
     {
-        if(GameManager.Instance.isPaused==false)
+        if(GameStateMachine.Instance.isPaused()==false)
         {            
             Tick();
         }

@@ -88,7 +88,7 @@ public class FreeLookAxisDriver : MonoBehaviour
 
     private void FreeLook()
     {
-        if (GameManager.Instance.isPaused)
+        if (GameStateMachine.Instance.isPaused())
             return;
 
         if (isCursorLocked())

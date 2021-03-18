@@ -11,7 +11,6 @@ using Service;
 public class UIManager : Singleton<UIManager> //IGameService
 {
     private const string UISceneName = "UI";
-
     public UIObjects UIObjects;
     [HideInInspector]
     public UIPauseMenu PauseMenuReference {get; private set;}
@@ -70,6 +69,7 @@ public class UIManager : Singleton<UIManager> //IGameService
         
         if (!GameObject.FindObjectOfType<UIQuickMenu>())
         {            
+            Debug.Log(UIObjects.QuickMenuGameObject==null);
             Addressables.InstantiateAsync(UIObjects.QuickMenuGameObject).Completed+=QuickMenuLoaded;
         }
     }

@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class Bootstrapper
 {
+
+    public static AssetReferenceGameObject InitializerPrefab;
+    
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     public static void Initialize()
     {
-        if(!GameObject.FindObjectOfType<GameManager>())
+        if(!GameObject.FindObjectOfType<GameStateMachine>())
         {
-            var gameManagerGameObject = new GameObject("GAME MANAGER");
-            gameManagerGameObject.AddComponent<GameManager>();
+            var gameManagerGameObject = new GameObject("GameStateMachine");
+            gameManagerGameObject.AddComponent<GameStateMachine>();
             GameObject.DontDestroyOnLoad(gameManagerGameObject.gameObject);
         }
         

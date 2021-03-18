@@ -36,7 +36,7 @@ public class Character : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(!GameManager.Instance.isPaused)
+        if(!GameStateMachine.Instance.isPaused())
         {            
             _Locomotion.Tick();
         }

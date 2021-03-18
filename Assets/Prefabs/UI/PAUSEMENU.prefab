@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 38760931271906587}
   - component: {fileID: 38760931271906585}
   m_Layer: 0
-  m_Name: PAUSESCREEN
+  m_Name: PAUSEMENU
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PauseMenu: {fileID: 38760932340365569}
+  GamePausedCondition: {fileID: 11400000, guid: af4112b12ec711947b116dda1a028721,
+    type: 2}
 --- !u!1 &38760931360313415
 GameObject:
   m_ObjectHideFlags: 0

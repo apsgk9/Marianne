@@ -102,7 +102,7 @@ public partial class Locomotion : ILocomotion
     private void HandleRootMotion(Vector3 DeltaVector, Quaternion NewRotation)
     {
         
-        if (GameManager.Instance.isPaused || Time.deltaTime == 0f) //there is a bug that sets Time.deltaTime infinity to, this fixes it
+        if (GameStateMachine.Instance.isPaused() || Time.deltaTime == 0f) //there is a bug that sets Time.deltaTime infinity to, this fixes it
             return;
 
 
