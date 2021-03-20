@@ -67,7 +67,7 @@ namespace GameInit
             {
                 WrapUpObject(gameObject.GetComponent<T>());
 
-                Debug.LogWarning($"{typeof(T)} already exists.");
+                //Debug.LogWarning($"{typeof(T)} already exists.");
             }
         }
 
@@ -77,7 +77,6 @@ namespace GameInit
         {
             var ComponentReference = obj.Result.GetComponent<T>();
             Type type = typeof(T);
-            Debug.Log("Loaded " + typeof(T));
             if (ComponentReference == null)
             {
                 Debug.LogError($"{typeof(T).Name} component not found.");
@@ -120,9 +119,7 @@ namespace GameInit
         }
 
         private static void UpdateGameService<T>(T ComponentReference) where T : MonoBehaviour
-        {
-            
-            Debug.Log("CHECKING GAMESERVICE: "+ComponentReference.name);
+        {            
             if (ComponentReference is IGameService)
             {
                 if(ComponentReference is SettingsManager)

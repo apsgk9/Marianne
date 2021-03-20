@@ -10,7 +10,6 @@ public class CinemachineFreeLookZoomController : MonoBehaviour
 {
     private CinemachineFreeLookZoom freelookZoom;
     private InputSettings _InputSettings;
-    private UIManager _UIManager;
 
     private void Awake()
     {
@@ -19,12 +18,10 @@ public class CinemachineFreeLookZoomController : MonoBehaviour
 
     private IEnumerator Start()
     {
+        
         while(!Service.ServiceLocator.Current.Exists<SettingsManager>())
             yield return null;
         _InputSettings= Service.ServiceLocator.Current.Get<SettingsManager>().GetInputSettings();
-        while(!Service.ServiceLocator.Current.Exists<UIManager>())
-            yield return null;
-        _UIManager= Service.ServiceLocator.Current.Get<UIManager>();
     }
 
 

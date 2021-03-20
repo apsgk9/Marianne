@@ -40,7 +40,6 @@ public class UIPauseMenu : Singleton<UIPauseMenu>
     }
     private void HandleMenuPressed(InputAction.CallbackContext obj)
     {
-        Debug.Log("PAUSEDTOGGLED");
         TogglePause();
     }
     public void TogglePause()

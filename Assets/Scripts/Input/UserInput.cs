@@ -50,20 +50,29 @@ public class UserInput : Singleton<UserInput>, IUserInput
     {
         get {
             if(_InputSettingsInstance==null)
-        {
-            var sManager =Service.ServiceLocator.Current.Get<SettingsManager>();
-            _InputSettingsInstance= sManager.GetInputSettings();
-        }
+            {
+                if(!Service.ServiceLocator.Current.Exists<SettingsManager>())
+                {
+                    Debug.LogError("Using TempSettings");
+                    return _tempSettings;
+                }
+                var sManager =Service.ServiceLocator.Current.Get<SettingsManager>();
+                _InputSettingsInstance= sManager.GetInputSettings();
+            }
         return _InputSettingsInstance;
         }
     }
     private InputSettings _InputSettingsInstance;
+    private InputSettings _tempSettings;
 
 
     #endregion
     //---------------------------
     private void Awake()
     {
+        //For when settings are not found
+        _tempSettings=ScriptableObject.CreateInstance<InputSettings>();
+
         //Instance = this;
         MouseIdleTimer = new Timer(IdleThreshold);
         LastDirectionVector = DirectionVector;
@@ -214,8 +223,9 @@ public class UserInput : Singleton<UserInput>, IUserInput
         //_analogAimPosition = context.ReadValue<Vector2>() * 15f;
         Vector2 RawAnalogAim= context.ReadValue<Vector2>();
         _analogAimPosition = 
-        new Vector2(_InputSettings.ControllerXAxisSensitivity*RawAnalogAim.x*5,
+            new Vector2(_InputSettings.ControllerXAxisSensitivity*RawAnalogAim.x*5,
                   _InputSettings.ControllerYAxisSensitivity*RawAnalogAim.y*5);
+        
                     
 
     }
