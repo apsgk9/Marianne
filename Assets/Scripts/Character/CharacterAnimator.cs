@@ -10,9 +10,9 @@ namespace CharacterProperties
     {
         public Animator Animator;
         public CharacterState CharacterState;
-        public string SpeedParameterName = "Speed";
         private float _compositeSpeedValue;
         private Vector2 _rawDirection;
+        public string SpeedParameterName = "Speed";
         public string MovementPressedParameterName ="MovementPressed";
         public string UsingControllerParameterName ="UsingController";
         public string ControllerDeltaParameterName ="ControllerDelta";

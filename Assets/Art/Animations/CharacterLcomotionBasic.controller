@@ -149,7 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97febff944df1764181fcbb122c17621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ForwardSpeedMultiplier: 1
   Height: 1
 --- !u!1101 &-8821493554348971797
 AnimatorStateTransition:
@@ -789,7 +788,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97febff944df1764181fcbb122c17621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ForwardSpeedMultiplier: 1
   Height: 0
 --- !u!1101 &-6678725227646018762
 AnimatorStateTransition:
@@ -3365,7 +3363,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle01
+  m_Name: Idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -3399,20 +3397,20 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102698040993713290}
-    m_Position: {x: 420, y: 180, z: 0}
+    m_Position: {x: 370, y: 270, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1497872782434206254}
-    m_Position: {x: 710, y: 550, z: 0}
+    m_Position: {x: 700, y: 660, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7501667329854018334}
-    m_Position: {x: 270, y: 380, z: 0}
+    m_Position: {x: 250, y: 470, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -417319160405886693}
-    m_Position: {x: -70, y: 400, z: 0}
+    m_Position: {x: -100, y: 550, z: 0}
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: 2485691322421808408}
-    m_Position: {x: 280, y: 760, z: 0}
+    m_Position: {x: 270, y: 760, z: 0}
   m_AnyStateTransitions:
   - {fileID: -9118225786083308661}
   - {fileID: 3237249697454758660}
@@ -3420,8 +3418,8 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 1020, y: 270, z: 0}
-  m_EntryPosition: {x: 400, y: -30, z: 0}
+  m_AnyStatePosition: {x: 1320, y: 250, z: 0}
+  m_EntryPosition: {x: 50, y: 10, z: 0}
   m_ExitPosition: {x: -250, y: -40, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 1102698040993713290}
@@ -4532,7 +4530,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97febff944df1764181fcbb122c17621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ForwardSpeedMultiplier: 1.5
   Height: 1
 --- !u!1102 &4363226689703139216
 AnimatorState:

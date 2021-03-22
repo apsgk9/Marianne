@@ -19,6 +19,8 @@ public class CinemachineFreeLookZoomController : MonoBehaviour
     private IEnumerator Start()
     {
         
+        while(Service.ServiceLocator.Current == null)
+            yield return null;
         while(!Service.ServiceLocator.Current.Exists<SettingsManager>())
             yield return null;
         _InputSettings= Service.ServiceLocator.Current.Get<SettingsManager>().GetInputSettings();

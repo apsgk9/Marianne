@@ -8,19 +8,19 @@ public class NormalizedTimeBehaviour : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetFloat(NormalizedTimeParameterName,stateInfo.normalizedTime%1);
+        animator.SetFloat(NormalizedTimeParameterName,stateInfo.normalizedTime);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetFloat(NormalizedTimeParameterName,stateInfo.normalizedTime%1);        
+        animator.SetFloat(NormalizedTimeParameterName,stateInfo.normalizedTime);        
     }   
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetFloat(NormalizedTimeParameterName,stateInfo.normalizedTime%1);        
+        animator.SetFloat(NormalizedTimeParameterName,stateInfo.normalizedTime);        
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -53,7 +53,7 @@ public class UserInput : Singleton<UserInput>, IUserInput
             {
                 if(!Service.ServiceLocator.Current.Exists<SettingsManager>())
                 {
-                    Debug.LogError("Using TempSettings");
+                    Debug.LogWarning("Using TempSettings");
                     return _tempSettings;
                 }
                 var sManager =Service.ServiceLocator.Current.Get<SettingsManager>();
