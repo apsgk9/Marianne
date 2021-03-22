@@ -15,15 +15,6 @@ namespace CharacterProperties
 
         [SerializeField]
         private CharacterAnimatorNamingList  CharacterAnimatorNamingList;
-        //public string SpeedParameterName = "Speed";
-        //public string MovementPressedParameterName ="MovementPressed";
-        //public string UsingControllerParameterName ="UsingController";
-        //public string ControllerDeltaParameterName ="ControllerDelta";
-        //public string CharacterHasStaminaParameterName ="HasStamina";
-        //public string JumpTriggerParameterName ="Jump";
-        //public string IsJumpingParameterName ="IsJumping";
-        //public string isGroundedParameterName ="isGrounded";
-        //public string InterruptableParameterName ="Interruptable";
         private static Vector2 _previousMovmementAxis;
         private ICharacterInput _characterInput;
 
