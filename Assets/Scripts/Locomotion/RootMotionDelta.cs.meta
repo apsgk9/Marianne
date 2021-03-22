@@ -3,7 +3,9 @@ guid: 3ce1f0e54de41d84485c037cdeda90b5
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - CharacterAnimatorNamingList: {fileID: 11400000, guid: d2c11ec5262a4aa4ebedd4d4df24c1b2,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

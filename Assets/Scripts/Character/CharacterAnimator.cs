@@ -12,15 +12,18 @@ namespace CharacterProperties
         public CharacterState CharacterState;
         private float _compositeSpeedValue;
         private Vector2 _rawDirection;
-        public string SpeedParameterName = "Speed";
-        public string MovementPressedParameterName ="MovementPressed";
-        public string UsingControllerParameterName ="UsingController";
-        public string ControllerDeltaParameterName ="ControllerDelta";
-        public string CharacterHasStaminaParameterName ="HasStamina";
-        public string JumpTriggerParameterName ="Jump";
-        public string IsJumpingParameterName ="IsJumping";
-        public string isGroundedParameterName ="isGrounded";
-        public string InterruptableParameterName ="Interruptable";
+
+        [SerializeField]
+        private CharacterAnimatorNamingList  CharacterAnimatorNamingList;
+        //public string SpeedParameterName = "Speed";
+        //public string MovementPressedParameterName ="MovementPressed";
+        //public string UsingControllerParameterName ="UsingController";
+        //public string ControllerDeltaParameterName ="ControllerDelta";
+        //public string CharacterHasStaminaParameterName ="HasStamina";
+        //public string JumpTriggerParameterName ="Jump";
+        //public string IsJumpingParameterName ="IsJumping";
+        //public string isGroundedParameterName ="isGrounded";
+        //public string InterruptableParameterName ="Interruptable";
         private static Vector2 _previousMovmementAxis;
         private ICharacterInput _characterInput;
 
@@ -56,24 +59,24 @@ namespace CharacterProperties
 
         private void SetParameters()
         {
-            Animator.SetFloat(SpeedParameterName, _compositeSpeedValue);
+            Animator.SetFloat(CharacterAnimatorNamingList.SpeedParameterName, _compositeSpeedValue);
 
-            Animator.SetBool(MovementPressedParameterName, GetMovementPressed());
+            Animator.SetBool(CharacterAnimatorNamingList.MovementPressedParameterName, GetMovementPressed());
 
-            Animator.SetFloat(ControllerDeltaParameterName, ReturnDeltaMovement());
+            Animator.SetFloat(CharacterAnimatorNamingList.ControllerDeltaParameterName, ReturnDeltaMovement());
 
-            Animator.SetBool(UsingControllerParameterName, InputHelper.DeviceInputTool.IsUsingController());
+            Animator.SetBool(CharacterAnimatorNamingList.UsingControllerParameterName, InputHelper.DeviceInputTool.IsUsingController());
 
-            Animator.SetBool(CharacterHasStaminaParameterName, CharacterState.CanUseStamina);
+            Animator.SetBool(CharacterAnimatorNamingList.CharacterHasStaminaParameterName, CharacterState.CanUseStamina);
 
-            Animator.SetBool(isGroundedParameterName, CharacterState.isGrounded);
+            Animator.SetBool(CharacterAnimatorNamingList.isGroundedParameterName, CharacterState.isGrounded);
         }
 
         private void HandleJump()
         {
             if(CharacterState.TryingToJump && CharacterState.CanJump)
             {
-                Animator.SetTrigger(JumpTriggerParameterName);
+                Animator.SetTrigger(CharacterAnimatorNamingList.JumpTriggerParameterName);
             }
         }
 
@@ -113,7 +116,7 @@ namespace CharacterProperties
             if(!_dashbuttonIsLifted)
             {
                 //Prevent Dashing until button is lifted again
-                if(CharacterState.CanUseStamina==false || Animator.GetBool(InterruptableParameterName))
+                if(CharacterState.CanUseStamina==false || Animator.GetBool(CharacterAnimatorNamingList.InterruptableParameterName))
                 {
                     canDash=false;
                 }

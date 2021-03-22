@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterAnimatorNamingList : ScriptableObject
 {
+    [Header("ParameterList")]
     public string SpeedParameterName = "Speed";
     public string MovementPressedParameterName ="MovementPressed";
     public string UsingControllerParameterName ="UsingController";
@@ -13,4 +14,13 @@ public class CharacterAnimatorNamingList : ScriptableObject
     public string IsJumpingParameterName ="IsJumping";
     public string isGroundedParameterName ="isGrounded";
     public string InterruptableParameterName ="Interruptable";
+    public string CanRotateParameterName = "CanRotate";
+
+    [Header("StateList")]
+    public string IdleStateName = "Idle";
+    public string RunStateName = "Run";
+    public string WalkStateName = "Walk";
+    public string StartRunStateName = "StartRun";
+    public string StopLeftStateName = "StopLeft";
+    public string StopRightStateName = "StopRight";
 }

@@ -2025,7 +2025,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh19742
+  m_Name: pb_Mesh42956
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3368,7 +3368,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce1f0e54de41d84485c037cdeda90b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanRotateParameterName: CanRotate
+  CharacterAnimatorNamingList: {fileID: 11400000, guid: d2c11ec5262a4aa4ebedd4d4df24c1b2,
+    type: 2}
   canRotate: 0
 --- !u!95 &1971596280 stripped
 Animator:
@@ -3819,7 +3820,7 @@ PrefabInstance:
     - target: {fileID: 902796673986563009, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000007627971
+      value: -0.000000007627972
       objectReference: {fileID: 0}
     - target: {fileID: 3254674524928728612, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
@@ -3829,17 +3830,22 @@ PrefabInstance:
     - target: {fileID: 3254674524928728612, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.00000006854079
+      value: 0.000000068540785
       objectReference: {fileID: 0}
     - target: {fileID: 3254674524928728612, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000011122639
+      value: -0.00000001112264
       objectReference: {fileID: 0}
     - target: {fileID: 4645461900202962038, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00000013090093
+      value: 0.0000001309009
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645461900202962038, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000023841858
       objectReference: {fileID: 0}
     - target: {fileID: 4645461900202962038, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
@@ -3849,7 +3855,7 @@ PrefabInstance:
     - target: {fileID: 4645461900202962038, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.00000002153511
+      value: 0.000000021535106
       objectReference: {fileID: 0}
     - target: {fileID: 4645461900202962038, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
@@ -3904,12 +3910,12 @@ PrefabInstance:
     - target: {fileID: 4645461901031918253, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000021535111
+      value: 0.000000021535115
       objectReference: {fileID: 0}
     - target: {fileID: 4645461901031918253, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000034946679
+      value: -0.000000003494668
       objectReference: {fileID: 0}
     - target: {fileID: 4645461901031918253, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
@@ -3934,12 +3940,12 @@ PrefabInstance:
     - target: {fileID: 7485163716152358442, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000017588194
+      value: 0.000000017588178
       objectReference: {fileID: 0}
     - target: {fileID: 7485163716152358442, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000028541696
+      value: -0.000000002854167
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5682ebd30d6abf943ab0a0b8d5fee8b9, type: 3}
@@ -4382,12 +4388,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Animator: {fileID: 1971596280}
   CharacterState: {fileID: 7083189469216682204}
-  SpeedParameterName: Speed
-  MovementPressedParameterName: MovementPressed
-  UsingControllerParameterName: UsingController
-  ControllerDeltaParameterName: ControllerDelta
-  CharacterHasStaminaParameterName: HasStamina
-  JumpTriggerParameterName: Jump
-  IsJumpingParameterName: IsJumping
-  isGroundedParameterName: isGrounded
-  InterruptableParameterName: Interruptable
+  CharacterAnimatorNamingList: {fileID: 11400000, guid: d2c11ec5262a4aa4ebedd4d4df24c1b2,
+    type: 2}
