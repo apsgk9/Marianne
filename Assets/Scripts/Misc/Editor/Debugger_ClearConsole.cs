@@ -1,4 +1,3 @@
-﻿
 using System.Reflection;
 
 public static class ClearConsole
