@@ -66,27 +66,6 @@ namespace CharacterProperties
         }
 
 
-
-        /*
-private void CalculateCanJump()
-{
-   Debug.Log(TryingToJump);
-   if(TryingToJump==false) //released/up
-   {
-       _canJump=true;       
-   }
-   else 
-   {
-       if(_canJump)
-       {
-           _canJump=false;
-       }
-   }
-}
-*/
-
-
-
         private void Start()
         {
             if (_player._Locomotion != null)
@@ -131,22 +110,6 @@ private void CalculateCanJump()
             }
 
         }
-
-        //private void CalculateCanJump()
-        //{
-        //    Debug.Log(TryingToJump);
-        //    if(TryingToJump==false) //released/up
-        //    {
-        //        _canJump=true;       
-        //    }
-        //    else 
-        //    {
-        //        if(_canJump)
-        //        {
-        //            _canJump=false;
-        //        }
-        //    }
-        //}
 
         #region Handlers
         private void UpdateDesiredVector(Vector3 MoveVector)
