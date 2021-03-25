@@ -11,6 +11,11 @@ public class CinemachineFreeLookZoomController : MonoBehaviour
     private CinemachineFreeLookZoom freelookZoom;
     private InputSettings _InputSettings;
 
+    [SerializeField]
+    private float ControllerValue;
+    [SerializeField]
+    private float DesktopValue;
+
     private void Awake()
     {
         freelookZoom = GetComponentInChildren<CinemachineFreeLookZoom>();        
@@ -35,12 +40,15 @@ public class CinemachineFreeLookZoomController : MonoBehaviour
         if(GameStateMachine.Instance.isGameplay())
         {
             UpdateDesktopValues();
+            SetZoomValue(DesktopValue+ControllerValue);
+            ControllerValue=0;
+            DesktopValue=0;
         }
     }
 
     private void UpdateDesktopValues()
     {
-        freelookZoom.Value+=UserInput.Instance.Scroll;
+        DesktopValue=UserInput.Instance.Scroll;
     }
     public void SetZoomValue(float value)
     {
@@ -49,6 +57,6 @@ public class CinemachineFreeLookZoomController : MonoBehaviour
 
     public void SetZoomValueWithControllerSensititivity(float value)
     {
-        freelookZoom.Value+=value*_InputSettings.ControllerZoomSensitivity;
+        ControllerValue=value*_InputSettings.ControllerZoomSensitivity;
     }
 }

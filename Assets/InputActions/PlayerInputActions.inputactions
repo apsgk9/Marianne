@@ -378,7 +378,7 @@
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "GamePadZoomIn",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -389,7 +389,7 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "GamePadZoomOut",
                     "isComposite": false,
                     "isPartOfComposite": false
