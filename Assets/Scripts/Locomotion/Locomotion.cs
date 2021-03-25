@@ -17,6 +17,9 @@ public partial class Locomotion : ILocomotion
     private Vector3 _movementInput;
     public Vector3 finalMovementComposite { get; private set; }
     public Quaternion CompositeRotation { get; private set; }
+
+    private IRotateDesiredForwardEvent[] _RotateLocomotionEvents;
+
     public bool UseMovementAngleDifference { get; set; }
 
     public event Action<Vector3> OnDesiredMoveChange;
@@ -84,22 +87,36 @@ public partial class Locomotion : ILocomotion
         _locomotionMode = LocomotionMode.Idle;
         if (_RootMotionDelta != null)
         {
-            _RootMotionDelta.OnRootMotionChange += HandleRootMotion;
+            _RootMotionDelta.OnRootPositionChange += HandleRootMotion;
+        }
+
+        //Rotate Character to Desired Forward called        
+        _RotateLocomotionEvents = _characterGameObject.GetComponentsInChildren<IRotateDesiredForwardEvent>();
+        if (_RotateLocomotionEvents.Length>0)
+        {
+            for (int i = 0; i < _RotateLocomotionEvents.Length; i++)
+            {                
+                _RotateLocomotionEvents[i].OnCallDesiredForwardRotationChange += MoveToDesiredForward;
+            }
+            
         }
         UseMovementAngleDifference = true;
         
         OnStateChange?.Invoke(_state);
     }
+
     
+    
+
     private void OnDestroy()
     {
         if (_RootMotionDelta != null)
         {
-            _RootMotionDelta.OnRootMotionChange -= HandleRootMotion;
+            _RootMotionDelta.OnRootPositionChange -= HandleRootMotion;
         }
     }
 
-    private void HandleRootMotion(Vector3 DeltaVector, Quaternion NewRotation)
+    private void HandleRootMotion(Vector3 DeltaVector)
     {
         
         if (GameStateMachine.Instance.isPaused() || Time.deltaTime == 0f) //there is a bug that sets Time.deltaTime infinity to, this fixes it
@@ -261,6 +278,17 @@ public partial class Locomotion : ILocomotion
     {
         _movementInput = new Vector3(_characterInput.MovementHorizontal(), 0, _characterInput.MovementVertical());
         DesiredCharacterVectorForward = Quaternion.Euler(0, _viewTransform.eulerAngles.y, 0) * _movementInput;
+    }
+
+    //Turn Character To Input Movement. Typically Used if cannot rotate
+    private void MoveToDesiredForward()
+    {
+        CalculateCharacterDesiredVector();
+        if(DesiredCharacterVectorForward!=Vector3.zero)               
+        {
+            var DesiredRotation = Quaternion.LookRotation(DesiredCharacterVectorForward);
+            ApplyRotation(DesiredRotation);
+        }        
     }
 
     private void SendAnimatorLocomotionCommands(bool isRunning)

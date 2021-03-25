@@ -30,12 +30,12 @@ namespace CharacterProperties
         private bool canDash;
 
         
-        private object _previousCurrentStateInfo;
-        private object _previousNextStateInfo;
-        private object _previousIsAnimatorTransitioning;
-        private object _currentStateInfo;
-        private object _nextStateInfo;
-        private object _isAnimatorTransitioning;
+        private AnimatorStateInfo _previousCurrentStateInfo;
+        private AnimatorStateInfo _previousNextStateInfo;
+        private bool _previousIsAnimatorTransitioning;
+        private AnimatorStateInfo _currentStateInfo;
+        private AnimatorStateInfo _nextStateInfo;
+        private bool _isAnimatorTransitioning;
 
         #endregion
 

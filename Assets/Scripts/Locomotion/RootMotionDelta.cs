@@ -8,12 +8,9 @@ public class RootMotionDelta : MonoBehaviour
     [SerializeField]
     private CharacterAnimatorNamingList  CharacterAnimatorNamingList;
     public bool canRotate;
-    public AnimatorControllerParameter CanRotateParamater;
-    private bool _rotateparamaterexists;
-
     public Animator Animator { get; private set; }
 
-    public event Action<Vector3,Quaternion> OnRootMotionChange;
+    public event Action<Vector3> OnRootPositionChange;
 
     private void Awake()
     {        
@@ -26,7 +23,7 @@ public class RootMotionDelta : MonoBehaviour
     void OnAnimatorMove()
     {
         canRotate=Animator.GetBool(CharacterAnimatorNamingList.CanRotateParameterName);
-        OnRootMotionChange?.Invoke(Animator.deltaPosition,Animator.rootRotation);
+        OnRootPositionChange?.Invoke(Animator.deltaPosition);
         Animator.transform.localPosition=Vector3.zero;
     }
 }
