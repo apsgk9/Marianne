@@ -41,19 +41,33 @@ public class ExampleWindow : EditorWindow
             }
             if(GUILayout.Button("Remove Parameters"))
             {
-                RemoveParameters();
+                if(EditorUtility.DisplayDialog("Remove Parameters?",
+                "Are you sure you want to remove the parameters?", "Yes", "No"))
+                {
+                    RemoveParameters();
+                }
+                
             }
             
             if(_hasSetupParameters)
             {
-                GUILayout.Label("StateMachine:");
+                GUILayout.Label("Combo:");
                 if(GUILayout.Button("Add Combo"))
                 {
                     AddCombo(_combo);
                 }
+                if(GUILayout.Button("Update Combo"))
+                {
+                    UpdateCombo(_combo);
+                }
                 if(GUILayout.Button("Remove Combo"))
                 {
-                    RemoveCombo(_combo);
+                    if(EditorUtility.DisplayDialog("Remove Combo?",
+                    "Are you sure you want to remove this combo?", "Yes", "No"))
+                    {
+                        RemoveCombo(_combo);
+                    }
+                    
                 }     
             }
                    
@@ -62,6 +76,45 @@ public class ExampleWindow : EditorWindow
         
         
         EditorGUILayout.EndVertical();
+    }
+
+    private void UpdateCombo(Combo combo)
+    {
+        //find state
+        var rootStateMachine = _animatorController.layers[0].stateMachine;
+        AnimatorStateMachine ComboStateMachine=null;
+        foreach(var SM in rootStateMachine.stateMachines)
+        {
+            if(SM.stateMachine.name==combo.ComboName)
+            {
+                ComboStateMachine = SM.stateMachine;
+                break;
+            }
+        }
+        if(ComboStateMachine==null)
+        {
+            Debug.Log("Combo State Cannot be found.");
+            return;
+        }
+
+        //Assume State is the exact same setup.
+        
+        List<AnimatorState> ComboStates= new List<AnimatorState>();
+
+        //Update Motions
+        var childAnimatorStates=ComboStateMachine.states;
+        for (int i = 0; i < childAnimatorStates.Length; i++)
+        {
+            var state=childAnimatorStates[i].state;
+            state.motion=combo.ComboPieces[i].Motion;
+            state.name=combo.ComboPieces[i].ComboPieceName;
+
+            state.transitions= new AnimatorStateTransition[0];
+
+            ComboStates.Add(state);
+        }
+
+        AddTransitionsAndConditions(combo,ComboStates);
     }
 
     private void RemoveParameters()
@@ -174,55 +227,61 @@ public class ExampleWindow : EditorWindow
 
     private void AddCombo(Combo combo)
     {
-        var rootStateMachine  = _animatorController.layers[0].stateMachine;
-        if(!_hasSetupParameters)
+        var rootStateMachine = _animatorController.layers[0].stateMachine;
+        if (!_hasSetupParameters)
         {
             Debug.LogError("Setup Parameters First.");
             return;
         }
-        
+
         //CheckDuplicate
-        bool isDuplicate=false;
-        foreach(var SM in rootStateMachine.stateMachines)
+        bool isDuplicate = false;
+        foreach (var SM in rootStateMachine.stateMachines)
         {
-            if(SM.stateMachine.name==combo.ComboName)
+            if (SM.stateMachine.name == combo.ComboName)
             {
-                isDuplicate=true;
+                isDuplicate = true;
                 break;
             }
         }
-        if(isDuplicate)
+        if (isDuplicate)
         {
             Debug.LogError("Cannot add duplicate combos");
             return;
         }
-            
+
 
         //Add
-        var ComboStateMachine = rootStateMachine.AddStateMachine(combo.ComboName,rootStateMachine.anyStatePosition+Vector3.down*100);
+        var ComboStateMachine = rootStateMachine.AddStateMachine(combo.ComboName, rootStateMachine.anyStatePosition + Vector3.down * 100);
 
-        List<AnimatorState> ComboStates= new List<AnimatorState>();
-        List<AnimatorStateTransition> ComboTransitions= new List<AnimatorStateTransition>();
-        List<AnimatorStateTransition> ExitTransitions= new List<AnimatorStateTransition>();
-        List<AnimatorStateTransition> ExitTransitionsDashCancel= new List<AnimatorStateTransition>();
-        List<AnimatorStateTransition> ExitTransitionsWalkRunCancel= new List<AnimatorStateTransition>();
+        List<AnimatorState> ComboStates = new List<AnimatorState>();
+
 
         //Create States
-        foreach(var cp in combo.ComboPieces)
+        foreach (var cp in combo.ComboPieces)
         {
-            var state=ComboStateMachine.AddState(cp.ComboPieceName);
-            state.motion=cp.Motion;
+            var state = ComboStateMachine.AddState(cp.ComboPieceName);
+            state.motion = cp.Motion;
             ComboStates.Add(state);
         }
 
+        AddTransitionsAndConditions(combo, ComboStates);
+    }
+
+    private void AddTransitionsAndConditions(Combo combo, List<AnimatorState> ComboStates)
+    {
+        List<AnimatorStateTransition> ComboTransitions = new List<AnimatorStateTransition>();
+        List<AnimatorStateTransition> ExitTransitions = new List<AnimatorStateTransition>();
+        List<AnimatorStateTransition> ExitTransitionsDashCancel = new List<AnimatorStateTransition>();
+        List<AnimatorStateTransition> ExitTransitionsWalkRunCancel = new List<AnimatorStateTransition>();
 
         //AddTransitions Between Combos
-        for(int i=1;i<ComboStates.Count;i++)
+        for (int i = 1; i < ComboStates.Count; i++)
         {
-            ComboTransitions.Add(ComboStates[i-1].AddTransition(ComboStates[i]));
+            ComboTransitions.Add(ComboStates[i - 1].AddTransition(ComboStates[i]));
         }
         ////AddExit Transitions From Each Combo
-        foreach(var state in ComboStates)
+        foreach (var state in ComboStates)
         {
             ExitTransitions.Add(state.AddExitTransition());
             ExitTransitionsDashCancel.Add(state.AddExitTransition());
@@ -230,49 +289,49 @@ public class ExampleWindow : EditorWindow
         }
 
         //Loop
-        if(combo.Loopable && combo.ComboPieces.Length>1)
+        if (combo.Loopable && combo.ComboPieces.Length > 1)
         {
-            ComboTransitions.Add(ComboStates[ComboStates.Count-1].AddTransition(ComboStates[0]));
+            ComboTransitions.Add(ComboStates[ComboStates.Count - 1].AddTransition(ComboStates[0]));
         }
 
         ////AddConditions
         //InBetween
-        for(int i=0;i<ComboTransitions.Count;i++)
+        for (int i = 0; i < ComboTransitions.Count; i++)
         {
-            ComboTransitions[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.If, 0,combo.ComboTriggerParameterName);
-            ComboTransitions[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, combo.ComboPieces[i].NextMoveCancelTime,_CharacterAnimatorNamingList.NormalizedTimeParameterName);
-            ComboTransitions[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Less, 1,_CharacterAnimatorNamingList.NormalizedTimeParameterName);
+            ComboTransitions[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.If, 0, combo.ComboTriggerParameterName);
+            ComboTransitions[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, combo.ComboPieces[i].NextMoveCancelTime, _CharacterAnimatorNamingList.NormalizedTimeParameterName);
+            ComboTransitions[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Less, 1, _CharacterAnimatorNamingList.NormalizedTimeParameterName);
 
-            
-            ComboTransitions[i].duration= combo.ComboPieces[i].NextMoveCancelDuration;
-            ComboTransitions[i].hasFixedDuration=combo.ComboPieces[i].NextMoveCancelFixedDuration;
+
+            ComboTransitions[i].duration = combo.ComboPieces[i].NextMoveCancelDuration;
+            ComboTransitions[i].hasFixedDuration = combo.ComboPieces[i].NextMoveCancelFixedDuration;
         }
 
         //Exits
-        for(int i=0;i<ExitTransitionsDashCancel.Count;i++)
+        for (int i = 0; i < ExitTransitionsDashCancel.Count; i++)
         {
             //Normal Exit
-            ExitTransitions[i].hasExitTime=true;
-            ExitTransitions[i].exitTime=1f;
+            ExitTransitions[i].hasExitTime = true;
+            ExitTransitions[i].exitTime = 1f;
             //Dash
-            ExitTransitionsDashCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, ((float)LocomotionEnmus.LocomotionMode.Sprint)-0.001f,_CharacterAnimatorNamingList.SpeedParameterName);
-            ExitTransitionsDashCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, combo.ComboPieces[i].DashCancelTime,_CharacterAnimatorNamingList.NormalizedTimeParameterName);
-            ExitTransitionsDashCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Less, 1,_CharacterAnimatorNamingList.NormalizedTimeParameterName);
+            ExitTransitionsDashCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, ((float)LocomotionEnmus.LocomotionMode.Sprint) - 0.001f, _CharacterAnimatorNamingList.SpeedParameterName);
+            ExitTransitionsDashCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, combo.ComboPieces[i].DashCancelTime, _CharacterAnimatorNamingList.NormalizedTimeParameterName);
+            ExitTransitionsDashCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Less, 1, _CharacterAnimatorNamingList.NormalizedTimeParameterName);
 
-            
-            ExitTransitionsDashCancel[i].duration= combo.ComboPieces[i].DashCancelDuration;
-            ExitTransitionsDashCancel[i].hasFixedDuration=combo.ComboPieces[i].DashCancelFixedDuration;
+
+            ExitTransitionsDashCancel[i].duration = combo.ComboPieces[i].DashCancelDuration;
+            ExitTransitionsDashCancel[i].hasFixedDuration = combo.ComboPieces[i].DashCancelFixedDuration;
 
 
             //WalkRun
-            ExitTransitionsWalkRunCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, ((float)LocomotionEnmus.LocomotionMode.Walk)-0.001f,_CharacterAnimatorNamingList.SpeedParameterName);
-            ExitTransitionsWalkRunCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Less, ((float)LocomotionEnmus.LocomotionMode.Sprint),_CharacterAnimatorNamingList.SpeedParameterName);
-            ExitTransitionsWalkRunCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, combo.ComboPieces[i].WalkRunCancelTime,_CharacterAnimatorNamingList.NormalizedTimeParameterName);
-            ExitTransitionsWalkRunCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Less, 1,_CharacterAnimatorNamingList.NormalizedTimeParameterName);
+            ExitTransitionsWalkRunCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, ((float)LocomotionEnmus.LocomotionMode.Walk) - 0.001f, _CharacterAnimatorNamingList.SpeedParameterName);
+            ExitTransitionsWalkRunCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Less, ((float)LocomotionEnmus.LocomotionMode.Sprint), _CharacterAnimatorNamingList.SpeedParameterName);
+            ExitTransitionsWalkRunCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Greater, combo.ComboPieces[i].WalkRunCancelTime, _CharacterAnimatorNamingList.NormalizedTimeParameterName);
+            ExitTransitionsWalkRunCancel[i].AddCondition(UnityEditor.Animations.AnimatorConditionMode.Less, 1, _CharacterAnimatorNamingList.NormalizedTimeParameterName);
 
-            
-            ExitTransitionsWalkRunCancel[i].duration= combo.ComboPieces[i].WalkRunCancelDuration;
-            ExitTransitionsWalkRunCancel[i].hasFixedDuration=combo.ComboPieces[i].WalkRunCancelFixedDuration;
+
+            ExitTransitionsWalkRunCancel[i].duration = combo.ComboPieces[i].WalkRunCancelDuration;
+            ExitTransitionsWalkRunCancel[i].hasFixedDuration = combo.ComboPieces[i].WalkRunCancelFixedDuration;
 
         }
     }

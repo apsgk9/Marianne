@@ -21,7 +21,7 @@ MonoBehaviour:
   WalkRunCancelTime: 0.5
   WalkRunCancelFixedDuration: 1
   WalkRunCancelDuration: 0.05
-  NextMoveCancelTime: 0.05
+  NextMoveCancelTime: 0.2
   NextMoveCancelFixedDuration: 1
-  NextMoveCancelDuration: 0.05
+  NextMoveCancelDuration: 0.01
   Description: 
