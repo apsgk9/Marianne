@@ -29,6 +29,14 @@ namespace CharacterProperties
         private bool _dashbuttonIsLifted;
         private bool canDash;
 
+        
+        private object _previousCurrentStateInfo;
+        private object _previousNextStateInfo;
+        private object _previousIsAnimatorTransitioning;
+        private object _currentStateInfo;
+        private object _nextStateInfo;
+        private object _isAnimatorTransitioning;
+
         #endregion
 
         private void Awake()
@@ -47,6 +55,22 @@ namespace CharacterProperties
             SetParameters();
             HandleJump();
         }
+        void FixedUpdate()
+        {
+            CacheAnimatorState();
+        }
+
+        // Called at the start of FixedUpdate to record the current state of the base layer of the animator.
+        void CacheAnimatorState()
+        {
+            _previousCurrentStateInfo = _currentStateInfo;
+            _previousNextStateInfo = _nextStateInfo;
+            _previousIsAnimatorTransitioning = _isAnimatorTransitioning;
+
+            _currentStateInfo = Animator.GetCurrentAnimatorStateInfo(0);
+            _nextStateInfo = Animator.GetNextAnimatorStateInfo(0);
+            _isAnimatorTransitioning = Animator.IsInTransition(0);
+        }
 
         private void SetParameters()
         {
@@ -61,6 +85,8 @@ namespace CharacterProperties
             Animator.SetBool(CharacterAnimatorNamingList.CharacterHasStaminaParameterName, CharacterState.CanUseStamina);
 
             Animator.SetBool(CharacterAnimatorNamingList.isGroundedParameterName, CharacterState.isGrounded);
+            
+            Animator.SetFloat(CharacterAnimatorNamingList.NormalizedTimeParameterName, Mathf.Repeat(Animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f));
         }
 
         private void HandleJump()

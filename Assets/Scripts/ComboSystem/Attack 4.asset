@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6fa4e1520f904e4c9453cb8e3751614, type: 3}
+  m_Name: Attack 4
+  m_EditorClassIdentifier: 
+  ComboPieceName: Attack_4
+  Motion: {fileID: 7400032, guid: 18175899ffd97384ab6a9bbd3042177d, type: 3}
+  StateMachineBehaviour: {fileID: 0}
+  DashCancelTime: 0.2
+  DashCancelFixedDuration: 1
+  DashCancelDuration: 0.05
+  WalkRunCancelTime: 0.5
+  WalkRunCancelFixedDuration: 1
+  WalkRunCancelDuration: 0.05
+  NextMoveCancelTime: 0.05
+  NextMoveCancelFixedDuration: 1
+  NextMoveCancelDuration: 0.05
+  Description: 

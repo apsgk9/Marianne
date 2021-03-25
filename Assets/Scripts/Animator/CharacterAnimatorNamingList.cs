@@ -15,6 +15,7 @@ public class CharacterAnimatorNamingList : ScriptableObject
     public string isGroundedParameterName ="isGrounded";
     public string InterruptableParameterName ="Interruptable";
     public string CanRotateParameterName = "CanRotate";
+    public string NormalizedTimeParameterName = "NormalizedTime";
 
     [Header("StateList")]
     public string IdleStateName = "Idle";

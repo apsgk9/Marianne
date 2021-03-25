@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ComboSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ComboSystem : MonoBehaviour
+public class ComboTest : MonoBehaviour
 {
     
     public Animator Animator;
-    private string Attack_A="Attack_A";
+    public Combo Combo;
     private PlayerInputActions _inputActions;
+    public int currentCombo=0;
+    public bool inCombo;
+
     private void Awake()
     {
         
@@ -21,7 +25,6 @@ public class ComboSystem : MonoBehaviour
     {
         _inputActions.Enable();
         _inputActions.PlayerControls.A_Attack.started += HandlePressAttack_A;
-
 
     }
     private void OnDisable()
@@ -39,12 +42,37 @@ public class ComboSystem : MonoBehaviour
         _inputActions.PlayerControls.A_Attack.started -= HandlePressAttack_A;
     }
 
+    private void FixedUpdate()
+    {
+        var stateinfo = Animator.GetCurrentAnimatorStateInfo(0);
+        foreach(var cp in Combo.ComboPieces)
+        {
+            if(stateinfo.IsName(cp.ComboPieceName))
+            {
+                inCombo=true;
+                return;
+            }
+        }
+
+        inCombo=false;
+    }
+
     private void HandlePressAttack_A(InputAction.CallbackContext obj)
     {
         SendAttack_A();
     }
     public void SendAttack_A()
     {
-        Animator.SetTrigger(Attack_A);
+        if(!inCombo)
+        {
+            Animator.Play(Combo.ComboPieces[0].ComboPieceName);
+        }
+        else
+        {
+            Animator.SetTrigger(Combo.ComboTriggerParameterName);
+            currentCombo++;
+            currentCombo%=Combo.ComboPieces.Length;
+        }
+        
     }
 }

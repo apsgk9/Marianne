@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CreateScriptableObject : MonoBehaviour
 {
-    [MenuItem("Assets/CreateScriptableObject")]
+    [MenuItem("Assets/Create Scriptable Object")]
     public static void createScriptableObject()
     {
         if (Selection.activeObject is MonoScript)
