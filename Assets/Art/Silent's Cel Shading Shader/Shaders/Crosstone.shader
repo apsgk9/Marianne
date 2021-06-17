@@ -6,10 +6,11 @@ Shader "Silent's Cel Shading/Crosstone (Outline)"
 		_MainTex("Main Texture", 2D) = "white" {}
 		_Color("Tint", Color) = (1,1,1,1)
 		_Cutoff("Alpha Cutoff", Range(0,1)) = 0.5
-		[ToggleUI]_AlphaSharp("Disable Dithering for Cutout", Float) = 0.0
+		[Enum(TransparencyMode)]_AlphaSharp("Transparency Mode", Float) = 0.0
 		//[Space]
 		_ColorMask("Color Mask Map", 2D) = "white" {}
 		_ClippingMask ("Alpha Transparency Map", 2D) = "white" {}
+        _Tweak_Transparency ("Transparency Adjustment", Range(-1, 1)) = 0
 		_BumpMap("Normal Map", 2D) = "bump" {}
 		_BumpScale("Normal Map Scale", Float) = 1.0
 		[Enum(VertexColorType)]_VertexColorType ("Vertex Colour Type", Float) = 2.0
@@ -88,8 +89,26 @@ Shader "Silent's Cel Shading/Crosstone (Outline)"
 		_SpecularDetailMask ("Specular Detail Mask", 2D) = "white" {}
 		_SpecularDetailStrength ("Specular Detail Strength", Range(0, 1)) = 1.0
 		[Toggle(_EMISSION)]_UseAdvancedEmission("Enable Advanced Emission", Float ) = 0.0
+        [Enum(UV0, 0, UV1, 1)]_DetailEmissionUVSec("Detail Emission UV Source", Float) = 0
+		_EmissionDetailType("Emission Detail Type", Float) = 0
 		_DetailEmissionMap("Detail Emission Map", 2D) = "white" {}
 		[HDR]_EmissionDetailParams("Emission Detail Params", Vector) = (0,0,0,0)
+		//[Space]
+        _alColorR("Red Channel Tint", Color)   = (1, 0.333, 0, 0)
+        _alColorG("Green Channel Tint", Color) = (0, 1, 0.333, 0)
+        _alColorB("Blue Channel Tint", Color)  = (0.33, 0, 1, 0)
+        _alColorA("Alpha Channel Tint", Color) = (0.333, 0.333, 0.333, 0)
+        [IntRange]_alBandR("Red Channel Band", Range(0, 4)) = 1
+        [IntRange]_alBandG("Green Channel Band", Range(0, 4)) = 2
+        [IntRange]_alBandB("Blue Channel Band", Range(0, 4)) = 3
+        [IntRange]_alBandA("Alpha Channel Band", Range(0, 4)) = 0
+        [Enum(Pulse, 0, VU, 1)]_alModeR("AudioLink Mode", Float) = 0
+        [Enum(Pulse, 0, VU, 1)]_alModeG("AudioLink Mode", Float) = 0
+        [Enum(Pulse, 0, VU, 1)]_alModeB("AudioLink Mode", Float) = 0
+        [Enum(Pulse, 0, VU, 1)]_alModeA("AudioLink Mode", Float) = 0
+        [Gamma]_alTimeRange("Audio Link Time Range", Range(0, 1)) = 1.0
+        [ToggleUI]_alUseFallback("Enable fallback", Float) = 1
+        _alFallbackBPM("Fallback BPM", Float) = 160
 		[Enum(UV0,0,UV1,1)]_UVSec ("UV Set Secondary", Float) = 0
 		//[Space]
 		[Toggle(_SUNDISK_NONE)]_UseSubsurfaceScattering ("Use Subsurface Scattering", Float) = 0.0
@@ -112,6 +131,10 @@ Shader "Silent's Cel Shading/Crosstone (Outline)"
 		[ToggleUI]_UseVanishing ("Use Vanishing", Float) = 0.0
 		_VanishingStart("Vanishing Start", Float) = 0.0
 		_VanishingEnd("Vanishing End", Float) = 0.0
+		//[Space]
+		[ToggleUI]_UseEmissiveLightSense ("Use Light-sensing Emission", Float) = 0.0
+		_EmissiveLightSenseStart("Light Threshold Start", Range(0, 1)) = 1.0
+		_EmissiveLightSenseEnd("Light Threshold End", Range(0, 1)) = 0.0
 		//[Space]
 		[ToggleUI]_AlbedoAlphaMode("Albedo Alpha Mode", Float) = 0.0
 		[HDR]_CustomFresnelColor("Emissive Fresnel Color", Color) = (0,0,0,1)
@@ -149,6 +172,7 @@ Shader "Silent's Cel Shading/Crosstone (Outline)"
 	    [Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0
 	    [Enum(UnityEngine.Rendering.StencilOp)] _StencilFail ("Stencil Fail", Int) = 0
 	    [Enum(UnityEngine.Rendering.StencilOp)] _StencilZFail ("Stencil ZFail", Int) = 0
+	    [HideInInspector]__Baked ("Is this material referencing a baked shader?", Float) = 0
 	}
 
 	SubShader
@@ -182,6 +206,7 @@ Shader "Silent's Cel Shading/Crosstone (Outline)"
 		#pragma multi_compile _ UNITY_HDR_ON
 
 		#define SCSS_CROSSTONE
+		#define SCSS_OUTLINE
 		#define SCSS_USE_OUTLINE_TEXTURE
         ENDCG
 
@@ -264,12 +289,8 @@ Shader "Silent's Cel Shading/Crosstone (Outline)"
 			Name "SHADOW_CASTER"
 			Tags{ "LightMode" = "ShadowCaster" }
 
-            Blend[_SrcBlend][_DstBlend]
-            BlendOp[_BlendOp]
-            ZTest[_ZTest]
-            ZWrite[_ZWrite]
+            ZWrite On ZTest LEqual
             Cull[_CullMode]
-            ColorMask[_ColorWriteMask]
 		
 			AlphaToMask Off
 

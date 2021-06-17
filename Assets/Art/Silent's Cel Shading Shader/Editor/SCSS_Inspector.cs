@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 using static SilentCelShading.Unity.InspectorCommon;
+using SilentCelShading.Unity.Baking;
 
 // Parts of this file are based on https://github.com/Microsoft/MixedRealityToolkit-Unity/
 //	Copyright (c) Microsoft Corporation. All rights reserved.
@@ -50,9 +51,21 @@ namespace SilentCelShading.Unity
 			Simple
 		}
 
+		public enum TransparencyMode
+		{
+			Soft,
+			Sharp
+		}
+
+		public enum DetailEmissionMode
+		{
+			Phase,
+			AudioLink
+		}
+
 		protected Material target;
 		protected MaterialEditor editor;
-		Dictionary<string, MaterialProperty> props = new Dictionary<string, MaterialProperty>();
+		protected Dictionary<string, MaterialProperty> props = new Dictionary<string, MaterialProperty>();
 
     	public int scssSettingsComplexityMode = 1;
 
@@ -99,42 +112,91 @@ namespace SilentCelShading.Unity
 			SetupMaterialWithAlbedo(material, 
 				props["_MainTex"], 
 				props["_AlbedoAlphaMode"]);
-			SetupMaterialWithOutlineMode(material, 
-				(OutlineMode)props["_OutlineMode"].floatValue);
 
+				
+			MaterialProperty outlineProp;
+			if (props.TryGetValue("_OutlineMode", out outlineProp))
+			{
+				SetupMaterialWithOutlineMode(material, (OutlineMode)outlineProp.floatValue);
+			}
+
+			MaterialProperty specProp;
+			if (props.TryGetValue("_SpecularType", out specProp))
+			{
+				SetupMaterialWithSpecularType(material, (SpecularType)specProp.floatValue);
+			}
+			
 			SetMaterialKeywords(material);
 
 			base.MaterialChanged(material);
 		}
+		
+		protected MaterialProperty Property(string i)
+		{
+			MaterialProperty prop;
+			if (props.TryGetValue(i, out prop))
+			{
+				return prop;
+			} 
+			return null;
+		}
+
+		protected GUIContent Content(string i)
+		{
+			GUIContent style;
+			if (!styles.TryGetValue(i, out style))
+			{
+				style = new GUIContent(i);
+			}
+			return style;
+		}
+
+		protected Rect DisabledLabel(GUIContent style)
+		{
+			EditorGUI.BeginDisabledGroup(true);
+			Rect rect = EditorGUILayout.GetControlRect();
+			EditorGUI.LabelField(rect, style);
+			EditorGUI.EndDisabledGroup();
+			return rect;
+		}
 
 		protected Rect TexturePropertySingleLine(string i)
 		{
-			GUIContent style;
-			if (styles.TryGetValue(i, out style))
+			MaterialProperty prop = Property(i);
+			GUIContent style = Content(i);
+			if (prop != null) 
 			{
-				return editor.TexturePropertySingleLine(style, props[i]);
-			} 
-			return editor.TexturePropertySingleLine(new GUIContent(i), props[i]);
+				return editor.TexturePropertySingleLine(style, prop);
+			} else {
+				return DisabledLabel(style);
+			}
 		}
 
 		protected Rect TexturePropertySingleLine(string i, string i2)
 		{
-			GUIContent style;
-			if (styles.TryGetValue(i, out style))
+			GUIContent style = Content(i);
+			MaterialProperty prop = Property(i);
+			MaterialProperty prop2 = Property(i2);
+			if (prop != null) 
 			{
-				return editor.TexturePropertySingleLine(style, props[i], props[i2]);
-			} 
-			return editor.TexturePropertySingleLine(new GUIContent(i), props[i], props[i2]);
+				return editor.TexturePropertySingleLine(style, prop, prop2);
+			} else {
+				return DisabledLabel(style);
+			}
 		}
 
 		protected Rect TexturePropertySingleLine(string i, string i2, string i3)
 		{
-			GUIContent style;
-			if (styles.TryGetValue(i, out style))
+			GUIContent style = Content(i);
+			MaterialProperty prop = Property(i);
+			MaterialProperty prop2 = Property(i2);
+			MaterialProperty prop3 = Property(i3);
+			if (prop != null) 
 			{
-				return editor.TexturePropertySingleLine(style, props[i], props[i2], props[i3]);
-			} 
-			return editor.TexturePropertySingleLine(new GUIContent(i), props[i], props[i2], props[i3]);
+				return editor.TexturePropertySingleLine(style, prop, prop2, prop3);
+			} else {
+				return DisabledLabel(style);
+			}
 		}
 
 		protected Rect TextureColorPropertyWithColorReset(string tex, string col)
@@ -161,57 +223,51 @@ namespace SilentCelShading.Unity
 
 		protected Rect TexturePropertyWithHDRColor(string i, string i2)
 		{
-			GUIContent style;
-			if (styles.TryGetValue(i, out style))
+			GUIContent style = Content(i);
+			MaterialProperty prop = Property(i);
+			MaterialProperty prop2 = Property(i2);
+			if (prop != null) 
 			{
-				return editor.TexturePropertyWithHDRColor(style, props[i], props[i2], false);
-			} 
-			return editor.TexturePropertyWithHDRColor(new GUIContent(i), props[i], props[i2], false);
-		}
-
-		protected void ShaderProperty(string i)
-		{
-			GUIContent style;
-			if (styles.TryGetValue(i, out style))
-			{
-				editor.ShaderProperty(props[i], style);
+				return editor.TexturePropertyWithHDRColor(style, prop, prop2, false);
 			} else {
-				editor.ShaderProperty(props[i], new GUIContent(i));
+				return DisabledLabel(style);
 			}
 		}
 
-		protected void TogglePropertyHeader(string i, bool display = true)
+		protected bool ShaderProperty(string i)
 		{
-			if (display) ShaderProperty(i);
-			/*
-        	int HEADER_HEIGHT = 22; // Arktoon default
-            Rect r = EditorGUILayout.GetControlRect(true,0,EditorStyles.layerMaskField);
-            r.y -= HEADER_HEIGHT;
-            r.height = MaterialEditor.GetDefaultPropertyHeight(props[i]);
-        	var e = Event.current;
-			
-			Rect rect = r;
+			MaterialProperty prop;
+			GUIContent style;
 
-			if(e.type == EventType.Repaint) //draw the divider
+			if (!styles.TryGetValue(i, out style))
 			{
-				rect.x -= 0.0f;
-				rect.y += 20.0f;
-				rect.height = 1.0f;
-				rect.width += 0.0f;
-				GUI.depth++;
-				GUI.skin.box.Draw(rect,GUIContent.none,0);
-				GUI.depth--;
+				style = new GUIContent(i);
 			}
-			*/
+
+			if (props.TryGetValue(i, out prop))
+			{
+				editor.ShaderProperty(prop, style);
+				return true;
+			} else {
+				DisabledLabel(style);
+			}
+			return false;
 		}
-        public static void Vector2Property(MaterialProperty property, GUIContent name)
+
+		protected bool TogglePropertyHeader(string i, bool display = true)
+		{
+			if (display) return ShaderProperty(i);
+			return false;
+		}
+		
+        protected static void Vector2Property(MaterialProperty property, GUIContent name)
         {
             EditorGUI.BeginChangeCheck();
             Vector2 vector2 = EditorGUILayout.Vector2Field(name,new Vector2(property.vectorValue.x, property.vectorValue.y),null);
             if (EditorGUI.EndChangeCheck())
                 property.vectorValue = new Vector4(vector2.x, vector2.y, property.vectorValue.z, property.vectorValue.w);
         }
-        public static void Vector2PropertyZW(MaterialProperty property, GUIContent name)
+        protected static void Vector2PropertyZW(MaterialProperty property, GUIContent name)
         {
             EditorGUI.BeginChangeCheck();
             Vector2 vector2 = EditorGUILayout.Vector2Field(name,new Vector2(property.vectorValue.z, property.vectorValue.w),null);
@@ -220,11 +276,17 @@ namespace SilentCelShading.Unity
         }
 
         protected void DrawShaderPropertySameLine(string i) {
+			MaterialProperty prop;
+
         	int HEADER_HEIGHT = 22; // Arktoon default
             Rect r = EditorGUILayout.GetControlRect(true,0,EditorStyles.layerMaskField);
             r.y -= HEADER_HEIGHT;
             r.height = MaterialEditor.GetDefaultPropertyHeight(props[i]);
-            editor.ShaderProperty(r, props[i], " ");
+
+			if (props.TryGetValue(i, out prop))
+			{
+				editor.ShaderProperty(r, prop, " ");
+			} 
         }
 
 		protected GUIStyle scmStyle;
@@ -264,29 +326,42 @@ namespace SilentCelShading.Unity
 			Material material = this.target;
 
 			CheckShaderType(material);
+			
+			ShaderBakeHeader();
+			
+			bool isBaked = false;
+			{
+				MaterialProperty bakedSettings;
+				props.TryGetValue("__Baked", out bakedSettings);
+				isBaked = (bakedSettings != null && bakedSettings.floatValue == 1);
+			}
 
+            if (isBaked) EditorGUI.BeginDisabledGroup(true);
 			base.OnGUI(materialEditor, matProps);
-
+            if (isBaked) EditorGUI.EndDisabledGroup();
 			SettingsComplexityArea();
+            if (isBaked) EditorGUI.BeginDisabledGroup(true);
 			MainOptions();
 			ShadingOptions();
 			
 			switch ((SettingsComplexityMode)scssSettingsComplexityMode)
 			{
 				case SettingsComplexityMode.Simple:
-					DrawSectionHeaderArea(styles["s_renderingOptions"]);
+					DrawSectionHeaderArea(Content("s_renderingOptions"));
 					EmissionOptions();
 					OutlineOptions();
+            if (isBaked) EditorGUI.EndDisabledGroup();
 					ManualButtonArea();
-					FooterOptions();
+            if (isBaked) EditorGUI.BeginDisabledGroup(true);
 					break;
 				case SettingsComplexityMode.Normal:
 					RenderingOptions();
 					OutlineOptions();
 					EmissionOptions();
+            if (isBaked) EditorGUI.EndDisabledGroup();
 					ManualButtonArea();
+            if (isBaked) EditorGUI.BeginDisabledGroup(true);
 					AdvancedOptions();
-					FooterOptions();
 					break;
 				default:
 				case SettingsComplexityMode.Complex:
@@ -295,11 +370,15 @@ namespace SilentCelShading.Unity
 					DetailOptions();
 					EmissionOptions();
 					MiscOptions();
+            if (isBaked) EditorGUI.EndDisabledGroup();
 					ManualButtonArea();
+            if (isBaked) EditorGUI.BeginDisabledGroup(true);
 					AdvancedOptions();
-					FooterOptions();
 					break;
 			}
+            if (isBaked) EditorGUI.EndDisabledGroup();
+			
+			FooterOptions();
 		}
 
 		protected string[] SettingsComplexityModeOptions = new string[]
@@ -309,9 +388,9 @@ namespace SilentCelShading.Unity
 
 		protected void SettingsComplexityArea()
 		{
-			SettingsComplexityModeOptions[0] = styles["s_fullComplexity"].text;
-			SettingsComplexityModeOptions[1] = styles["s_normalComplexity"].text;
-			SettingsComplexityModeOptions[2] = styles["s_simpleComplexity"].text;
+			SettingsComplexityModeOptions[0] = Content("s_fullComplexity").text;
+			SettingsComplexityModeOptions[1] = Content("s_normalComplexity").text;
+			SettingsComplexityModeOptions[2] = Content("s_simpleComplexity").text;
 			EditorGUILayout.Space();
 
 			if (WithChangeCheck(() =>
@@ -322,32 +401,108 @@ namespace SilentCelShading.Unity
 				EditorUserSettings.SetConfigValue("scss_settings_complexity_mode", scssSettingsComplexityMode.ToString());
 			}
 		}
+
+		protected void ShaderBakeHeader()
+		{
+            Rect r = EditorGUILayout.GetControlRect(true,0,EditorStyles.layerMaskField);
+				r.x -= 12.0f;
+				r.y -= 8.0f;
+				r.height = 18.0f;
+				r.width += 4.0f;
+			float maxWidth = 128.0f;
+			Rect r2 = r;
+				r2.x = r.width - maxWidth + 14.0f;
+				r2.width = maxWidth;
+			GUI.Box(r, "", EditorStyles.toolbar);
+
+			GUIContent s_bakeButton;
+			MaterialProperty shaderOptimizer;
+			// Create the GUIContent for the button so it can be rendered.
+			if (!props.TryGetValue("__Baked", out shaderOptimizer))
+			{
+				s_bakeButton = new GUIContent ("s_bakeButton");
+			}
+			else
+			{
+				// Determine whether we're baking or unbaking materials. 
+				if (shaderOptimizer.floatValue == 1) 
+				{
+					if (!styles.TryGetValue("s_bakeButtonRevert", out s_bakeButton)) 
+						s_bakeButton = new GUIContent ("s_bakeButtonRevert");
+				} 
+				else
+				{
+					if (editor.targets.Length == 1)
+					{
+						if (!styles.TryGetValue("s_bakeButton", out s_bakeButton)) 
+							s_bakeButton = new GUIContent ("s_bakeButton");
+					} 
+					else 
+					{
+						if (!styles.TryGetValue("s_bakeButtonPlural", out s_bakeButton)) 
+							s_bakeButton = new GUIContent ("s_bakeButtonPlural");
+						s_bakeButton = new GUIContent(s_bakeButton);
+						s_bakeButton.text = String.Format(s_bakeButton.text, "" + editor.targets.Length.ToString());
+					}
+				}
+			}
+			// Draw the button. Because of Unity shenanigans, if we don't always draw the button, 
+			// the layout will explode on the first update of the inspector.
+			if (GUI.Button(r2, s_bakeButton, EditorStyles.miniButtonMid))
+			{
+				// If it's a mixed value, then only allow baking. It shouldn't be a mixed value,
+				// but a material might think it's baked when it isn't, which needs to be handled anyway.
+				if (shaderOptimizer.hasMixedValue)
+				{
+					foreach (Material m in editor.targets)
+					{
+						m.SetFloat(shaderOptimizer.name, 1);
+						MaterialProperty[] props = MaterialEditor.GetMaterialProperties(new UnityEngine.Object[] { m });
+						if (!ShaderOptimizer.Lock(m, props)) // Error locking shader, revert property
+							m.SetFloat(shaderOptimizer.name, 0);
+					}	
+
+				}
+				else
+				{
+					shaderOptimizer.floatValue = shaderOptimizer.floatValue == 1 ? 0 : 1;
+					if (shaderOptimizer.floatValue == 1)
+					{
+						foreach (Material m in editor.targets)
+						{
+							MaterialProperty[] props = MaterialEditor.GetMaterialProperties(new UnityEngine.Object[] { m });
+							if (!ShaderOptimizer.Lock(m, props))
+								m.SetFloat(shaderOptimizer.name, 0);
+						}
+					}
+					else
+					{
+						foreach (Material m in editor.targets)
+						{
+							if (!ShaderOptimizer.Unlock(m))
+								m.SetFloat(shaderOptimizer.name, 1);
+							MaterialChanged(m);
+						}
+					}
+				}
+			}
+			EditorGUILayout.LabelField("", EditorStyles.label); // Spacing only
+		}
 		
 		protected void MainOptions()
 		{ 
 			EditorGUILayout.Space();
 		
-			DrawSectionHeaderArea(styles["s_mainOptions"]);
+			DrawSectionHeaderArea(Content("s_mainOptions"));
 
 			EditorGUILayout.Space();
 			TexturePropertySingleLine("_MainTex", "_Color");
+
 			TexturePropertySingleLine("_BumpMap", "_BumpScale");
 
-			if ((AlbedoAlphaMode)props["_AlbedoAlphaMode"].floatValue == AlbedoAlphaMode.ClippingMask)
-			{
-				TexturePropertySingleLine("_ClippingMask");
-			}
-
-			EditorGUI.indentLevel += 2;
-			if ((RenderingMode)props[BaseStyles.renderingModeName].floatValue == RenderingMode.Cutout)
-			{
-				ShaderProperty("_Cutoff");
-				ShaderProperty("_AlphaSharp");
-			}
-			EditorGUI.indentLevel -= 2;
 			TexturePropertySingleLine("_ColorMask");
-			EditorGUILayout.Space();
-			
+
+			// For Standard compatibility, but not sure what the purpose is
 			if (WithChangeCheck(() => 
 			{
 				editor.TextureScaleOffsetProperty(props["_MainTex"]);
@@ -355,13 +510,29 @@ namespace SilentCelShading.Unity
 			{
 				props["_EmissionMap"].textureScaleAndOffset = props["_MainTex"].textureScaleAndOffset;		
 			}
+
+			if ((AlbedoAlphaMode)props["_AlbedoAlphaMode"].floatValue == AlbedoAlphaMode.ClippingMask)
+			{
+				EditorGUILayout.Space();
+				TexturePropertySingleLine("_ClippingMask", "_Tweak_Transparency");
+				editor.TextureScaleOffsetProperty(props["_ClippingMask"]);
+			}
 			EditorGUILayout.Space();
+
+			if ((RenderingMode)props[BaseStyles.renderingModeName].floatValue > 0)
+			{
+				foreach (Material mat in WithMaterialPropertyDropdown(props["_AlphaSharp"], Enum.GetNames(typeof(TransparencyMode)), editor))
+				{
+					SetupMaterialWithTransparencyMode(mat, (TransparencyMode)props["_AlphaSharp"].floatValue);
+				}
+				ShaderProperty("_Cutoff");
+			}
 		}
 
 		protected void ShadingOptions()
 		{
 			EditorGUILayout.Space();
-			DrawSectionHeaderArea(styles["s_shadingOptions"]);
+			DrawSectionHeaderArea(Content("s_shadingOptions"));
 			if (usingLightramp) LightrampOptions();
 			if (usingCrosstone) CrosstoneOptions();
 		}
@@ -369,7 +540,7 @@ namespace SilentCelShading.Unity
 		protected void RenderingOptions()
 		{ 
 			EditorGUILayout.Space();
-			DrawSectionHeaderArea(styles["s_renderingOptions"]);
+			DrawSectionHeaderArea(Content("s_renderingOptions"));
 
 			SpecularOptions();
 			RimlightOptions();
@@ -379,7 +550,7 @@ namespace SilentCelShading.Unity
 		protected void DetailOptions()
 		{
 			EditorGUILayout.Space();
-			DrawSectionHeaderArea(styles["s_detailOptions"]);
+			DrawSectionHeaderArea(Content("s_detailOptions"));
 			SubsurfaceOptions();
 			DetailMapOptions();
 		}
@@ -388,23 +559,62 @@ namespace SilentCelShading.Unity
 		{
 			EditorGUILayout.Space();
 
-            bool hadEmissionTexture = props["_EmissionMap"].textureValue != null;
-			TexturePropertyWithHDRColor("_EmissionMap", "_EmissionColor");
-            // If texture was assigned and color was black set color to white
-            float brightness = props["_EmissionColor"].colorValue.maxColorComponent;
-            if (props["_EmissionMap"].textureValue != null && !hadEmissionTexture && brightness <= 0f)
-                 props["_EmissionColor"].colorValue = Color.white;
-			EditorGUILayout.Space();
+			MaterialProperty emissionMapProp;
+			if (props.TryGetValue("_EmissionMap", out emissionMapProp)) 
+			{
+				bool hadEmissionTexture = emissionMapProp.textureValue != null;
+				TexturePropertyWithHDRColor("_EmissionMap", "_EmissionColor");
+				// If texture was assigned and color was black set color to white
+				float brightness = props["_EmissionColor"].colorValue.maxColorComponent;
+				if (emissionMapProp.textureValue != null && !hadEmissionTexture && brightness <= 0f)
+					props["_EmissionColor"].colorValue = Color.white;
+				EditorGUILayout.Space();
+			}
 
-			ShaderProperty("_UseAdvancedEmission");
-			if (PropertyEnabled(props["_UseAdvancedEmission"]))
+			if (ShaderProperty("_UseAdvancedEmission") && PropertyEnabled(props["_UseAdvancedEmission"]))
 			{
 				target.EnableKeyword("_EMISSION");
 				TexturePropertySingleLine("_DetailEmissionMap");
-				//ShaderProperty("_EmissionDetailParams");
-            	EditorGUI.indentLevel ++;
-				Vector2Property(props["_EmissionDetailParams"], styles["s_EmissionDetailScroll"]);
-				Vector2PropertyZW(props["_EmissionDetailParams"], styles["s_EmissionDetailPhase"]);
+				editor.TextureScaleOffsetProperty(props["_DetailEmissionMap"]);
+				ShaderProperty("_DetailEmissionUVSec");
+				EditorGUI.indentLevel ++;
+				
+				WithMaterialPropertyDropdown(props["_EmissionDetailType"], Enum.GetNames(typeof(DetailEmissionMode)), editor);
+				MaterialProperty deProp;
+				if (props.TryGetValue("_EmissionDetailType", out deProp))
+				{
+					switch ((DetailEmissionMode)deProp.floatValue)
+					{
+						case DetailEmissionMode.Phase:
+						//ShaderProperty("_EmissionDetailParams");
+						Vector2Property(props["_EmissionDetailParams"], Content("s_EmissionDetailScroll"));
+						Vector2PropertyZW(props["_EmissionDetailParams"], Content("s_EmissionDetailPhase"));
+						break;
+						case DetailEmissionMode.AudioLink:
+						// AudioLink
+						ShaderProperty("_alColorR");
+						ShaderProperty("_alColorG");
+						ShaderProperty("_alColorB");
+						ShaderProperty("_alColorA");
+						ShaderProperty("_alBandR");
+						ShaderProperty("_alBandG");
+						ShaderProperty("_alBandB");
+						ShaderProperty("_alBandA");
+						ShaderProperty("_alModeR");
+						ShaderProperty("_alModeG");
+						ShaderProperty("_alModeB");
+						ShaderProperty("_alModeA");
+						ShaderProperty("_alTimeRange");
+						ShaderProperty("_alUseFallback");
+						ShaderProperty("_alFallbackBPM");
+						ShaderProperty("_UseEmissiveLightSense");
+						ShaderProperty("_EmissiveLightSenseStart");
+						ShaderProperty("_EmissiveLightSenseEnd");
+						break;
+						default:
+						break;
+					}
+				}
             	EditorGUI.indentLevel --;
 			} else {
 				target.DisableKeyword("_EMISSION");
@@ -418,7 +628,7 @@ namespace SilentCelShading.Unity
 		protected void MiscOptions()
 		{
 			EditorGUILayout.Space();
-			DrawSectionHeaderArea(styles["s_miscOptions"]);
+			DrawSectionHeaderArea(Content("s_miscOptions"));
 			EditorGUILayout.Space();
 			ShaderProperty("_PixelSampleMode");
 			AnimationOptions();
@@ -439,7 +649,7 @@ namespace SilentCelShading.Unity
                 WithGroupHorizontal(() => 
 				{
 					TexturePropertySingleLine("_Ramp");
-					if (GUILayout.Button(styles["s_gradientEditorButton"], "button"))
+					if (GUILayout.Button(Content("s_gradientEditorButton"), "button"))
 					{
 						XSGradientEditor.callGradientEditor(target);
 					}
@@ -485,72 +695,80 @@ namespace SilentCelShading.Unity
 		protected void SpecularOptions()
 		{	
             EditorGUILayout.Space();
-			foreach (Material mat in WithMaterialPropertyDropdown(props["_SpecularType"], Enum.GetNames(typeof(SpecularType)), editor))
+			MaterialProperty specProp;
+			if (props.TryGetValue("_SpecularType", out specProp))
 			{
-				SetupMaterialWithSpecularType(mat, (SpecularType)props["_SpecularType"].floatValue);
-			}
-			TogglePropertyHeader("_SpecularType", false);
+				foreach (Material mat in WithMaterialPropertyDropdown(specProp, Enum.GetNames(typeof(SpecularType)), editor))
+				{
+					SetupMaterialWithSpecularType(mat, (SpecularType)specProp.floatValue);
+				}
+				TogglePropertyHeader("_SpecularType", false);
 
-			switch ((SpecularType)props["_SpecularType"].floatValue)
-			{
-				case SpecularType.Standard:
-				case SpecularType.Cloth:
-				TextureColorPropertyWithColorReset("_SpecGlossMap", "_SpecColor");
-				ShaderProperty("_Smoothness");
-				ShaderProperty("_UseMetallic");
-				ShaderProperty("_UseEnergyConservation");
-				break;
-				case SpecularType.Cel:
-				TextureColorPropertyWithColorReset("_SpecGlossMap", "_SpecColor");
-				ShaderProperty("_Smoothness");
-				ShaderProperty("_CelSpecularSoftness");
-				ShaderProperty("_CelSpecularSteps");
-				ShaderProperty("_UseMetallic");
-				ShaderProperty("_UseEnergyConservation");
-				break;
-				case SpecularType.Anisotropic:
-				TextureColorPropertyWithColorReset("_SpecGlossMap", "_SpecColor");
-				ShaderProperty("_Smoothness");
-				ShaderProperty("_Anisotropy");
-				ShaderProperty("_UseMetallic");
-				ShaderProperty("_UseEnergyConservation");
-				break;
-				case SpecularType.CelStrand:
-				TextureColorPropertyWithColorReset("_SpecGlossMap", "_SpecColor");
-				ShaderProperty("_Smoothness");
-				ShaderProperty("_CelSpecularSoftness");
-				ShaderProperty("_CelSpecularSteps");
-				ShaderProperty("_Anisotropy");
-				ShaderProperty("_UseMetallic");
-				ShaderProperty("_UseEnergyConservation");
-				break;
-				case SpecularType.Disable:
-				default:
-				break;
-			}	
+				switch ((SpecularType)specProp.floatValue)
+				{
+					case SpecularType.Standard:
+					case SpecularType.Cloth:
+					TextureColorPropertyWithColorReset("_SpecGlossMap", "_SpecColor");
+					ShaderProperty("_Smoothness");
+					ShaderProperty("_UseMetallic");
+					ShaderProperty("_UseEnergyConservation");
+					break;
+					case SpecularType.Cel:
+					TextureColorPropertyWithColorReset("_SpecGlossMap", "_SpecColor");
+					ShaderProperty("_Smoothness");
+					ShaderProperty("_CelSpecularSoftness");
+					ShaderProperty("_CelSpecularSteps");
+					ShaderProperty("_UseMetallic");
+					ShaderProperty("_UseEnergyConservation");
+					break;
+					case SpecularType.Anisotropic:
+					TextureColorPropertyWithColorReset("_SpecGlossMap", "_SpecColor");
+					ShaderProperty("_Smoothness");
+					ShaderProperty("_Anisotropy");
+					ShaderProperty("_UseMetallic");
+					ShaderProperty("_UseEnergyConservation");
+					break;
+					case SpecularType.CelStrand:
+					TextureColorPropertyWithColorReset("_SpecGlossMap", "_SpecColor");
+					ShaderProperty("_Smoothness");
+					ShaderProperty("_CelSpecularSoftness");
+					ShaderProperty("_CelSpecularSteps");
+					ShaderProperty("_Anisotropy");
+					ShaderProperty("_UseMetallic");
+					ShaderProperty("_UseEnergyConservation");
+					break;
+					case SpecularType.Disable:
+					default:
+					break;
+				}	
+			}
 		}
 
 		protected void RimlightOptions()
 		{	
             EditorGUILayout.Space();
-			TogglePropertyHeader("_UseFresnel");
-			bool isTintable = 
-				(AmbientFresnelType)props["_UseFresnel"].floatValue == AmbientFresnelType.Lit
-				|| (AmbientFresnelType)props["_UseFresnel"].floatValue == AmbientFresnelType.Ambient;
-
-			if (PropertyEnabled(props["_UseFresnel"]))
+			MaterialProperty rimProp;
+			if (props.TryGetValue("_UseFresnel", out rimProp))
 			{
-				ShaderProperty("_FresnelWidth");
-				ShaderProperty("_FresnelStrength");
-				if (isTintable) ShaderProperty("_FresnelTint");	
+				TogglePropertyHeader("_UseFresnel");
+				bool isTintable = 
+					(AmbientFresnelType)rimProp.floatValue == AmbientFresnelType.Lit
+					|| (AmbientFresnelType)rimProp.floatValue == AmbientFresnelType.Ambient;
 
-				ShaderProperty("_UseFresnelLightMask");
-				if (PropertyEnabled(props["_UseFresnelLightMask"]))
+				if (PropertyEnabled(rimProp))
 				{
-					ShaderProperty("_FresnelLightMask");
-					if (isTintable) ShaderProperty("_FresnelTintInv");
-					ShaderProperty("_FresnelWidthInv");
-					ShaderProperty("_FresnelStrengthInv");
+					ShaderProperty("_FresnelWidth");
+					ShaderProperty("_FresnelStrength");
+					if (isTintable) ShaderProperty("_FresnelTint");	
+
+					ShaderProperty("_UseFresnelLightMask");
+					if (PropertyEnabled(props["_UseFresnelLightMask"]))
+					{
+						ShaderProperty("_FresnelLightMask");
+						if (isTintable) ShaderProperty("_FresnelTintInv");
+						ShaderProperty("_FresnelWidthInv");
+						ShaderProperty("_FresnelStrengthInv");
+					}
 				}
 			}
 		}
@@ -569,67 +787,73 @@ namespace SilentCelShading.Unity
 		protected void MatcapOptions()
 		{ 
 			EditorGUILayout.Space();
-			var mMode = (MatcapType)props["_UseMatcap"].floatValue;
-			if (WithChangeCheck(() => 
+			MaterialProperty matcapProp;
+			if (props.TryGetValue("_UseMatcap", out matcapProp))
 			{
-				mMode = (MatcapType)EditorGUILayout.Popup(styles["_UseMatcap"], 
-				(int)mMode, Enum.GetNames(typeof(MatcapType)));
-			})) {
-				editor.RegisterPropertyChangeUndo(styles["_UseMatcap"].text);
-				props["_UseMatcap"].floatValue = (float)mMode;
-			}
-			TogglePropertyHeader("_UseMatcap", false);
+				var mMode = (MatcapType)matcapProp.floatValue;
+				if (WithChangeCheck(() => 
+				{
+					mMode = (MatcapType)EditorGUILayout.Popup(Content("_UseMatcap"), 
+					(int)mMode, Enum.GetNames(typeof(MatcapType)));
+				})) {
+					editor.RegisterPropertyChangeUndo(Content("_UseMatcap").text);
+					matcapProp.floatValue = (float)mMode;
+				}
+				TogglePropertyHeader("_UseMatcap", false);
 
-			if (PropertyEnabled(props["_UseMatcap"]))
-			{
-				TexturePropertySingleLine("_MatcapMask");
-            	DrawMatcapField("_Matcap1", "_Matcap1Blend", "_Matcap1Tint", "_Matcap1Strength");
-            	DrawMatcapField("_Matcap2", "_Matcap2Blend", "_Matcap2Tint", "_Matcap2Strength");
-            	DrawMatcapField("_Matcap3", "_Matcap3Blend", "_Matcap3Tint", "_Matcap3Strength");
-            	DrawMatcapField("_Matcap4", "_Matcap4Blend", "_Matcap4Tint", "_Matcap4Strength");
+				if (PropertyEnabled(matcapProp))
+				{
+					TexturePropertySingleLine("_MatcapMask");
+					DrawMatcapField("_Matcap1", "_Matcap1Blend", "_Matcap1Tint", "_Matcap1Strength");
+					DrawMatcapField("_Matcap2", "_Matcap2Blend", "_Matcap2Tint", "_Matcap2Strength");
+					DrawMatcapField("_Matcap3", "_Matcap3Blend", "_Matcap3Tint", "_Matcap3Strength");
+					DrawMatcapField("_Matcap4", "_Matcap4Blend", "_Matcap4Tint", "_Matcap4Strength");
+				}
 			}
 		}
 
 		protected void SubsurfaceOptions()
 		{ 
             EditorGUILayout.Space();
-			TogglePropertyHeader("_UseSubsurfaceScattering");
-			if (PropertyEnabled(props["_UseSubsurfaceScattering"]))
+			if (TogglePropertyHeader("_UseSubsurfaceScattering"))
 			{
-				TexturePropertySingleLine("_ThicknessMap");
-				ShaderProperty("_ThicknessMapPower");
-				ShaderProperty("_ThicknessMapInvert");
-				ShaderProperty("_SSSCol");
-				ShaderProperty("_SSSIntensity");
-				ShaderProperty("_SSSPow");
-				ShaderProperty("_SSSDist");
-				ShaderProperty("_SSSAmbient");
+				if (PropertyEnabled(props["_UseSubsurfaceScattering"]))
+				{
+					TexturePropertySingleLine("_ThicknessMap");
+					ShaderProperty("_ThicknessMapPower");
+					ShaderProperty("_ThicknessMapInvert");
+					ShaderProperty("_SSSCol");
+					ShaderProperty("_SSSIntensity");
+					ShaderProperty("_SSSPow");
+					ShaderProperty("_SSSDist");
+					ShaderProperty("_SSSAmbient");
+				}
 			}
 		}
 
 		protected void DetailMapOptions()
 		{	  
             EditorGUILayout.Space();
-			TogglePropertyHeader("_UseDetailMaps");
-			if (PropertyEnabled(props["_UseDetailMaps"])) 
-			{
-				target.EnableKeyword("_DETAIL_MULX2");
-				TexturePropertySingleLine("_DetailAlbedoMap", "_DetailAlbedoMapScale");
-				TexturePropertySingleLine("_DetailNormalMap", "_DetailNormalMapScale");
-				TexturePropertySingleLine("_SpecularDetailMask", "_SpecularDetailStrength");
-				
-				editor.TextureScaleOffsetProperty(props["_DetailAlbedoMap"]);
-				ShaderProperty("_UVSec");
-			} else {
-				target.DisableKeyword("_DETAIL_MULX2");
+			if (TogglePropertyHeader("_UseDetailMaps")){
+				if (PropertyEnabled(props["_UseDetailMaps"])) 
+				{
+					target.EnableKeyword("_DETAIL_MULX2");
+					TexturePropertySingleLine("_DetailAlbedoMap", "_DetailAlbedoMapScale");
+					TexturePropertySingleLine("_DetailNormalMap", "_DetailNormalMapScale");
+					TexturePropertySingleLine("_SpecularDetailMask", "_SpecularDetailStrength");
+					
+					editor.TextureScaleOffsetProperty(props["_DetailAlbedoMap"]);
+					ShaderProperty("_UVSec");
+				} else {
+					target.DisableKeyword("_DETAIL_MULX2");
+				}
 			}
 		}
 
 		protected void AnimationOptions()
 		{
             EditorGUILayout.Space();
-			TogglePropertyHeader("_UseAnimation");
-			if (PropertyEnabled(props["_UseAnimation"]))
+			if (TogglePropertyHeader("_UseAnimation") && PropertyEnabled(props["_UseAnimation"]))
 			{
 				ShaderProperty("_AnimationSpeed");
 				ShaderProperty("_TotalFrames");
@@ -643,8 +867,7 @@ namespace SilentCelShading.Unity
 		protected void VanishingOptions()
 		{ 
             EditorGUILayout.Space();
-			TogglePropertyHeader("_UseVanishing");
-			if (PropertyEnabled(props["_UseVanishing"]))
+			if (TogglePropertyHeader("_UseVanishing") && PropertyEnabled(props["_UseVanishing"]))
 			{
 				ShaderProperty("_VanishingStart");
 				ShaderProperty("_VanishingEnd");
@@ -655,41 +878,54 @@ namespace SilentCelShading.Unity
 		{ 
 			EditorGUILayout.Space();
 			
-			foreach (Material mat in WithMaterialPropertyDropdown(props["_OutlineMode"], Enum.GetNames(typeof(OutlineMode)), editor))
+			MaterialProperty outlineProp;
+			if (props.TryGetValue("_OutlineMode", out outlineProp))
 			{
-				SetupMaterialWithOutlineMode(mat, (OutlineMode)props["_OutlineMode"].floatValue);
-			}
-			TogglePropertyHeader("_OutlineMode", false);
+				foreach (Material mat in WithMaterialPropertyDropdown(outlineProp, Enum.GetNames(typeof(OutlineMode)), editor))
+				{
+					SetupMaterialWithOutlineMode(mat, (OutlineMode)outlineProp.floatValue);
+				}
+				TogglePropertyHeader("_OutlineMode", false);
 
-			switch ((OutlineMode)props["_OutlineMode"].floatValue)
-			{
-				case OutlineMode.Tinted:
-				case OutlineMode.Colored:
-				TexturePropertySingleLine("_OutlineMask");
-				ShaderProperty("_outline_color");
-				ShaderProperty("_outline_width");
-				break;
-				case OutlineMode.None:
-				default:
-				break;
-			}	  
+				switch ((OutlineMode)outlineProp.floatValue)
+				{
+					case OutlineMode.Tinted:
+					case OutlineMode.Colored:
+					TexturePropertySingleLine("_OutlineMask");
+					ShaderProperty("_outline_color");
+					ShaderProperty("_outline_width");
+					break;
+					case OutlineMode.None:
+					default:
+					break;
+				}	  
+			}
 		}
 
 		protected void ManualButtonArea()
 		{
 			EditorGUILayout.Space();
+			
+			DrawSectionHeaderArea(Content("Resources"));
 
-			if (GUILayout.Button(styles["s_manualButton"], "button"))
-			{
-				Application.OpenURL("https://gitlab.com/s-ilent/SCSS/wikis/Manual/Setting-Overview");
-			}
+            Rect r = EditorGUILayout.GetControlRect(true,0,EditorStyles.layerMaskField);
+				r.x -= 2.0f;
+				r.y += 2.0f;
+				r.height = 18.0f;
+			Rect r2 = r;
+				r2.width = r.width / 2.0f;
+			//GUI.Box(r, EditorGUIUtility.IconContent("Toolbar"), EditorStyles.toolbar);
+			if (GUI.Button(r2, Content("s_manualButton"), EditorStyles.miniButtonLeft)) Application.OpenURL("https://gitlab.com/s-ilent/SCSS/wikis/Manual/Setting-Overview");
+				r2.x += r2.width;
+			if (GUI.Button(r2, Content("s_socialButton"), EditorStyles.miniButtonRight)) Application.OpenURL("https://discord.gg/uHJx4g629K");
+			EditorGUILayout.LabelField("", EditorStyles.label);
 		}
 
 		protected void AdvancedOptions()
 		{
 			EditorGUILayout.Space();
 
-			DrawSectionHeaderArea(styles["s_advancedOptions"]);
+			DrawSectionHeaderArea(Content("s_advancedOptions"));
 
 			EditorGUILayout.Space();
 
@@ -717,7 +953,8 @@ namespace SilentCelShading.Unity
 
 			ShaderProperty("_LightSkew");
 
-			if (props["_SpecularType"].floatValue >= 1.0f) 
+			MaterialProperty specProp;
+			if (props.TryGetValue("_SpecularType", out specProp) && specProp.floatValue >= 1.0f) 
 			{
 				if (WithChangeCheck(() => 
 				{
@@ -754,7 +991,21 @@ namespace SilentCelShading.Unity
 			editor.EnableInstancingField();
 		}
 
-		public static void SetupMaterialWithShadowMaskType(Material material, ShadowMaskType shadowMaskType)
+		protected static void SetupMaterialWithTransparencyMode(Material material, TransparencyMode shadowMaskType)
+		{
+			switch ((TransparencyMode)material.GetFloat("_AlphaSharp"))
+			{
+				case TransparencyMode.Sharp:
+				material.SetFloat("_AlphaSharp", 1);
+				break;
+				default:
+				case TransparencyMode.Soft:
+				material.SetFloat("_AlphaSharp", 0);
+				break;
+			}
+		}
+
+		protected static void SetupMaterialWithShadowMaskType(Material material, ShadowMaskType shadowMaskType)
 		{
 			switch ((ShadowMaskType)material.GetFloat("_ShadowMaskType"))
 			{
@@ -772,7 +1023,7 @@ namespace SilentCelShading.Unity
 			}
 		}
 
-		public static void SetupMaterialWithLightRampType(Material material, LightRampType lightRampType)
+		protected static void SetupMaterialWithLightRampType(Material material, LightRampType lightRampType)
 		{
 			switch ((LightRampType)material.GetFloat("_LightRampType"))
 			{
@@ -883,6 +1134,8 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
 
             Texture normalMapTexture = GetTextureProperty(material, "_BumpMap");
             float? normalMapScale = GetFloatProperty(material, "_BumpScale");
+
+            Texture emissionTexture = GetTextureProperty(material, "_EmissionMap");
             Color? emissionColor = GetColorProperty(material, "_EmissionColor");
 
  			float? useToneSeparation = GetFloatProperty(material, "_CrosstoneToneSeparation");
@@ -901,11 +1154,15 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
             Texture matcapMask = GetTextureProperty(material, "_MatcapMask");
             Texture matcapTexture = GetTextureProperty(material, "_Matcap1");
             float? matcapBlend = GetFloatProperty(material, "_Matcap1Blend");
+            float? matcapStrength = GetFloatProperty(material, "_Matcap1Strength");
+            Color? matcapTint = GetColorProperty(material, "_Matcap1Tint");
 
             float? specularType = GetFloatProperty(material, "_SpecularType");
             Texture specularMap = GetTextureProperty(material, "_SpecGlossMap");
+            Texture specularDetailMask = GetTextureProperty(material, "_SpecularDetailMask");
             Color? specularTint = GetColorProperty(material, "_SpecColor");
             float? smoothness = GetFloatProperty(material, "_Smoothness");
+            float? celSpecularSoftness = GetFloatProperty(material, "_CelSpecularSoftness");
 
             float? useFresnel = GetFloatProperty(material, "_UseFresnel");
             float? fresnelWidth = GetFloatProperty(material, "_FresnelWidth");
@@ -935,6 +1192,9 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
                     normalMapTexture = GetTextureProperty(material, "_NormalMap");
                     // _Tweak_ShadingGradeMapLevel is named the same.
 
+					if (GetFloatProperty(material, "_Inverse_Clipping") == 1) Debug.Log("Note: Inverse clipping currently not supported.");
+					if (GetTextureProperty(material, "_ClippingMask")) SetFloatProperty(material, "_AlbedoAlphaMode", (float)AlbedoAlphaMode.ClippingMask);
+
                     // Tone seperation is based on whether BaseAs1st is set.
                     // 2nd seperation is based on whether 1stAs2nd is set.
                     useToneSeparation = GetFloatProperty(material, "_Use_BaseAs1st");
@@ -942,13 +1202,27 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
                     use2ndSeparation = GetFloatProperty(material, "_Use_1stAs2nd");
                     if (use2ndSeparation.HasValue) use2ndSeparation = 1.0f - use2ndSeparation;
 
+					// Emission properties are not fully supported.
+					emissionTexture = GetTextureProperty(material, "_Emissive_Tex");
+					emissionColor = GetColorProperty(material, "_Emissive_Color");
+
                     // HighColor is only supported in Specular mode
                     specularMap = GetTextureProperty(material, "_HighColor_Tex");
+					if (specularMap) { specularDetailMask = GetTextureProperty(material, "_Set_HighColorMask"); }
+					else { specularMap = GetTextureProperty(material, "_Set_HighColorMask"); };
                     specularType = GetFloatProperty(material, "_Is_SpecularToHighColor");
+					//if (specularDetailMask.HasValue) 
                     if (specularType.HasValue) specularType = (float)SpecularType.Cel * specularType;
                     specularTint = GetColorProperty(material, "_HighColor");
+					{
+						Color specularTint_var = (specularTint.HasValue)? (specularTint.Value) : (Color.white);
+						specularTint_var.a *= 0.1f;
+						specularTint = specularTint_var;
+					}
+
                     smoothness = GetFloatProperty(material, "_HighColor_Power");
                     if (smoothness.HasValue) smoothness = 1.0f - smoothness;
+					celSpecularSoftness = GetFloatProperty(material, "_Is_SpecularToHighColor");
 
                     // Rim lighting works differently here, but there's not much we can do about it. 
                     useFresnel = GetFloatProperty(material, "_RimLight");
@@ -979,6 +1253,9 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
                     // _Is_LightColor_MatCap is not supported.
                     matcapBlend = GetFloatProperty(material, "_Is_BlendAddToMatCap");
                     if (matcapBlend.HasValue) matcapBlend = 1.0f - matcapBlend;
+					// This seems to be used as a strength setting.
+					matcapStrength = 1.0f - GetFloatProperty(material, "_Tweak_MatcapMaskLevel");
+            		matcapTint = GetColorProperty(material, "_MatCapColor");
                     // _Tweak_MatCapUV, _Rotate_MatCapUV are not yet supported.
                     // _Is_NormalMapForMatCap, _NormalMapForMatCap, _BumpScaleMatcap, _Rotate_NormalMapForMatCapUV
                     // are not supported.
@@ -1049,6 +1326,10 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
             {
                 material.SetTexture("_OutlineMask", outlineMask);
             }
+            if (emissionTexture)
+            {
+                material.SetTexture("_EmissionMap", emissionTexture);
+            }
 
             SetFloatProperty(material, "_BumpScale", normalMapScale);
             SetColorProperty(material, "_EmissionColor", emissionColor);
@@ -1060,9 +1341,11 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
             SetFloatProperty(material, "_2nd_ShadeColor_Feather", shadeMap2Feather);
             SetFloatProperty(material, "_UseMatcap", useMatcap);
             SetFloatProperty(material, "_Matcap1Blend", matcapBlend);
+            SetColorProperty(material, "_Matcap1Tint", matcapTint);
             SetFloatProperty(material, "_SpecularType", specularType);
             SetColorProperty(material, "_SpecColor", specularTint);
             SetFloatProperty(material, "_Smoothness", smoothness);
+            SetFloatProperty(material, "_CelSpecularSoftness", celSpecularSoftness);
             SetFloatProperty(material, "_UseFresnel", useFresnel);
             SetFloatProperty(material, "_FresnelWidth", fresnelWidth);
             SetFloatProperty(material, "_FresnelStrength", fresnelStrength);
@@ -1083,6 +1366,7 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
 			SetIntProperty(material, "_StencilFail", stencilFail);
 
             if (outlineMode.HasValue) SetupMaterialWithOutlineMode(material, (OutlineMode)outlineMode);
+			if (specularType.HasValue) SetupMaterialWithSpecularType(material, (SpecularType)specularType);
 
             // Setup the rendering mode based on the old shader.
             if (oldShader == null || !oldShader.name.Contains(LegacyShadersPath))
@@ -1110,6 +1394,10 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
 	                }
 	            	if (oldShader.name.Contains("TransClipping"))
 	                {
+	                    mode = RenderingMode.Cutout;
+	                }
+	            	if (oldShader.name.Contains("Transparent"))
+	                {
 	                    mode = RenderingMode.Fade;
 	                }
 	            }
@@ -1120,7 +1408,7 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
             }
         }
 
-		public static void SetupMaterialWithAlbedo(Material material, MaterialProperty albedoMap, MaterialProperty albedoAlphaMode)
+		protected static void SetupMaterialWithAlbedo(Material material, MaterialProperty albedoMap, MaterialProperty albedoAlphaMode)
 		{
 			switch ((AlbedoAlphaMode)albedoAlphaMode.floatValue)
 			{
@@ -1138,7 +1426,7 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
 			}
 		}
 
-		public static void SetupMaterialWithOutlineMode(Material material, OutlineMode outlineMode)
+		protected static void SetupMaterialWithOutlineMode(Material material, OutlineMode outlineMode)
 		{
 			string[] oldShaderName = material.shader.name.Split('/');
             const string outlineName = " (Outline)"; //
@@ -1173,7 +1461,7 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
             }
         }
 
-        public static void SetupMaterialWithSpecularType(Material material, SpecularType specularType)
+        protected static void SetupMaterialWithSpecularType(Material material, SpecularType specularType)
         {
             // Note: _METALLICGLOSSMAP is used to avoid keyword problems with VRchat.
             // It's only a coincidence that the metallic map needs to be present.
@@ -1216,7 +1504,7 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
         	}
         }
 
-        public static void SetupMaterialWithVertexColorType(Material material, VertexColorType vertexColorType)
+        protected static void SetupMaterialWithVertexColorType(Material material, VertexColorType vertexColorType)
         {
         	switch ((VertexColorType)material.GetFloat("_VertexColorType"))
         	{
@@ -1229,12 +1517,15 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
         		case VertexColorType.AdditionalData:
         		material.SetFloat("_VertexColorType", 2);
         		break;
+        		case VertexColorType.Ignore:
+        		material.SetFloat("_VertexColorType", 3);
+        		break;
         		default:
         		break;
         	}
         }
         
-        public static void SetupMaterialWithLightingCalculationType(Material material, LightingCalculationType LightingCalculationType)
+        protected static void SetupMaterialWithLightingCalculationType(Material material, LightingCalculationType LightingCalculationType)
         {
         	switch ((LightingCalculationType)material.GetFloat("_LightingCalculationType"))
         	{   
@@ -1247,14 +1538,17 @@ protected Vector4? GetSerializedMaterialVector4(Material material, string propNa
         		case LightingCalculationType.Directional:
         		material.SetFloat("_LightingCalculationType", 3);
         		break;
+        		case LightingCalculationType.Biased:
+        		material.SetFloat("_LightingCalculationType", 4);
+        		break;
         		default:
-        		case LightingCalculationType.Arktoon:
+        		case LightingCalculationType.Unbiased:
         		material.SetFloat("_LightingCalculationType", 0);
         		break;
         	}
         }
 
-	    public static void UpgradeVariantCheck(Material material)
+	    protected static void UpgradeVariantCheck(Material material)
 	    {
 	        const string oldNoOutlineName = "☓ No Outline";
 	        string newShaderName = "Silent's Cel Shading/Lightramp";

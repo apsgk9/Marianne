@@ -7,8 +7,16 @@
     #endif
 #endif
 
-#if defined (SHADOWS_SCREEN) || ( defined (SHADOWS_DEPTH) && defined (SPOT) ) || defined (SHADOWS_CUBE) || (defined (UNITY_LIGHT_PROBE_PROXY_VOLUME) && UNITY_VERSION<600)
+#if defined (SHADOWS_SHADOWMASK) || defined (SHADOWS_SCREEN) || ( defined (SHADOWS_DEPTH) && defined (SPOT) ) || defined (SHADOWS_CUBE) || (defined (UNITY_LIGHT_PROBE_PROXY_VOLUME) && UNITY_VERSION<600)
     #define USING_SHADOWS_UNITY
+#endif
+
+#if defined (_ALPHATEST_ON) || defined (_ALPHABLEND_ON) || defined (_ALPHAPREMULTIPLY_ON)
+    #define USING_TRANSPARENCY
+#endif
+
+#ifndef UNITY_POSITION
+    #define UNITY_POSITION(pos) float4 pos : SV_POSITION
 #endif
 
 sampler2D_float _CameraDepthTexture;
@@ -47,41 +55,50 @@ float intensity(float2 pixel) {
     return frac(a1 * float(pixel.x) + a2 * float(pixel.y));
 }
 
-float rDither(float gray, float2 pos) {
-	#define steps 4
+float rDither(float gray, float2 pos, float steps) {
 	// pos is screen pixel position in 0-res range
     // Calculated noised gray value
     float noised = (2./steps) * T(intensity(float2(pos.xy))) + gray - (1./steps); 
     // Clamp to the number of gray levels we want
     return floor(steps * noised) / (steps-1.);
-    #undef steps
 }
 
 // "R2" dithering -- end
 
+#define ALPHA_SHOULD_DITHER_CLIP (defined(_ALPHATEST_ON) || defined(UNITY_PASS_SHADOWCASTER))
+
 inline void applyAlphaClip(inout float alpha, float cutoff, float2 pos, bool sharpen)
 {
+    // If this material isn't transparent, do nothing.
+    #if defined(USING_TRANSPARENCY)
+
     // Get the amount of MSAA samples present
     #if (SHADER_TARGET > 40)
     half samplecount = GetRenderTargetSampleCount();
     #else
-    half samplecount = 1;
+    half samplecount = 1; 
     #endif
 
     pos += _SinTime.x%4;
-    #if defined(_ALPHATEST_ON)
     // Switch between dithered alpha and sharp-edge alpha.
         if (!sharpen) {
+            // If using true alpha blending, don't dither.
+            #if ALPHA_SHOULD_DITHER_CLIP
             alpha = (1+cutoff) * alpha - cutoff;
             float mask = (T(intensity(pos)));
             const float width = 1 / (samplecount*2-1);
             alpha = alpha - (mask * (1-(alpha)) * width);
+            #endif
         }
         else {
-            alpha = ((alpha - cutoff) / max(fwidth(alpha), 0.0001) + 0.5);
+            alpha = ((alpha - cutoff) / max(fwidth(alpha), 0.0) + 0.5);
         }
-    // If 0, remove now.
-    clip (alpha);
+
+        clip (alpha);
+        // If 0, remove now.
+        alpha = saturate(alpha);
+    #else
+    alpha = 1.0;
     #endif
 }
 
@@ -155,7 +172,7 @@ float simpleSharpen (float x, float width, float mid, const float smoothnessMode
 float2 sharpSample( float4 texelSize , float2 p )
 {
 	p = p*texelSize.zw;
-    float2 c = max(0.0001, fwidth(p));
+    float2 c = max(0.0, fwidth(p));
     p = floor(p) + saturate(frac(p) / c);
 	p = (p - 0.5)*texelSize.xy;
 	return p;
@@ -176,6 +193,10 @@ bool backfaceInMirror()
 	return false;
 	#endif
 }
+
+//-----------------------------------------------------------------------------
+// These functions rely on data or functions not available in the shadow pass
+//-----------------------------------------------------------------------------
 
 #if defined(UNITY_STANDARD_BRDF_INCLUDED)
 
@@ -277,6 +298,7 @@ float GeometricNormalFiltering(float perceptualSmoothness, float3 geometricNorma
 void correctedScreenShadowsForMSAA(float4 _ShadowCoord, inout float shadow)
 {
     #ifdef SHADOWS_SCREEN
+    #ifdef SHADOWMAPSAMPLER_AND_TEXELSIZE_DEFINED
 
     float2 screenUV = _ShadowCoord.xy / _ShadowCoord.w;
     shadow = tex2D(_ShadowMapTexture, screenUV).r;
@@ -322,6 +344,7 @@ void correctedScreenShadowsForMSAA(float4 _ShadowCoord, inout float shadow)
 
         shadow = tex2D(_ShadowMapTexture, screenUV + uvOffsets[lowest]).r;
     }
+    #endif //SHADOWMAPSAMPLER_AND_TEXELSIZE_DEFINED
     #endif //SHADOWS_SCREEN
 }
 
@@ -449,14 +472,44 @@ float StrandSpecular(float3 T, float3 H, float exponent, float strength)
 	return dirAtten * pow(sinTH, exponent) * strength;
 }
 
+float3 GetSHDirectionL1()
+{
+    // For efficiency, we only get the direction from L1.
+    // Because getting it from L2 would be too hard!
+    return
+        Unity_SafeNormalize((unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz));
+}
+
 float3 SimpleSH9(float3 normal)
 {
     return ShadeSH9(float4(normal, 1));
 }
 
+// Get the average (L0) SH contribution
+// Biased due to a constant factor added for L2
+half3 GetSHAverageFast()
+{
+    return float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
+}
+
+
+// Get the ambient (L0) SH contribution correctly
+// Provided by Dj Lukis.LT - Unity's SH calculation adds a constant
+// factor which produces a slight bias in the result.
+half3 GetSHAverage ()
+{
+    return float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w)
+     + float3(unity_SHBr.z, unity_SHBg.z, unity_SHBb.z) / 3.0;
+}
+
 // Get the maximum SH contribution
 // synqark's Arktoon shader's shading method
-half3 GetSHLength ()
+// This method has some flaws: 
+// - Getting the length of the L1 data is a bit wrong
+//   because .w contains ambient contribution
+// - Getting the length of L2 doesn't correspond with
+//   intensity, because it doesn't store direct vectors
+half3 GetSHLengthOld ()
 {
     half3 x, x1;
     x.r = length(unity_SHAr);
@@ -468,10 +521,12 @@ half3 GetSHLength ()
     return x + x1;
 }
 
-// Get the average (L0) SH contribution
-half3 GetSHAverage ()
+// Returns the value from SH in the lighting direction with the 
+// brightest intensity. 
+half3 GetSHMaxL1()
 {
-    return float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
+    float4 maxDirection = float4(GetSHDirectionL1(), 1.0);
+    return SHEvalLinearL0L1(maxDirection) + max(SHEvalLinearL2(maxDirection), 0);
 }
 
 float3 SHEvalLinearL2(float3 n)
@@ -492,7 +547,7 @@ float getGreyscaleSH(float3 normal)
     //float3 dd = float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
     float3 dd = SimpleSH9(-ambientLightDirection);
     float3 ee = SimpleSH9(normal);
-    float3 aa = GetSHLength(); // SHa and SHb
+    float3 aa = SimpleSH9(ambientLightDirection);
 
     ee = saturate( (ee - dd) / (aa - dd));
     return abs(dot(ee, sRGB_Luminance));
@@ -532,6 +587,40 @@ float3 applyBlendMode(int blendOp, half3 a, half3 b, half t)
 float3 applyMatcap(sampler2D src, half2 matcapUV, float3 dst, float3 tint, int blendMode, float blendStrength)
 {
     return applyBlendMode(blendMode, dst, tex2D(src, matcapUV) * tint, blendStrength);
+}
+
+// Source: https://qiita.com/Santarh/items/428d2e0f33852e6f37b5
+static float getScreenAspectRatio()
+{
+    // Take the position of the top-right vertice of the near plane in projection space,
+    // and convert it back to view space.
+
+    // Upper right corner, so (x, y) = (1, 1)
+    // Since we want the near plane, z is dependant on API (0: DirectX, -1: OpenGL)
+    // And w is the near clip plane itself. 
+    float4 projectionSpaceUpperRight = float4(1, 1, UNITY_NEAR_CLIP_VALUE, _ProjectionParams.y);
+
+    // Apply the inverse projection matrix...
+    float4 viewSpaceUpperRight = mul(unity_CameraInvProjection, projectionSpaceUpperRight);
+
+    // ...and the aspect ratio is width / height. 
+    return viewSpaceUpperRight.x / viewSpaceUpperRight.y;
+}
+
+// This is based on a typical calculation for tonemapping
+// scenes to screens, but in this case we want to flatten
+// and shift the image colours.
+// Lavender's the most aesthetic colour for this.
+float3 AutoToneMapping(float3 color)
+{
+    const float A = 0.7;
+    const float3 B = float3(.74, 0.6, .74); 
+    const float C = 0;
+    const float D = 1.59;
+    const float E = 0.451;
+    color = max((0.0), color - (0.004));
+    color = (color * (A * color + B)) / (color * (C * color + D) + E);
+    return color;
 }
 
 #endif // if UNITY_STANDARD_BRDF_INCLUDED

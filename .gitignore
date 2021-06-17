@@ -84,3 +84,5 @@ sysinfo.txt
 *.stackdump
 
 */3rdParty/
+Assets/Art/**
+#[Aa]ssets/Art/**
