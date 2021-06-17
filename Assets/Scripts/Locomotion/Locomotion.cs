@@ -205,8 +205,7 @@ public partial class Locomotion : ILocomotion
                 CalculateCharacterDesiredVector();
                 RotateTransform(DesiredCharacterVectorForward);
             }
-            SendAnimatorLocomotionCommands(_characterInput.IsRunning());
-            
+            SendAnimatorLocomotionCommands(_characterInput.IsRunning());            
         }
     }
 
@@ -303,6 +302,7 @@ public partial class Locomotion : ILocomotion
         finalMovementComposite = runcomposite + baseMovementComposite;
         var runGap = 0.00f;
         var walkGap = 0.00f;
+        
         if (_locomotionMode == LocomotionMode.Run)
         {
             walkGap = -0.1f;

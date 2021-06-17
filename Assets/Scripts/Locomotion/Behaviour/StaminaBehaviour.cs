@@ -10,6 +10,8 @@ public class StaminaBehaviour : StateMachineBehaviour
     public int StaminaChange;
     public bool UseInitialCondition=false;
     public string InitialConditionParameterName="Speed";
+
+    //Note what does this do?
     public float Condition=3f;
     public int InitialStaminaUsage;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
