@@ -47,13 +47,19 @@ namespace CharacterProperties
                 _characterInput = GetComponentInParent<ICharacterInput>();
             }
             _previousMovmementAxis=Vector2.zero;
+            CharacterState.ActivateJump+=SetJumpTrigger;
 
         }
+
+        private void SetJumpTrigger()
+        {
+            Animator.SetTrigger(CharacterAnimatorNamingList.JumpTriggerParameterName);
+        }
+
         public void Update()
         {
             SpeedCalculations();
             SetParameters();
-            HandleJump();
         }
         void FixedUpdate()
         {
@@ -87,14 +93,6 @@ namespace CharacterProperties
             Animator.SetBool(CharacterAnimatorNamingList.isGroundedParameterName, CharacterState.isGrounded);
             
             Animator.SetFloat(CharacterAnimatorNamingList.NormalizedTimeParameterName, Mathf.Repeat(Animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f));
-        }
-
-        private void HandleJump()
-        {
-            if(CharacterState.TryingToJump && CharacterState.CanJump)
-            {
-                Animator.SetTrigger(CharacterAnimatorNamingList.JumpTriggerParameterName);
-            }
         }
 
         private bool GetMovementPressed()

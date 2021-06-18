@@ -5,7 +5,23 @@
 #include "AutoLight.cginc"
 #include "Lighting.cginc"
 
-#include "SCSS_Config.cginc"
+// Perform full-quality light calculations on unimportant lights.
+// Considering our target GPUs, this is a big visual improvement
+// for a small performance penalty.
+#define SCSS_UNIMPORTANT_LIGHTS_FRAGMENT 1
+
+// When rendered by a non-HDR camera, clamp incoming lighting.
+// This works around issues where scenes are set up incorrectly
+// for non-HDR.
+#define SCSS_CLAMP_IN_NON_HDR 1
+
+// When screen-space shadows are used in the scene, performs a
+// search to find the best sampling point for the shadow
+// using the camera's depth buffer. This filters away many aliasing
+// artifacts caused by limitations in the screen shadow technique
+// used by directional lights.
+#define SCSS_SCREEN_SHADOW_FILTER 1
+
 #include "SCSS_UnityGI.cginc"
 #include "SCSS_Utils.cginc"
 #include "SCSS_Input.cginc"
@@ -110,8 +126,8 @@ float3 sampleCrossToneLighting(inout float x, SCSS_TonemapInput tone0, SCSS_Tone
 	float3 final;
 
 	// 2nd separation determines whether 1st and 2nd shading tones are combined.
-	if (_Crosstone2ndSeparation == 0) 	tone1.col = tone1.col * tone0.col;
-	// if (_Crosstone2ndSeparation == 1) 	tone1.col = tone1.col; // Just here for completeness
+	if (_Crosstone2ndSeparation == 0) 	tone1.col * tone0.col;
+	if (_Crosstone2ndSeparation == 1) 	tone1.col = tone1.col ;
 	
 	// Either way, the result is interpolated against tone 0 by the 2nd factor.
 	final = lerp(tone1.col, tone0.col, factor1);
@@ -125,7 +141,6 @@ float3 sampleCrossToneLighting(inout float x, SCSS_TonemapInput tone0, SCSS_Tone
 	return final;
 }
 
-#if !defined(SCSS_CROSSTONE)
 float applyShadowLift(float baseLight, float occlusion)
 {
 	baseLight *= occlusion;
@@ -139,7 +154,6 @@ float applyShadowLift(float4 baseLight, float occlusion)
 	baseLight = _ShadowLift + baseLight * (1-_ShadowLift);
 	return baseLight;
 }
-#endif
 
 float getRemappedLight(half perceptualRoughness, SCSS_LightParam d)
 {
@@ -193,9 +207,9 @@ void getDirectIndirectLighting(float3 normal, out float3 directLighting, out flo
 	indirectLighting = 0.0;
 	switch (_LightingCalculationType)
 	{
-	case 0: // Unbiased
-		directLighting   = GetSHMaxL1();
-		indirectLighting = GetSHAverage(); 
+	case 0: // Arktoon
+		directLighting   = GetSHLength();
+		indirectLighting = BetterSH9(half4(0.0, 0.0, 0.0, 1.0)); 
 	break;
 	case 1: // Standard
 		directLighting = 
@@ -210,10 +224,6 @@ void getDirectIndirectLighting(float3 normal, out float3 directLighting, out flo
 		directLighting   = BetterSH9(ambientDir);
 		indirectLighting = BetterSH9(-ambientDir); 
 	break;
-	case 4: // Biased
-		directLighting   = GetSHMaxL1();
-		indirectLighting = BetterSH9(half4(0.0, 0.0, 0.0, 1.0)); 
-	break;
 	}
 }
 
@@ -222,12 +232,6 @@ half3 calcDiffuseGI(float3 albedo, SCSS_TonemapInput tone[2], float occlusion, h
 	float3 indirectLighting, float3 directLighting, SCSS_LightParam d)
 {
 	float ambientLight = d.NdotAmb;
-
-	/*
-	Ambient lighting splitting: 
-	Strong shading looks good, but weak shading looks bad. 
-	This system removes shading if it's too weak.
-	*/
 	
 	float3 indirectAverage = 0.5 * (indirectLighting + directLighting);
 
@@ -464,21 +468,18 @@ half3 calcSpecularCel(float3 specColor, float smoothness, float3 normal, float o
 		return (spec * specColor *  l.color) + (spec * specColor * envLight);
 	}
 	if (_SpecularType == 5) {
-		// It might be better if these are passed in parameters in future
-		float anisotropy = _Anisotropy;
-		float softness = _CelSpecularSoftness;
-		float3 strandTangent = (anisotropy < 0)
+		float3 strandTangent = (_Anisotropy < 0)
 		? i.tangentDir
 		: i.bitangentDir;
-		anisotropy = abs(anisotropy);
-		strandTangent = lerp(normal, strandTangent, anisotropy);
+		_Anisotropy = abs(_Anisotropy);
+		strandTangent = lerp(normal, strandTangent, _Anisotropy);
 		float exponent = smoothness;
 		float spec  = StrandSpecular(strandTangent, d.halfDir, 
 			exponent*80, 1.0 );
 		float spec2 = StrandSpecular(strandTangent, d.halfDir, 
 			exponent*40, 0.5 );
-		spec  = sharpenLighting(frac(spec), softness)+floor(spec);
-		spec2 = sharpenLighting(frac(spec2), softness)+floor(spec2);
+		spec  = sharpenLighting(frac(spec), _CelSpecularSoftness)+floor(spec);
+		spec2 = sharpenLighting(frac(spec2), _CelSpecularSoftness)+floor(spec2);
 		spec += spec2;
 		
     	float3 envLight = UNITY_SAMPLE_TEXCUBE_LOD(unity_SpecCube0, normal, UNITY_SPECCUBE_LOD_STEPS);
@@ -513,14 +514,14 @@ float3 SCSS_ShadeBase(SCSS_Input c, VertexOutput i, SCSS_Light l, float attenuat
 	// Prepare fake light params for subsurface scattering.
 	SCSS_Light iL = l;
 	SCSS_LightParam iD = d;
-	iL.color = GetSHMaxL1();
+	iL.color = GetSHLength();
 	iL.dir = Unity_SafeNormalize((unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz) * _LightSkew.xyz);
 	iD = initialiseLightParam(iL, c.normal, i.posWorld.xyz);
 
 	// Prepare fake light params for spec/fresnel which simulate specular.
 	SCSS_Light fL = l;
 	SCSS_LightParam fD = d;
-	fL.color = attenuation * fL.color + GetSHMaxL1();
+	fL.color = attenuation * fL.color + GetSHLength();
 	fL.dir = Unity_SafeNormalize(fL.dir + (unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz) * _LightSkew.xyz);
 	fD = initialiseLightParam(fL, c.normal, i.posWorld.xyz);
 
@@ -607,19 +608,21 @@ float3 SCSS_ApplyLighting(SCSS_Input c, VertexOutput i, float4 texcoords)
 	// Disable DisneyDiffuse for cel specular.
 	#endif
 
-	// Generic lighting for effects.
+	// Generic lighting for matcaps/rimlighting. 
+	// Currently matcaps are applied to albedo, so they don't need lighting. 
 	float3 effectLighting = l.color;
 	#if defined(UNITY_PASS_FORWARDBASE)
 	//effectLighting *= attenuation;
-	effectLighting += GetSHAverage();
-	#endif
-
-	float3 effectLightShadow = l.color * max((1+d.NdotL)*attenuation, 0);
-	#if defined(UNITY_PASS_FORWARDBASE)
-	effectLightShadow += GetSHAverage();
+	effectLighting += BetterSH9(half4(0.0,  0.0, 0.0, 1.0));
 	#endif
 
 	float3 finalColor = 0; 
+
+	float fresnelLightMaskBase = LerpOneTo((d.NdotH), _UseFresnelLightMask);
+	float fresnelLightMask = 
+		saturate(pow(saturate( fresnelLightMaskBase), _FresnelLightMask));
+	float fresnelLightMaskInv = 
+		saturate(pow(saturate(-fresnelLightMaskBase), _FresnelLightMask));
 
 	// Apply matcap before specular effect.
 	if (_UseMatcap >= 1 && isOutline <= 0) 
@@ -634,38 +637,36 @@ float3 SCSS_ApplyLighting(SCSS_Input c, VertexOutput i, float4 texcoords)
 		c.albedo = applyMatcap(_Matcap3, matcapUV, c.albedo, _Matcap3Tint, _Matcap3Blend, _Matcap3Strength * _MatcapMask_var.b);
 		c.albedo = applyMatcap(_Matcap4, matcapUV, c.albedo, _Matcap4Tint, _Matcap4Blend, _Matcap4Strength * _MatcapMask_var.a);
 	}
-
-
-	float3 finalRimLight = 0;
-	if (_UseFresnel)
+	
+	// Lit
+	if (_UseFresnel == 1 && isOutline <= 0) 
 	{
-		float fresnelLightMaskBase = LerpOneTo((d.NdotH), _UseFresnelLightMask);
-		float fresnelLightMask = 
-			saturate(pow(saturate( fresnelLightMaskBase), _FresnelLightMask));
-		float fresnelLightMaskInv = 
-			saturate(pow(saturate(-fresnelLightMaskBase), _FresnelLightMask));
+		float3 sharpFresnel = sharpenLighting(d.rlPow4.y * c.rim.width * fresnelLightMask, 
+			c.rim.power) * c.rim.tint * c.rim.alpha;
+		sharpFresnel += sharpenLighting(d.rlPow4.y * c.rim.invWidth * fresnelLightMaskInv,
+			c.rim.invPower) * c.rim.invTint * c.rim.invAlpha * _FresnelLightMask;
+		c.albedo += c.albedo * sharpFresnel;
+	}
 
-		// Refactored to use more ifs because the compiler is smarter than me.
-		float rimBase = sharpenLighting(d.rlPow4.y * c.rim.width * fresnelLightMask, c.rim.power) * c.rim.alpha;
-		float3 rimCol = rimBase * c.rim.tint;
+	// AmbientAlt
+	if (_UseFresnel == 3 && isOutline <= 0)
+	{
+		float sharpFresnel = sharpenLighting(d.rlPow4.y*c.rim.width*fresnelLightMask, c.rim.power);
+		sharpFresnel += sharpenLighting(d.rlPow4.y * c.rim.invWidth * fresnelLightMaskInv,
+			c.rim.invPower) * _FresnelLightMask;
+		c.occlusion += saturate(sharpFresnel);
+	}
 
-		float rimInv = sharpenLighting(d.rlPow4.y * c.rim.invWidth * fresnelLightMaskInv,
-			c.rim.invPower) * _FresnelLightMask * c.rim.invAlpha;
-		float3 rimInvCol = rimInv * c.rim.invTint;
-
-		float3 rimFinal = rimCol + rimInvCol;
-
-		float applyToAlbedo = (_UseFresnel == 1) + (_UseFresnel == 4);
-		float applyToFinal = (_UseFresnel == 2);
-		float applyToLightBias = (_UseFresnel == 3) + (_UseFresnel == 4);
-		// Lit
-		if (applyToAlbedo) c.albedo += c.albedo * rimFinal * (1-isOutline);
-		// AmbientAlt
-		if (applyToLightBias) c.occlusion += saturate(rimBase) * (1-isOutline);
-		// Ambient
-		// If applied to the final output, it can only be applied later.
-		if (applyToFinal) finalRimLight = rimFinal * (1-isOutline);
-
+	// Combination
+	if (_UseFresnel == 4 && isOutline <= 0)
+	{
+		float3 sharpFresnel = sharpenLighting(d.rlPow4.y * c.rim.width * fresnelLightMask, 
+			c.rim.power);
+		c.occlusion += saturate(sharpFresnel);
+		sharpFresnel *= c.rim.tint * c.rim.alpha;
+		sharpFresnel += sharpenLighting(d.rlPow4.y * c.rim.invWidth * fresnelLightMaskInv,
+			c.rim.invPower) * c.rim.invTint * c.rim.invAlpha * _FresnelLightMask;
+		c.albedo += c.albedo * sharpFresnel;
 	}
 
 	#if defined(UNITY_PASS_FORWARDBASE)
@@ -681,10 +682,14 @@ float3 SCSS_ApplyLighting(SCSS_Input c, VertexOutput i, float4 texcoords)
 	finalColor += c.albedo * calcVertexLight(i.vertexLight, c.occlusion, c.tone, c.softness);
 	#endif
 
-	// Apply Ambient rim lighting
-	if (_UseFresnel == 2)
+	// Ambient
+	if (_UseFresnel == 2 && isOutline <= 0)
 	{
-		finalColor += effectLighting*finalRimLight;
+		float3 sharpFresnel = sharpenLighting(d.rlPow4.y * c.rim.width * fresnelLightMask, 
+			c.rim.power) * c.rim.tint * c.rim.alpha;
+		sharpFresnel += sharpenLighting(d.rlPow4.y * c.rim.invWidth * fresnelLightMaskInv,
+			c.rim.invPower) * c.rim.invTint * c.rim.invAlpha * _FresnelLightMask;
+		finalColor += effectLighting*sharpFresnel;
 	}
 
 	//float3 wrappedDiffuse = LightColour * saturate((dot(N, L) + w) / ((1 + w) * (1 + w)));
@@ -714,19 +719,11 @@ float3 SCSS_ApplyLighting(SCSS_Input c, VertexOutput i, float4 texcoords)
 	finalColor *= _LightWrappingCompensationFactor;
 
 	#if defined(UNITY_PASS_FORWARDBASE)
-	// Emission
 	float3 emission;
-	float2 emissionDetailUV = EmissionDetailTexCoords(i);
-	float4 emissionDetail = EmissionDetail(emissionDetailUV);
+	float4 emissionDetail = EmissionDetail(texcoords.zw);
 
 	finalColor = max(0, finalColor - saturate((1-emissionDetail.w)- (1-c.emission)));
 	emission = emissionDetail.rgb * c.emission * _EmissionColor.rgb;
-
-	// Glow in the dark modifier.
-	#if defined(_EMISSION)
-		float glowModifier = smoothstep(_EmissiveLightSenseStart, _EmissiveLightSenseEnd, dot(effectLightShadow, sRGB_Luminance));
-		if (_UseEmissiveLightSense) emission *= glowModifier;
-	#endif
 
 	// Emissive c.rim. To restore masking behaviour, multiply by emissionMask.
 	emission += _CustomFresnelColor.xyz * (pow(d.rlPow4.y, rcp(_CustomFresnelColor.w+0.0001)));

@@ -21,6 +21,7 @@ namespace CharacterProperties
         public ICharacterStamina _staminaHandler;
         public IGroundSensors _GroundSensor;
         private bool _currentJumpButtonStatus;
+        public event Action ActivateJump;
 
         public bool CanUseStamina { get { return _staminaHandler.CanUse(); } }
 
@@ -92,11 +93,6 @@ namespace CharacterProperties
             }
         }
 
-        public void HasJumped()
-        {
-            throw new NotImplementedException();
-        }
-
         private void OnDisable()
         {
             if (_player._Locomotion != null)
@@ -126,6 +122,8 @@ namespace CharacterProperties
         private void UpdateTryingToJump(bool JumpGiven)
         {
             TryingToJump = JumpGiven;
+            
+            CheckJumpTrigger();
         }
         private void UpdateGrounded(bool inputIsGrounded)
         {
@@ -135,6 +133,15 @@ namespace CharacterProperties
         private void UpdateCanJump(bool CanJumpGiven)
         {
             CanJump = CanJumpGiven;
+        }
+
+        public void CheckJumpTrigger()
+        {
+            if(TryingToJump && CanJump)
+            {
+                ActivateJump?.Invoke();
+                Debug.Log("INVOKE");
+            }
         }
 
         private void UpdateState(LocomotionState inputState)

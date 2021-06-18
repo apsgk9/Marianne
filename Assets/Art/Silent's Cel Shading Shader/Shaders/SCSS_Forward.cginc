@@ -21,26 +21,16 @@ VertexOutput vert(appdata_full v) {
 	// Extra data handling
 	// X: Outline width | Y: Ramp softness
 	// Z: Outline Z offset | 
-	switch (_VertexColorType) 
+	if (_VertexColorType == 2) 
 	{
-		case 2: // Additional data
 		o.color = 1.0; // Reset
 		o.extraData = v.color;
-		break;
-
-		case 3: // None
-		o.color = 1.0; 
-		o.extraData = float4(1.0, 0.0, 1.0, 1.0); 
-		break;
-
-		default:
+	} else {
 		o.color = v.color;
 		o.extraData = float4(0.0, 0.0, 1.0, 1.0); 
 		o.extraData.x = v.color.a;
-		break;
 	}
 
-	#if defined(SCSS_OUTLINE)
 	#if defined(SCSS_USE_OUTLINE_TEXTURE)
 	o.extraData.x *= OutlineMask(v.texcoord.xy);
 	#endif
@@ -51,10 +41,6 @@ VertexOutput vert(appdata_full v) {
 	// they can have holes, being shells. This is also why it is clamped to not make them bigger.
 	// That looks good at a distance, but not perfect. 
 	o.extraData.x *= min(distance(o.posWorld,_WorldSpaceCameraPos)*4, 1); 
-	#else
-	// Remove outline data when no outline present.
-	o.extraData.xz = 0.0;
-	#endif
 
 #if (UNITY_VERSION<600)
 	TRANSFER_SHADOW(o);
@@ -111,11 +97,6 @@ void geom(triangle VertexOutput IN[3], inout TriangleStream<VertexOutput> tristr
 		for (int i = 2; i >= 0; i--)
 		{
 			VertexOutput o = IN[i];
-
-			// Single-pass instancing compatibility
-    		UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(o); 
-		    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-
 			o.pos = UnityObjectToClipPos(o.vertex + normalize(o.normal) * o.extraData.r);
 
 			// Possible future parameter depending on what people need
@@ -161,18 +142,9 @@ float4 frag(VertexOutput i, uint facing : SV_IsFrontFace) : SV_Target
 	// Ideally, we should pass all input to lighting functions through the 
 	// material parameter struct. But there are some things that are
 	// optional. Review this at a later date...
+	i.uv0 = texcoords; 
 
 	SCSS_Input c = (SCSS_Input) 0;
-
-	c.alpha = Alpha(texcoords.xy);
-
-    #if defined(ALPHAFUNCTION)
-    alphaFunction(c.alpha);
-	#endif
-
-	applyVanishing(c.alpha);
-	
-	applyAlphaClip(c.alpha, _Cutoff, i.pos.xy, _AlphaSharp);
 
 	half detailMask = DetailMask(texcoords.xy);
 
@@ -199,6 +171,31 @@ float4 frag(VertexOutput i, uint facing : SV_IsFrontFace) : SV_Target
 
 	c.albedo = Albedo(texcoords);
 
+	c.emission = Emission(texcoords.xy);
+
+	// Vertex colour application. 
+	[flatten]
+	switch (_VertexColorType)
+	{
+		case 2: 
+		case 0: c.albedo = c.albedo * i.color.rgb; break;
+		case 1: c.albedo = lerp(c.albedo, i.color.rgb, isOutline); break;
+	}
+	
+	c.softness = i.extraData.g;
+
+	c.alpha = Alpha(texcoords.xy);
+
+	c.alpha *= UNITY_SAMPLE_TEX2D_SAMPLER (_ColorMask, _MainTex, texcoords.xy).r;
+
+    #if defined(ALPHAFUNCTION)
+    alphaFunction(c.alpha);
+	#endif
+
+	applyVanishing(c.alpha);
+	
+	applyAlphaClip(c.alpha, _Cutoff, i.pos.xy, _AlphaSharp);
+
 	#if !defined(SCSS_CROSSTONE)
 	c.tone[0] = Tonemap(texcoords.xy, c.occlusion);
 	#endif
@@ -211,25 +208,11 @@ float4 frag(VertexOutput i, uint facing : SV_IsFrontFace) : SV_Target
 
 	c = applyDetail(c, texcoords);
 
-	// Vertex colour application. 
-	[flatten]
-	switch (_VertexColorType)
-	{
-		case 2: 
-		case 0: c.albedo = c.albedo * i.color.rgb; break;
-		case 1: c.albedo = lerp(c.albedo, i.color.rgb, isOutline); break;
-	}
-
-	c.emission = Emission(texcoords.xy);
-	
-	c.softness = i.extraData.g;
-
 	c = applyOutline(c, isOutline);
 
     // Rim lighting parameters. 
 	c.rim = initialiseRimParam();
-	c.rim.alpha *= RimMask(texcoords.xy);
-	c.rim.invAlpha *= RimMask(texcoords.xy);
+	c.rim.power *= RimMask(texcoords.xy);
 	c.rim.tint *= outlineDarken;
 
 	// Scattering parameters
