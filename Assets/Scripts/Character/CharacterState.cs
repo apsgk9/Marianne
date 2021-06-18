@@ -121,8 +121,7 @@ namespace CharacterProperties
 
         private void UpdateTryingToJump(bool JumpGiven)
         {
-            TryingToJump = JumpGiven;
-            
+            TryingToJump = JumpGiven;            
             CheckJumpTrigger();
         }
         private void UpdateGrounded(bool inputIsGrounded)
