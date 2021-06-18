@@ -64,13 +64,14 @@ public partial class Locomotion : ILocomotion
     private Vector3 JumpVelocity;
 
     private bool _canJump;
+    private float _jumpHeight;
     private float gravity=Physics.gravity.y;
     private float slideGravity=0.1f;
     private float slidingMaxVelocity=5f;
 	public float airFriction = 0.5f;
 	public float groundFriction = 100f;
 
-    public Locomotion(GameObject character, float rotationSpeed,
+    public Locomotion(GameObject character, float rotationSpeed, float jumpHeight,
     Transform viewTransform, AnimationCurve movementVectorBlend, AnimationCurve rotationBlend,
     ICharacterInput characterInput, IMover characterMover)
     {
@@ -78,6 +79,7 @@ public partial class Locomotion : ILocomotion
         _characterMover = characterMover;
         _viewTransform = viewTransform;
         _RotationSpeed = rotationSpeed;
+        _jumpHeight= jumpHeight;
         _MovementVectorBlend = movementVectorBlend;
         _RotationBlend = rotationBlend;
         _characterInput = characterInput;
@@ -248,6 +250,7 @@ public partial class Locomotion : ILocomotion
                 _state=LocomotionState.Jumping;
                 OnStateChange?.Invoke(_state);
                 currentJumpStartTime = Time.time;
+                Jump(_jumpHeight);
             }
 
         }

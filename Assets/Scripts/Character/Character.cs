@@ -9,6 +9,7 @@ public class Character : MonoBehaviour
     [SerializeField] public ICharacterInput _characterInput;
     [SerializeField] public IMover _characterMover;
     [SerializeField] public Collider Collider;
+    [SerializeField] private float JumpHeight;
     
 
     public ILocomotion _Locomotion;
@@ -30,7 +31,7 @@ public class Character : MonoBehaviour
                 PlayerCamera= new GameObject("[WorldTransform]").transform;
             }
         }
-        _Locomotion = new Locomotion (this.gameObject,rotationSpeed,
+        _Locomotion = new Locomotion (this.gameObject,rotationSpeed,JumpHeight,
         PlayerCamera,MovementVectorBlend,TurnRotationBlend,_characterInput,_characterMover);
     }
 
