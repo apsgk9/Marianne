@@ -41,13 +41,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
                     if (_instance == null)
                     {
-                        GameObject singleton = new GameObject();
-                        _instance = singleton.AddComponent<T>();
-                        singleton.name = "(singleton) " + typeof(T).ToString();
-
-                        Debug.Log("[Singleton] An instance of " + typeof(T) +
-                            " is needed in the scene, so '" + singleton +
-                            "' was created.");
+                        CreateInstance();
                     }
                     else
                     {
@@ -58,6 +52,17 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 return _instance;
             }
         }
+    }
+
+    private static void CreateInstance()
+    {
+        GameObject singleton = new GameObject();
+        _instance = singleton.AddComponent<T>();
+        singleton.name = "(singleton) " + typeof(T).ToString();
+
+        Debug.Log("[Singleton] An instance of " + typeof(T) +
+            " is needed in the scene, so '" + singleton +
+            "' was created.");
     }
 
     private static bool IsDontDestroyOnLoad()

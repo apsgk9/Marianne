@@ -33,11 +33,16 @@ namespace GameInit
 
             if (ServiceLocator.Current == null)
                 ServiceLocator.Initialize();
+
             CreateManagerParent();
+            Debug.Log("CREATED: CreateManagerParent");
 
             Create<SettingsManager>();
+            Debug.Log("CREATED: SettingsManager");
             Create<UserInput>();
+            Debug.Log("CREATED: UserInput");
             Create<UIManager>();
+            Debug.Log("CREATED: UIManager");
         }
 
         private void CreateManagerParent()

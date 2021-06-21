@@ -4,6 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
+  - Test: {fileID: 7451479110412506231, guid: 8efa2adc99c518849b1593058e2ef39a, type: 3}
   - _StateMachine: {fileID: 11400000, guid: 5816234e421ae9b47915332803b46015, type: 2}
   - _StartState: {fileID: 11400000, guid: 1740399689713a347adc1103d4a180cf, type: 2}
   - _NullState: {fileID: 11400000, guid: a9a1f295ca96df748a1579222afe326e, type: 2}

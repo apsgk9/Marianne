@@ -139,7 +139,6 @@ namespace CharacterProperties
             if(TryingToJump && CanJump)
             {
                 ActivateJump?.Invoke();
-                Debug.Log("INVOKE");
             }
         }
 
