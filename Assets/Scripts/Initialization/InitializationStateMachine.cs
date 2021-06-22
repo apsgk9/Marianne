@@ -22,8 +22,8 @@ public class InitializationStateMachine : ScriptableObject
     {
         if(!GameObject.FindObjectOfType<GameStateMachine>())
         {
-            Debug.Log("Initialize");
-            var gameManagerGameObject = new GameObject("GameStateMachine2333");
+            Debug.Log("Initializing");
+            var gameManagerGameObject = new GameObject("GameStateMachine");
             var gstate=gameManagerGameObject.AddComponent<GameStateMachine>();
             gstate.Activate();
             //gstate.LoadStateMachine(_StateMachine,_StartState,_NullState);

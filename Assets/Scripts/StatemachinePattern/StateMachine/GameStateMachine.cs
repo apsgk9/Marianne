@@ -16,13 +16,23 @@ public class GameStateMachine : Singleton<GameStateMachine>
     private State _StartState;
     [SerializeField]
     private State _NullState;
+    private bool _activated=false;
 
+    private void Awake()
+    {
+        if(!_activated)
+        {
+            Activate();
+        }
+    }
 
     public void Activate()
     {
         DontDestroyOnLoad(gameObject);
         _StateMachine.OnStateChanged += state => OnGameStateChanged?.Invoke(state);
+        _StateMachine.SetState(_NullState);
         _StateMachine.SetState(_StartState);
+        _activated=true;
     }
     public void LoadStateMachine(StateMachine stateMachine,State startState,State nullState)
     {

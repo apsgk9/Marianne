@@ -18,8 +18,6 @@ public class UserInput : Singleton<UserInput>, IUserInput
     private Timer MouseIdleTimer;
     public float Vertical => _vertical;
     public float Horizontal => _horizontal;
-    private bool _isPlayerTryingToMove;
-
     public Vector2 _cursorDeltaPosition;
     private Vector2 _mousePosition;
     private Vector2 _analogAimPosition;
@@ -143,7 +141,6 @@ public class UserInput : Singleton<UserInput>, IUserInput
     public void Tick()
     {
         PlayerMouseIdleCheck();
-        PlayerMovementIdleCheck();
         LastCursorPosition = CursorPosition;
         LastDirectionVector = DirectionVector;
 
@@ -267,11 +264,6 @@ public class UserInput : Singleton<UserInput>, IUserInput
     {
         return LastDirectionVector != DirectionVector;
     }
-    private void PlayerMovementIdleCheck()
-    {
-        _isPlayerTryingToMove = IsThereDifferenceInMovement() ? true : false;
-    }
-
     private void PlayerMouseIdleCheck()
     {
         MouseIdleTimer.Tick();

@@ -44,4 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIObjects: {fileID: 11400000, guid: dd51e4387be204c45a6e2a1d83dce733, type: 2}
+  PauseMenuPrefab: {fileID: 38760931271906585, guid: e0477f7adf708c142b0953a11057ac40,
+    type: 3}
+  QuickMenuPrefab: {fileID: 3588848771848082569, guid: b4774938bfe23284c8de3e58b8f63c44,
+    type: 3}
   isInMenu: 0

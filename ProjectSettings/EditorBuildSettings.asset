@@ -6,11 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test Scenes/MovementGameplay2.unity
-    guid: 7c7620f672886d645a1f5196cd29a1bc
-  - enabled: 1
-    path: Assets/Scenes/UI/PausedUI.unity
-    guid: 89574736ac8498749b71ce925d42c37e
+    path: Assets/Scenes/EmptyScene.unity
+    guid: a6ee6fc38c959094bab5d2ffee4c3b33
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: dbcfc8c8f063ac248932e30d2a172015,
       type: 2}

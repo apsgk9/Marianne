@@ -9,7 +9,6 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
-    //protected static bool _SpawnIfNull=false;
 
     private static object _lock = new object();
 
@@ -30,7 +29,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 if (_instance == null)
                 {
                     _instance = (T)FindObjectOfType(typeof(T));
-
                     if (FindObjectsOfType(typeof(T)).Length > 1)
                     {
                         Debug.LogError("[Singleton] Something went really wrong " +

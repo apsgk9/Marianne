@@ -11,10 +11,12 @@ namespace GameInit
     [CreateAssetMenu(fileName = "GameInitializer", menuName = "GameInitializer", order = 0)]
     public class GameInitializer : GameInitializerSO
     {
+        //[SerializeField]
+        //private AssetReferenceGameObject UIManagerReference;
         [SerializeField]
-        private AssetReferenceGameObject UIManagerReference;
+        private GameObject UIManagerReference;
         [SerializeField]
-        private AssetReferenceGameObject UserInputSystemReference;
+        private GameObject UserInputSystemReference;
         [SerializeField]
         private AssetReferenceGameObject SettingsManagerReference;
         private GameObject _managerParent;
@@ -35,14 +37,14 @@ namespace GameInit
                 ServiceLocator.Initialize();
 
             CreateManagerParent();
-            Debug.Log("CREATED: CreateManagerParent");
+            //Debug.Log("CREATED: CreateManagerParent");
 
             Create<SettingsManager>();
-            Debug.Log("CREATED: SettingsManager");
+            //Debug.Log("CREATED: SettingsManager");
             Create<UserInput>();
-            Debug.Log("CREATED: UserInput");
+            //Debug.Log("CREATED: UserInput");
             Create<UIManager>();
-            Debug.Log("CREATED: UIManager");
+            //Debug.Log("CREATED: UIManager");
         }
 
         private void CreateManagerParent()
@@ -66,7 +68,22 @@ namespace GameInit
             var gameObject = GameObject.FindObjectOfType<T>();
             if (gameObject==null)
             {
-                Addressables.InstantiateAsync(GetAssetReference<T>()).Completed += AssetReferenceLoaded<T>;
+                //UserInput Needs to be immediately instantiated.
+                if(typeof(T).Name == typeof(UserInput).Name)
+                {                    
+                    InstantLoad<T>(UserInputSystemReference);
+                }
+                else if(typeof(T).Name == typeof(UIManager).Name)
+                {
+                    
+                    InstantLoad<T>(UIManagerReference);
+                }
+                else
+                {
+                        
+                    AssetReference key = GetAssetReference<T>();                
+                    Addressables.InstantiateAsync(key).Completed += AssetReferenceLoaded<T>;
+                }
             }
             else
             {
@@ -74,6 +91,20 @@ namespace GameInit
 
                 //Debug.LogWarning($"{typeof(T)} already exists.");
             }
+        }
+
+        private void InstantLoad<T>(GameObject obj) where T : MonoBehaviour
+        {
+            var newObj=Instantiate(obj);
+            var ComponentReference = newObj.GetComponentInChildren<T>();
+            Type type = typeof(T);
+            if (ComponentReference == null)
+            {
+                Debug.LogError($"{typeof(T).Name} component not found.");
+                return;
+            }
+            GameObject.DontDestroyOnLoad(ComponentReference.gameObject);
+            WrapUpObject(ComponentReference);
         }
 
         
@@ -88,13 +119,8 @@ namespace GameInit
                 return;
             }
 
-            AddNotifyOnDestroy(ComponentReference);
-
             GameObject.DontDestroyOnLoad(ComponentReference.gameObject);
-
             WrapUpObject(ComponentReference);
-
-            //Debug.Log($"{typeof(T).Name} has initialized.");
         }
 
         private void AddNotifyOnDestroy<T>(T ComponentReference) where T : MonoBehaviour
@@ -154,15 +180,10 @@ namespace GameInit
             {
                 return SettingsManagerReference;
             }
-            if (typeof(T).Name == typeof(UserInput).Name)
-            {
-                return UserInputSystemReference;
-            }
-                
-            if (typeof(T).Name == typeof(UIManager).Name)
-            {
-                return UIManagerReference;
-            }
+            //if (typeof(T).Name == typeof(UIManager).Name)
+            //{
+            //    return UIManagerReference;
+            //}
                 
             return null;
         }

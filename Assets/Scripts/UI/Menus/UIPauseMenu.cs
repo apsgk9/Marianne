@@ -44,7 +44,10 @@ public class UIPauseMenu : Singleton<UIPauseMenu>
     }
     public void TogglePause()
     {
+        
+        Debug.Log("444444444");
         GamePausedCondition.PauseMenuKeyPressing();
+        Debug.Log("222222222");
     }
 
 

@@ -46,10 +46,15 @@ namespace StateMachinePattern
 
         public void Tick()
         {
-
             StateTransition transition = CheckForTransition();
             if (transition != null)
             {
+                    Debug.Log("TRANSITIONS:");
+                foreach (var transitions in _stateTransitions)
+                {
+                    Debug.Log(transitions.name);
+                }
+                    Debug.Log("--------");
                 SetState(transition.To);
             }
             _currentState.Tick();
@@ -67,6 +72,7 @@ namespace StateMachinePattern
 
             foreach (var transition in _stateTransitions)
             {
+                
                 if (transition.From == _currentState && transition.Condition.Check)
                 {
                     return transition;
