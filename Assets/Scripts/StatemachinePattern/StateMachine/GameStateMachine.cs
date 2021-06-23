@@ -20,14 +20,16 @@ public class GameStateMachine : Singleton<GameStateMachine>
 
     private void Awake()
     {
-        if(!_activated)
-        {
-            Activate();
-        }
+        Activate();
     }
 
     public void Activate()
     {
+        if(_activated)
+        {
+            Debug.LogWarning("ALREADY ACTIVATED");
+            return;
+        }
         DontDestroyOnLoad(gameObject);
         _StateMachine.OnStateChanged += state => OnGameStateChanged?.Invoke(state);
         _StateMachine.SetState(_NullState);

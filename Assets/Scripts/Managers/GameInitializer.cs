@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using Service;
 using UnityEngine;
@@ -14,11 +14,11 @@ namespace GameInit
         //[SerializeField]
         //private AssetReferenceGameObject UIManagerReference;
         [SerializeField]
-        private GameObject UIManagerReference;
+        private UIManager UIManagerReference;
         [SerializeField]
-        private GameObject UserInputSystemReference;
+        private UserInput UserInputSystemReference;
         [SerializeField]
-        private AssetReferenceGameObject SettingsManagerReference;
+        private SettingsManager SettingsManagerReference;
         private GameObject _managerParent;
 
         //initialize checks
@@ -68,35 +68,36 @@ namespace GameInit
             var gameObject = GameObject.FindObjectOfType<T>();
             if (gameObject==null)
             {
-                //UserInput Needs to be immediately instantiated.
-                if(typeof(T).Name == typeof(UserInput).Name)
-                {                    
-                    InstantLoad<T>(UserInputSystemReference);
-                }
-                else if(typeof(T).Name == typeof(UIManager).Name)
-                {
-                    
-                    InstantLoad<T>(UIManagerReference);
-                }
-                else
-                {
-                        
-                    AssetReference key = GetAssetReference<T>();                
-                    Addressables.InstantiateAsync(key).Completed += AssetReferenceLoaded<T>;
-                }
+                MonoBehaviour reference = GetReference<T>();                
+                InstantLoad<T>(reference);
             }
             else
             {
                 WrapUpObject(gameObject.GetComponent<T>());
-
-                //Debug.LogWarning($"{typeof(T)} already exists.");
             }
         }
 
-        private void InstantLoad<T>(GameObject obj) where T : MonoBehaviour
+        private MonoBehaviour GetReference<T>() where T : MonoBehaviour
         {
-            var newObj=Instantiate(obj);
-            var ComponentReference = newObj.GetComponentInChildren<T>();
+            if(typeof(T).Name == typeof(UserInput).Name)
+            { 
+                return UserInputSystemReference;
+            }
+            else if(typeof(T).Name == typeof(UIManager).Name)
+            {                
+                return UIManagerReference;
+            }
+            else if(typeof(T).Name == typeof(SettingsManager).Name)
+            {
+                return SettingsManagerReference;
+            }
+            return null;
+        }
+
+        private void InstantLoad<T>(MonoBehaviour monoscript) where T : MonoBehaviour
+        {
+            var newObj=Instantiate(monoscript);
+            var ComponentReference = newObj.GetComponent<T>();
             Type type = typeof(T);
             if (ComponentReference == null)
             {
@@ -108,7 +109,8 @@ namespace GameInit
         }
 
         
-
+        
+        /*Obselete cause not using addressables
         private void AssetReferenceLoaded<T>(AsyncOperationHandle<GameObject> obj) where T : MonoBehaviour
         {
             var ComponentReference = obj.Result.GetComponent<T>();
@@ -133,7 +135,7 @@ namespace GameInit
             {
                 Debug.LogWarning("AssetReference is null on notify");
             }
-        }
+        }*/
 
         public void WrapUpObject<T>(T Component) where T : MonoBehaviour
         {
@@ -174,19 +176,22 @@ namespace GameInit
             }
         }
 
+        /*Obselete cause not using addressables
         private AssetReference GetAssetReference<T>() where T : MonoBehaviour
         {
             if (typeof(T).Name == typeof(SettingsManager).Name)
             {
                 return SettingsManagerReference;
             }
-            //if (typeof(T).Name == typeof(UIManager).Name)
-            //{
-            //    return UIManagerReference;
-            //}
                 
             return null;
         }
+        
+        private void Remove(AssetReference assetReference, NotifyOnDestroy obj)
+        {
+            Addressables.ReleaseInstance(obj.gameObject);
+        }
+        */
 
         private void UpdateInitializationCheck<T>(T componentReference) where T : MonoBehaviour
         {
@@ -198,10 +203,6 @@ namespace GameInit
                 _UIManagerInitialized = true;
         }
 
-        private void Remove(AssetReference assetReference, NotifyOnDestroy obj)
-        {
-            Addressables.ReleaseInstance(obj.gameObject);
-        }
     }
 
 }

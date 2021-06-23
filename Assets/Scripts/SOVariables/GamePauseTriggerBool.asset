@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4bdab0494c9faa4789790a7c4b63850, type: 3}
   m_Name: GamePauseTriggerBool
   m_EditorClassIdentifier: 
-  DeveloperDescription: 
   Value: 0

@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac937ce4cf087b64abd53efbbd6b5702, type: 3}
   m_Name: GameInitializer
   m_EditorClassIdentifier: 
-  UIManagerReference: {fileID: 3543562697498082614, guid: cf3cb1bd263aaf34eae3d3223b7a6d71,
+  UIManagerReference: {fileID: 9161092257762475652, guid: cf3cb1bd263aaf34eae3d3223b7a6d71,
     type: 3}
-  UserInputSystemReference: {fileID: 1221768570166407505, guid: 18f11f9e581a24649a8f2204b97c5a39,
+  UserInputSystemReference: {fileID: 6011585247870732358, guid: 18f11f9e581a24649a8f2204b97c5a39,
     type: 3}
-  SettingsManagerReference:
-    m_AssetGUID: 819e143f31864e34bacef8933b6165fd
-    m_SubObjectName: 
-    m_SubObjectType: 
+  SettingsManagerReference: {fileID: 6149527642629384095, guid: 819e143f31864e34bacef8933b6165fd,
+    type: 3}

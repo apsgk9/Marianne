@@ -21,22 +21,14 @@ MonoBehaviour:
     m_Address: Assets/InputActions/UserSettings/UserSettings.asset
     m_ReadOnly: 0
     m_SerializedLabels:
-    - UI
+    - System
     m_MainAsset: {fileID: 11400000, guid: 842174542e66696458651794babb8601, type: 2}
     m_TargetAsset: {fileID: 11400000, guid: 842174542e66696458651794babb8601, type: 2}
-  - m_GUID: b4774938bfe23284c8de3e58b8f63c44
-    m_Address: UI/QuickMenu
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UI
-    m_MainAsset: {fileID: 5975141576203266004, guid: b4774938bfe23284c8de3e58b8f63c44,
-      type: 3}
-    m_TargetAsset: {fileID: 5975141576203266004, guid: b4774938bfe23284c8de3e58b8f63c44,
-      type: 3}
   - m_GUID: fd37724ec85bd164fbe1c9585de5caa8
     m_Address: UserSettings/DefaultUserSettings
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - System
     m_MainAsset: {fileID: 11400000, guid: fd37724ec85bd164fbe1c9585de5caa8, type: 2}
     m_TargetAsset: {fileID: 11400000, guid: fd37724ec85bd164fbe1c9585de5caa8, type: 2}
   - m_GUID: 819e143f31864e34bacef8933b6165fd
@@ -48,12 +40,6 @@ MonoBehaviour:
       type: 3}
     m_TargetAsset: {fileID: 3089238627868270966, guid: 819e143f31864e34bacef8933b6165fd,
       type: 3}
-  - m_GUID: cf3cb1bd263aaf34eae3d3223b7a6d71
-    m_Address: Assets/Scripts/Managers/InitPrefabs/Adressables/UIMANAGER.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 50dbd1c4bea1e254f811ab1e985e8f06, type: 2}
   m_SchemaSet:

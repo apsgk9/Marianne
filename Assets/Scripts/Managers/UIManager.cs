@@ -8,7 +8,6 @@ using Service;
 public class UIManager : MonoBehaviour, IGameService
 {
     private const string UISceneName = "UI";
-    public UIObjects UIObjects;
     public UIPauseMenu PauseMenuPrefab;
     public UIQuickMenu QuickMenuPrefab;
 
@@ -16,15 +15,12 @@ public class UIManager : MonoBehaviour, IGameService
     public UIPauseMenu PauseMenuReference {get; private set;}
     [HideInInspector]
     public UIQuickMenu QuickMenuReference { get; private set; }
-
-    //PlayerInputActions _inputActionToUse;
     public InputSystemUIInputModule CurrentInputSystemUIInputModule {get; private set;}
     public bool UIHasBeenBuilt { get; private set; }
 
     //todo: update this so that its hooked
     public bool isInMenu=false;
 
-    //For some reason, it doesn't find UIObject reference when I play in Awake().
     private void Start()
     {
         Setup();
@@ -64,51 +60,19 @@ public class UIManager : MonoBehaviour, IGameService
         
         if (!GameObject.FindObjectOfType<UIPauseMenu>())
         {            
-            //Addressables.InstantiateAsync(UIObjects.PauseMenuGameObject).Completed+=PauseMenuLoaded;
-            //--
             var obj=GameObject.Instantiate(PauseMenuPrefab);
             PauseMenuReference=obj;
             RenameAndMovetoUIScene(PauseMenuReference.gameObject);
-            //--
         }
 
         
         if (!GameObject.FindObjectOfType<UIQuickMenu>())
         {            
-            //Addressables.InstantiateAsync(UIObjects.QuickMenuGameObject).Completed+=QuickMenuLoaded;
             var obj=GameObject.Instantiate(QuickMenuPrefab);
             QuickMenuReference=obj;
-            RenameAndMovetoUIScene(PauseMenuReference.gameObject);
+            RenameAndMovetoUIScene(QuickMenuReference.gameObject);
         }
     }
-
-    private void QuickMenuLoaded(AsyncOperationHandle<GameObject> obj)
-    {
-        QuickMenuReference = obj.Result.GetComponent<UIQuickMenu>();
-        if (QuickMenuReference == null)
-        {
-            Debug.LogError("Quick Menu Reference is null.");
-        }
-        RenameAndMovetoUIScene(QuickMenuReference.gameObject);
-        var notify = QuickMenuReference.gameObject.AddComponent<NotifyOnDestroy>();
-        notify.Destroyed += Remove;
-        notify.AssetReference = UIObjects.PauseMenuGameObject;
-        Debug.Log("Quick Menu has loaded.");
-    }
-
-    //private void PauseMenuLoaded(AsyncOperationHandle<GameObject> obj)
-    //{
-    //    PauseMenuReference = obj.Result.GetComponent<UIPauseMenu>();
-    //    if (PauseMenuReference == null)
-    //    {
-    //        Debug.LogError("Pause Menu Reference is null.");
-    //    }
-    //    RenameAndMovetoUIScene(PauseMenuReference.gameObject);
-    //    var notify = PauseMenuReference.gameObject.AddComponent<NotifyOnDestroy>();
-    //    notify.Destroyed += Remove;
-    //    notify.AssetReference = UIObjects.PauseMenuGameObject;
-    //    Debug.Log("Pause Menu has loaded.");
-    //}
 
     private void RenameAndMovetoUIScene(GameObject obj)
     {

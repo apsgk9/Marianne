@@ -49,12 +49,6 @@ namespace StateMachinePattern
             StateTransition transition = CheckForTransition();
             if (transition != null)
             {
-                    Debug.Log("TRANSITIONS:");
-                foreach (var transitions in _stateTransitions)
-                {
-                    Debug.Log(transitions.name);
-                }
-                    Debug.Log("--------");
                 SetState(transition.To);
             }
             _currentState.Tick();

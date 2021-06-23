@@ -25,11 +25,6 @@ public class GamePausingCondition : StateMachinePattern.StateTransitionCondition
 
     public void PauseMenuKeyPressing()
     {
-        Debug.Log("_pauseTriggered.Value: "+_pauseTriggered.Value);
-        Debug.Log("PauseMenuKeyPressing");
         _pauseTriggered.SetValue(true);
-        Debug.Log("AFTER");
-        Debug.Log("_pauseTriggered.Value: "+_pauseTriggered.Value);
-        //_pauseTriggered=true;
     }
 }
