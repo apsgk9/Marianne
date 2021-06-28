@@ -48,13 +48,12 @@ public partial class Locomotion : ILocomotion
     protected Vector3 momentum = Vector3.zero;
     //Saved velocity from last frame;
     Vector3 savedVelocity = Vector3.zero;
-    //Saved horizontal movement velocity from last frame;
-    Vector3 savedMovementVelocity = Vector3.zero;
+    Vector3 savedMovement= Vector3.zero;
     private float slopeLimit = 45f;
 
     [Tooltip("Whether to calculate and apply momentum relative to the controller's transform.")]
     public bool useLocalMomentum = false;
-    private int movementSpeed;
+    private int animatorMovementSpeed;
     //'Aircontrol' determines to what degree the player is able to move while in the air;
     [Range(0f, 1f)]
     public float airControl = 0.4f;
@@ -171,7 +170,7 @@ public partial class Locomotion : ILocomotion
 
         //Store velocity for next frame;
 		savedVelocity = _velocity;
-		savedMovementVelocity = _velocity - _worldMomentum;
+		savedMovement = Movement;
         
     }
 
@@ -179,15 +178,10 @@ public partial class Locomotion : ILocomotion
     {
 
         ////Run initial mover ground check;
-        //mover.CheckForGround();
         _characterMover.CheckForGround();
 
         _state= DetermineControllerState();
         OnStateChange?.Invoke(_state);
-        //Debug.Log("STATE:"+_state.ToString());
-
-		//Apply friction and gravity to 'momentum';
-		////HandleMomentum();
 
         var Jumping = HandleJump();
 
@@ -337,7 +331,7 @@ public partial class Locomotion : ILocomotion
         }
         
         OnMoveAnimatorSpeedChange?.Invoke((float)_locomotionMode);
-        movementSpeed = (int)_locomotionMode;
+        animatorMovementSpeed = (int)_locomotionMode;
 
     }
 
@@ -590,11 +584,9 @@ public partial class Locomotion : ILocomotion
 
     void OnGroundContactLost()
     {
-        //Calculate current velocity;
-        //If velocity would exceed the controller's movement speed, decrease movement velocity appropriately;
-        //This prevents unwanted accumulation of velocity;
-        float _horizontalMomentumSpeed = VectorMath.RemoveDotVector(GetMomentum(), _characterGameObject.transform.up).magnitude;
-        Vector3 _currentVelocity = GetMomentum() + Vector3.ClampMagnitude(savedMovementVelocity, Mathf.Clamp(movementSpeed - _horizontalMomentumSpeed, 0f, movementSpeed));
+        Debug.Log("LOSTGROUND");
+        //Calculate current velocity;       
+        Vector3 _currentVelocity =savedMovement;
 
         //Calculate length and direction from '_currentVelocity';
         float _length = _currentVelocity.magnitude;
@@ -602,13 +594,22 @@ public partial class Locomotion : ILocomotion
         //Calculate velocity direction;
         Vector3 _velocityDirection = Vector3.zero;
         if (_length != 0f)
+        {
             _velocityDirection = _currentVelocity / _length;
 
+        }
+
         //Subtract from '_length', based on 'movementSpeed' and 'airControl', check for overshooting;
-        if (_length >= movementSpeed * airControl)
-            _length -= movementSpeed * airControl;
+        if (_length >= animatorMovementSpeed * airControl)
+        {
+            _length -= animatorMovementSpeed * airControl;
+
+        }
         else
+        {
             _length = 0f;
+
+        }
 
         //If local momentum is used, transform momentum into world coordinates first;
         if (useLocalMomentum)
